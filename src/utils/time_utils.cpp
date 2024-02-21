@@ -7,7 +7,9 @@
 
 std::string narechi::utils::get_formatted_time()
 {
-    const auto now = std::chrono::system_clock::now();
-    return std::format(R"({:%H:%M:%OS})", now);
+    const auto now = 
+        std::chrono::floor<std::chrono::seconds>(
+            std::chrono::system_clock::now());
+    return std::format(R"({:%X})", now);
 }
    
