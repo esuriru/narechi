@@ -4,6 +4,6 @@
 
 int main()
 {
-    narechi::logger logger;
-    logger.log(narechi::logger::log_level::info, "Test ", "Bam");
+    narechi::core_logger.log(
+        narechi::logger::log_level::info, "Test ", "Bam");
 }

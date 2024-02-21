@@ -10,8 +10,6 @@ namespace narechi
     class logger 
     {
     public:
-        logger();
-
         enum class log_level
         {
             none = 0,
@@ -20,6 +18,8 @@ namespace narechi
             info,
             debug
         };
+
+        explicit logger();
 
         template <typename Arg, typename... Args>
         void log(const log_level level, Arg&& arg, Args&&... args)
@@ -36,4 +36,6 @@ namespace narechi
         std::string output_format; 
 
     };
+
+    static logger core_logger;
 }
