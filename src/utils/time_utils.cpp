@@ -3,12 +3,11 @@
 #include <chrono>
 #include <sstream>
 #include <iomanip>
-// #include <format>
+#include <format>
 
 std::string narechi::utils::get_formatted_time()
 {
-    // const auto& now = std::chrono::system_clock::now();
-    // return std::format("{%H:%M:%OS}", now);
-    return std::string();
+    const auto now = std::chrono::system_clock::now();
+    return std::format(R"({:%H:%M:%OS})", now);
 }
    

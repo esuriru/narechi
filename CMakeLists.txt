@@ -8,6 +8,7 @@ set(NARECHI_SOURCES
     "src/entry.cpp"
     "src/core/core.hpp"
     "src/core/logger.hpp"
+    "src/core/logger.cpp"
     "src/utils/time_utils.hpp"
     "src/utils/time_utils.cpp"
 )
