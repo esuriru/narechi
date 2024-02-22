@@ -1,3 +1,5 @@
+#pragma once
+
 #include <core/logger.hpp>
 
 #ifdef NRC_DEBUG
