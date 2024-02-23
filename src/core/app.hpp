@@ -13,5 +13,9 @@ namespace narechi
     
     private:
         bool is_running;
+
+
     };
+
+    extern app* create_app();
 }
