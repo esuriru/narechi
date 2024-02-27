@@ -1,10 +1,11 @@
 #pragma once
 
-#include <utils/singleton.hpp>
+// #include <utils/singleton.hpp>
 
 namespace narechi
 {
-    class app final : public utils::singleton<app>
+    // class app : public utils::singleton<app>
+    class app
     {
     public:
         explicit app();

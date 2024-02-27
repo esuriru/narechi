@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef NRC_DEBUG
-     
+
 #endif
 
 #ifdef NRC_PLATFORM_WINDOWS
