@@ -9,6 +9,7 @@ namespace narechi
     {
     public:
         explicit app();
+        virtual ~app() {}
 
         void run();
     

@@ -1,11 +1,16 @@
 #include "app.hpp"
 
-narechi::app::app()
+namespace narechi
 {
+    static app* app_instance = nullptr;
 
-}
+    app::app()
+    {
+        app_instance = this;
+    }
 
-void narechi::app::run()
-{
+    void app::run()
+    {
 
+    }
 }
