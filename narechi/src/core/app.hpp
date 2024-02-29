@@ -12,10 +12,10 @@ namespace narechi
         virtual ~app() {}
 
         void run();
+        app& get();
     
     private:
         bool is_running;
-
 
     };
 
