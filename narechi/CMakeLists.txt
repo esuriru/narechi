@@ -11,6 +11,11 @@ set(NARECHI_SOURCES
     "src/core/app.hpp"
     "src/core/app.cpp"
 
+    "src/core/buffer.hpp"
+
+    "src/rendering/buffer.hpp"
+    "src/rendering/shader_type.hpp"
+
     "src/utils/time_utils.hpp"
     "src/utils/time_utils.cpp"
 )
