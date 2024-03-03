@@ -25,9 +25,7 @@ add_library(narechi-engine SHARED ${NARECHI_SOURCES})
 target_include_directories(narechi-engine PUBLIC "src")
 
 if (WIN32)
-    message("windows")
     target_compile_definitions(narechi-engine PUBLIC 
         "NRC_PLATFORM_WINDOWS;NRC_DEBUG;")
 else()
-    message("not windows")
 endif()
