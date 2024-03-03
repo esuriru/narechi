@@ -11,6 +11,9 @@ project(narechi LANGUAGES CXX)
 
 add_subdirectory("narechi")
 add_subdirectory("narechi-launcher")
-add_subdirectory("extern/glm")
 
+add_subdirectory("extern/glm")
 target_include_directories(narechi-engine PUBLIC "extern")
+
+add_subdirectory("extern/glfw-3.4")
+target_include_directories(narechi-engine PUBLIC "extern/glfw-3.4/include")

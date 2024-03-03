@@ -1,15 +1,15 @@
-#include <iostream>
+#include <core/app.hpp>
 
-#include "core/core.hpp"
-#include "core/logger.hpp"
-#include "core/assert.hpp"
+__declspec(dllexport) narechi::app* narechi::create_app();
 
-#define GLM_ENABLE_EXPERIMENTAL
-
-#include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>
-
+// TODO - Arguments for app creation: App specification
 int main()
 {
-    NRC_CORE_LOG(glm::to_string(glm::vec3(8, 4, 2)));
+    auto app = narechi::create_app();
+
+    app->run();
+
+    delete app;
+
+    return 0;
 }

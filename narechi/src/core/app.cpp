@@ -11,6 +11,8 @@ namespace narechi
         NRC_ASSERT(app_instance == nullptr, 
             "An instance of app has already been created");
         app_instance = this;
+
+        window = window::create({"narechi window", 1280, 720});
     }
 
     void app::run()

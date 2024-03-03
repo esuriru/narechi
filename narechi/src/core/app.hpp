@@ -1,6 +1,7 @@
 #pragma once
 
-// #include <utils/singleton.hpp>
+#include <core/core.hpp>
+#include <core/window.hpp>
 
 namespace narechi
 {
@@ -15,9 +16,10 @@ namespace narechi
         app& get();
     
     private:
+        uptr<window> window;
         bool is_running;
 
     };
 
-    extern app* create_app();
+    app* create_app();
 }
