@@ -18,7 +18,7 @@ namespace narechi
 
     }
 
-    app &app::get()
+    app& app::get()
     {
         return *app_instance;
     }
