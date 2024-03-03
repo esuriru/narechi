@@ -4,9 +4,12 @@
 #include "core/logger.hpp"
 #include "core/assert.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 int main()
 {
-    narechi::core_logger.log(
-        narechi::logger::log_level::info, "Test ", "Bam");
-    NRC_ASSERT(false, "Test assertion");
+    NRC_CORE_LOG(glm::to_string(glm::vec3(8, 4, 2)));
 }
