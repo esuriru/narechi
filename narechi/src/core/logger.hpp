@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/core.hpp>
 #include <iostream>
 #include <format>
 
@@ -7,7 +8,7 @@
 
 namespace narechi
 {
-    class logger 
+    class NRC_API logger 
     {
     public:
         enum class log_level
@@ -39,7 +40,7 @@ namespace narechi
 
     };
 
-    static logger core_logger("CORE");
+    static logger core_logger = logger("CORE");
 }
 
 #define NRC_CORE_INFO(...) narechi::core_logger.log(\

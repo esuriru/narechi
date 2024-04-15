@@ -1,6 +1,6 @@
 set(NARECHI_SOURCES
-    "src/entry.cpp"
-    "src/narechi.h"
+    "src/entry.hpp"
+    "src/narechi.hpp"
 
     "src/core/assert.hpp"
     "src/core/core.hpp"
@@ -28,12 +28,12 @@ set(NARECHI_SOURCES
 
 add_library(narechi-engine SHARED ${NARECHI_SOURCES})
 
-target_link_libraries(narechi-engine PUBLIC glfw)
+target_link_libraries(narechi-engine PRIVATE glfw)
 
 target_include_directories(narechi-engine PUBLIC "src")
 
 if (WIN32)
-    target_compile_definitions(narechi-engine PUBLIC 
+    target_compile_definitions(narechi-engine PRIVATE 
         "NRC_PLATFORM_WINDOWS;NRC_DEBUG;NRC_BUILD_DLL;")
 else()
 endif()

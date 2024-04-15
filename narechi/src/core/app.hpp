@@ -19,4 +19,6 @@ namespace narechi
         bool is_running;
 
     };
+
+    app* create_app();
 }

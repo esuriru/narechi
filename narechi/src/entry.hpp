@@ -1,4 +1,4 @@
-#include <narechi.h>
+#include <core/app.hpp>
 
 extern narechi::app* narechi::create_app();
 

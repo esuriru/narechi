@@ -2,13 +2,18 @@ set(NARECHI_LAUNCHER_SOURCES
     "src/launcher_app.cpp"
 )
 
+
 add_executable(narechi-launcher ${NARECHI_LAUNCHER_SOURCES})
 
 target_link_libraries(
     narechi-launcher
-    PUBLIC
+    PUBLIC 
     narechi-engine
 )
+
+
+target_compile_definitions(narechi-launcher PRIVATE
+    "NRC_PLATFORM_WINDOWS;NRC_DEBUG;")
 
 # Copy dependencies into the exe
 add_custom_command(TARGET narechi-launcher POST_BUILD
