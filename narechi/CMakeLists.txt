@@ -34,6 +34,6 @@ target_include_directories(narechi-engine PUBLIC "src")
 
 if (WIN32)
     target_compile_definitions(narechi-engine PUBLIC 
-        "NRC_PLATFORM_WINDOWS;NRC_DEBUG;")
+        "NRC_PLATFORM_WINDOWS;NRC_DEBUG;NRC_BUILD_DLL;")
 else()
 endif()

@@ -1,6 +1,6 @@
-#include <core/app.hpp>
+#include <narechi.h>
 
-__declspec(dllexport) narechi::app* narechi::create_app();
+extern narechi::app* narechi::create_app();
 
 // TODO - Arguments for app creation: App specification
 int main()

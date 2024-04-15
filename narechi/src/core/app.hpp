@@ -5,8 +5,7 @@
 
 namespace narechi
 {
-    // class app : public utils::singleton<app>
-    class app
+    class NRC_API app
     {
     public:
         explicit app();
@@ -20,6 +19,4 @@ namespace narechi
         bool is_running;
 
     };
-
-    app* create_app();
 }

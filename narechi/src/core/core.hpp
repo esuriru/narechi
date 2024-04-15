@@ -5,6 +5,11 @@
 #endif
 
 #ifdef NRC_PLATFORM_WINDOWS
+    #ifdef NRC_BUILD_DLL
+        #define NRC_API __declspec(dllexport)
+    #else
+        #define NRC_API __declspec(dllimport)
+    #endif
 #else
     #error "narechi only runs on windows"
 #endif
