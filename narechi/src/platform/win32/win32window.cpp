@@ -4,7 +4,7 @@
 
 namespace narechi
 {
-    win32window::win32window(const window_properties &properties)
+    win32window::win32window(const window_properties& properties)
     {
         // TODO - A possible profiling function here
 
