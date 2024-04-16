@@ -28,6 +28,8 @@ namespace narechi
         bool is_running;
         bool is_minimized;
 
+        float last_frame_time;
+
     };
 
     app* create_app();

@@ -1,6 +1,7 @@
 #include "app.hpp"
 
 #include "core/assert.hpp"
+#include "utils/time_utils.hpp"
 
 namespace narechi
 {
@@ -8,6 +9,7 @@ namespace narechi
 
     app::app()
         : is_running(true)
+        , last_frame_time(0.0f)
     {
         NRC_ASSERT(app_instance == nullptr, 
             "An instance of app has already been created");
@@ -20,6 +22,14 @@ namespace narechi
     {
         while (is_running)
         {
+            float current_time = utils::get_time();
+            float step = current_time - last_frame_time;
+            last_frame_time = current_time;
+
+            for (auto& layer : layer_stack)
+            {
+                layer->on_update(step);
+            }
         }
     }
 

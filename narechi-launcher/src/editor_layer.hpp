@@ -9,5 +9,7 @@ namespace narechi::editor
     public:
         explicit editor_layer();    
 
+        virtual void on_update(float dt) override;
+
     };
 }

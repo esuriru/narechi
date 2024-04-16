@@ -1,8 +1,12 @@
 #pragma once
 
+#include <core/core.hpp>
+
 #include <string>
 
 namespace narechi::utils
 {
-    std::string get_formatted_time();
+    NRC_API std::string get_formatted_time();
+
+    float get_time();
 }
