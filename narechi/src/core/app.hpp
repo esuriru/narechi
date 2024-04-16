@@ -16,7 +16,9 @@ namespace narechi
     
     private:
         uptr<window> window;
+
         bool is_running;
+        bool is_minimized;
 
     };
 

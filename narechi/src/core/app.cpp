@@ -7,6 +7,7 @@ namespace narechi
     static app* app_instance = nullptr;
 
     app::app()
+        : is_running(true)
     {
         NRC_ASSERT(app_instance == nullptr, 
             "An instance of app has already been created");
@@ -17,7 +18,9 @@ namespace narechi
 
     void app::run()
     {
-
+        while (is_running)
+        {
+        }
     }
 
     app& app::get()
