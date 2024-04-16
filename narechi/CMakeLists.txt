@@ -14,6 +14,10 @@ set(NARECHI_SOURCES
     "src/core/window.hpp"
     "src/core/window.cpp"
 
+    "src/core/layer.hpp"
+    "src/core/layer_stack.hpp"
+    "src/core/layer_stack.cpp"
+
     "src/core/buffer.hpp"
 
     "src/rendering/buffer.hpp"

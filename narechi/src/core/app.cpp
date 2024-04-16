@@ -4,7 +4,7 @@
 
 namespace narechi
 {
-    static app* app_instance = nullptr;
+    app* app::app_instance = nullptr;
 
     app::app()
         : is_running(true)
@@ -26,5 +26,15 @@ namespace narechi
     app& app::get()
     {
         return *app_instance;
+    }
+
+    void app::push_layer(layer* layer)
+    {
+        layer_stack.push_layer(layer);
+    }
+
+    void app::push_overlay(layer* overlay)
+    {
+        layer_stack.push_overlay(overlay);
     }
 }

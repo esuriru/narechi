@@ -2,6 +2,7 @@
 
 #include <core/core.hpp>
 #include <core/window.hpp>
+#include <core/layer_stack.hpp>
 
 namespace narechi
 {
@@ -14,8 +15,15 @@ namespace narechi
         void run();
         app& get();
     
+    protected:
+        void push_layer(layer* layer); 
+        void push_overlay(layer* overlay);
+
     private:
+        static app* app_instance;
+
         uptr<window> window;
+        layer_stack layer_stack;
 
         bool is_running;
         bool is_minimized;
