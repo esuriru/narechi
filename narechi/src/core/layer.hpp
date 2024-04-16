@@ -13,7 +13,7 @@ namespace narechi
         virtual void on_attach() {}
         virtual void on_detach() {}
 
-        virtual void on_update(float ts) {}
+        virtual void on_update(float dt) {}
 
     protected:
         std::string debug_name;
