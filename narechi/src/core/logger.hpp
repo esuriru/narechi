@@ -1,10 +1,10 @@
 #pragma once
 
+#include <utils/time_utils.hpp>
 #include <core/core.hpp>
+
 #include <iostream>
 #include <format>
-
-#include "utils/time_utils.hpp"
 
 namespace narechi
 {

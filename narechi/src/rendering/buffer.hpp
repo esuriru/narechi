@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include <rendering/shader_type.hpp>
+
+#include <string>
 
 namespace narechi
 {

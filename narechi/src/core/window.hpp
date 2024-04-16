@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.hpp"
+#include <core/core.hpp>
 
 #include <string>
 #include <cstdint>

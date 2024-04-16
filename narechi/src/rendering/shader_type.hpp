@@ -1,7 +1,8 @@
 #pragma once
 
-#include <cstdint>
 #include <core/assert.hpp>
+
+#include <cstdint>
 
 namespace narechi
 {
