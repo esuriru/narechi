@@ -12,6 +12,7 @@ namespace narechi::editor
 
     void editor_layer::on_update(float dt)
     {
-        NRC_CORE_LOG("Timestep: ", dt);
+        // NRC_CORE_LOG("Timestep: ", dt);
     }
+
 }
