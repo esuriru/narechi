@@ -11,6 +11,7 @@ namespace narechi
     {
     public:
         win32window(const window_properties& properties);
+        ~win32window() override;
 
         virtual void update() override;
 
@@ -36,6 +37,7 @@ namespace narechi
 
     private:
         void init(const window_properties& properties);
+        void cleanup();
 
         struct window_data 
         {

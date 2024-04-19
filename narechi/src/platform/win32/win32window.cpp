@@ -12,6 +12,11 @@ namespace narechi
         init(properties);
     }
 
+    win32window::~win32window()
+    {
+        cleanup();
+    }
+
     void win32window::update()
     {
         glfwPollEvents();
@@ -58,5 +63,11 @@ namespace narechi
             window_close_event event;
             data.event_callback(event);
         });
+    }
+
+    void win32window::cleanup()
+    {
+        glfwDestroyWindow(window);
+        glfwTerminate();
     }
 }
