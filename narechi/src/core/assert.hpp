@@ -8,7 +8,7 @@
     {\
         NRC_CORE_ERROR("Assertion failed: ", __VA_ARGS__,\
             "\n\tat line number: ", __LINE__, "\n\tin file: ",\
-            __FILE__);\ 
+            __FILE__);\
     }
     // TODO - Platform-dependent macro with breakpoint
 #else
