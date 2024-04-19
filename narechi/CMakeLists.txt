@@ -2,6 +2,9 @@ set(NARECHI_SOURCES
     "src/entry.hpp"
     "src/narechi.hpp"
 
+    "src/core/events/event.hpp"
+    "src/core/events/app_event.hpp"
+
     "src/core/assert.hpp"
     "src/core/core.hpp"
 

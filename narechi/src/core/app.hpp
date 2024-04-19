@@ -20,6 +20,8 @@ namespace narechi
         void push_overlay(layer* overlay);
 
     private:
+        void on_event(event& event);
+
         static app* app_instance;
 
         uptr<window> window;

@@ -16,6 +16,7 @@ namespace narechi
         app_instance = this;
 
         window = window::create({"narechi window", 1280, 720});
+        window->set_event_callback(NRC_BIND_FN(on_event));
     }
 
     void app::run()
@@ -30,6 +31,8 @@ namespace narechi
             {
                 layer->on_update(step);
             }
+
+            window->update();
         }
     }
 
@@ -46,5 +49,10 @@ namespace narechi
     void app::push_overlay(layer* overlay)
     {
         layer_stack.push_overlay(overlay);
+    }
+
+    void app::on_event(event& event)
+    {
+        NRC_CORE_DEBUG(event.to_string());
     }
 }

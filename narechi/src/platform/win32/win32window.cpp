@@ -1,6 +1,7 @@
 #include "win32window.hpp"
 
 #include <core/logger.hpp>
+#include <core/events/app_event.hpp>
 
 namespace narechi
 {
@@ -9,6 +10,11 @@ namespace narechi
         // TODO - A possible profiling function here
 
         init(properties);
+    }
+
+    void win32window::update()
+    {
+        glfwPollEvents();
     }
 
     void win32window::init(const window_properties& properties)
@@ -28,5 +34,29 @@ namespace narechi
         {
             NRC_CORE_DEBUG("GLFW Window created");
         }
+
+        glfwSetWindowUserPointer(window, &data);
+
+        glfwSetWindowSizeCallback(window, [](GLFWwindow* window, 
+            int width, int height)
+        {
+            window_data& data = 
+                *(window_data*)glfwGetWindowUserPointer(window);
+            
+            data.width = width;
+            data.height = height;
+
+            window_resize_event event(width, height);
+            data.event_callback(event);
+        });
+
+        glfwSetWindowCloseCallback(window, [](GLFWwindow* window)
+        {
+            window_data& data = 
+                *(window_data*)glfwGetWindowUserPointer(window);
+
+            window_close_event event;
+            data.event_callback(event);
+        });
     }
 }
