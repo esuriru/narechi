@@ -41,5 +41,6 @@ namespace narechi
 
     public:
         window_close_event() = default;
+
     };
 }
