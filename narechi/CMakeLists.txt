@@ -25,6 +25,10 @@ set(NARECHI_SOURCES
 
     "src/rendering/buffer.hpp"
     "src/rendering/shader_type.hpp"
+    "src/rendering/renderer_api.hpp"
+
+    "src/platform/vulkan/vulkan_renderer_api.hpp"
+    "src/platform/vulkan/vulkan_renderer_api.cpp"
 
     "src/platform/win32/win32window.hpp"
     "src/platform/win32/win32window.cpp"
