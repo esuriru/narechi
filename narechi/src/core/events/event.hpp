@@ -51,6 +51,8 @@ public:\
     class event
     {
     public:
+        bool handled = false;
+
         virtual ~event() = default;
 
         virtual int get_category_flags() const = 0;
@@ -69,4 +71,25 @@ public:\
     };
 
     using event_callback_fn = std::function<void(event&)>;
+
+    class event_handler final
+    {
+    public:
+        event_handler(event& event) : event(event) {}
+
+        template<typename T, typename F>
+        bool handle(const F& callback)
+        {
+            if (T::get_static_type() == event.get_type())
+            {
+                event.handled |= callback(static_cast<T&>(event));
+                return true;
+            }
+            return false;
+        }
+
+    private:
+        event& event;
+
+    };
 }

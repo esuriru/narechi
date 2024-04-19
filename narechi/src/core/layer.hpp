@@ -1,5 +1,7 @@
 #pragma once
 
+#include <core/events/event.hpp>
+
 #include <string>
 
 namespace narechi
@@ -14,6 +16,7 @@ namespace narechi
         virtual void on_detach() {}
 
         virtual void on_update(float dt) {}
+        virtual void on_event(event& event) {}
 
     protected:
         std::string debug_name;

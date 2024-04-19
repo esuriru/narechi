@@ -1,7 +1,9 @@
 #include "app.hpp"
 
 #include "core/assert.hpp"
+#include "core/events/app_event.hpp"
 #include "utils/time_utils.hpp"
+#include "core/logger.hpp"
 
 namespace narechi
 {
@@ -53,6 +55,28 @@ namespace narechi
 
     void app::on_event(event& event)
     {
-        NRC_CORE_DEBUG(event.to_string());
+        event_handler handler(event);
+
+        handler.handle<window_resize_event>([](auto& event)
+        {
+            NRC_CORE_LOG(event.to_string());
+            return true;
+        });
+
+        handler.handle<window_close_event>([this](auto& event)
+        {
+            is_running = false;
+            return true;
+        });
+
+        for (auto it = layer_stack.rbegin(); it != layer_stack.rend(); ++it)
+        {
+            if (event.handled)
+            {
+                break;
+            }
+
+            (*it)->on_event(event);
+        }
     }
 }
