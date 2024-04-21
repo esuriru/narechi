@@ -2,8 +2,12 @@
 
 #include "core/assert.hpp"
 #include "core/events/app_event.hpp"
-#include "utils/time_utils.hpp"
 #include "core/logger.hpp"
+
+#include "rendering/render_command.hpp"
+
+#include "utils/time_utils.hpp"
+
 
 namespace narechi
 {
@@ -19,6 +23,8 @@ namespace narechi
 
         window = window::create({"narechi window", 1280, 720});
         window->set_event_callback(NRC_BIND_FN(on_event));
+
+        render_command::init();
     }
 
     void app::run()
@@ -36,6 +42,8 @@ namespace narechi
 
             window->update();
         }
+
+        render_command::cleanup();
     }
 
     app& app::get()
