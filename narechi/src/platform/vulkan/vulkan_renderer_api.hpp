@@ -2,6 +2,9 @@
 
 #include <rendering/renderer_api.hpp>
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 namespace narechi
 {
     class vulkan_renderer_api final : public renderer_api 
@@ -12,5 +15,8 @@ namespace narechi
 
         void init() override;
         void cleanup() override;
+    
+    private:
+        VkInstance instance;
     };
 }
