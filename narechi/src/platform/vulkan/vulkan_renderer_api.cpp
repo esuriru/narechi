@@ -9,8 +9,8 @@ namespace narechi
 {
     using std::vector;
 
-    static uptr<logger> validation_layer_logger = 
-        make_uptr<logger>("Vulkan Validation Layer");        
+    static uptr<logger> validation_layer_logger
+        = make_uptr<logger>("Vulkan Validation Layer");
 
     static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
         VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -19,8 +19,8 @@ namespace narechi
         void* user_data)
     {
         // TODO - Convert message severity to log_level
-        validation_layer_logger->log(logger::log_level::error,
-            callback_data->pMessage);
+        validation_layer_logger->log(
+            logger::log_level::error, callback_data->pMessage);
         return VK_FALSE;
     }
 
@@ -28,15 +28,14 @@ namespace narechi
     {
         create_instance();
         setup_debug_messenger();
-
     }
 
     void vulkan_renderer_api::cleanup()
     {
         if (enable_validation_layers)
         {
-            destroy_debug_utils_messenge_ext(instance,
-                debug_messenger, nullptr);
+            destroy_debug_utils_messenge_ext(
+                instance, debug_messenger, nullptr);
         }
 
         vkDestroyInstance(instance, nullptr);
@@ -45,10 +44,10 @@ namespace narechi
 
     void vulkan_renderer_api::create_instance()
     {
-        NRC_ASSERT(!enable_validation_layers || validation_layer_supported(), 
+        NRC_ASSERT(!enable_validation_layers || validation_layer_supported(),
             "Vulkan validation layers requested, but not available");
 
-        VkApplicationInfo app_info{};
+        VkApplicationInfo app_info {};
         app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         app_info.pApplicationName = "narechi window";
         app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -56,26 +55,26 @@ namespace narechi
         app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         app_info.apiVersion = VK_API_VERSION_1_0;
 
-        VkInstanceCreateInfo create_info{};
+        VkInstanceCreateInfo create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         create_info.pApplicationInfo = &app_info;
 
         check_extensions();
         auto extensions = get_required_extensions();
-        create_info.enabledExtensionCount = 
-            static_cast<uint32_t>(extensions.size());
+        create_info.enabledExtensionCount
+            = static_cast<uint32_t>(extensions.size());
         create_info.ppEnabledExtensionNames = extensions.data();
 
         if (enable_validation_layers)
         {
-            create_info.enabledLayerCount = 
-                static_cast<uint32_t>(validation_layers.size());
+            create_info.enabledLayerCount
+                = static_cast<uint32_t>(validation_layers.size());
             create_info.ppEnabledLayerNames = validation_layers.data();
 
-            auto debug_messenger_create_info = 
-                get_debug_messenger_create_info();
-            create_info.pNext = 
-                reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>(
+            auto debug_messenger_create_info
+                = get_debug_messenger_create_info();
+            create_info.pNext
+                = reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>(
                     &debug_messenger_create_info);
         }
         else
@@ -94,12 +93,12 @@ namespace narechi
     void vulkan_renderer_api::check_extensions()
     {
         uint32_t extension_count = 0;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
-            nullptr);
+        vkEnumerateInstanceExtensionProperties(
+            nullptr, &extension_count, nullptr);
 
         vector<VkExtensionProperties> extensions(extension_count);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
-            extensions.data());
+        vkEnumerateInstanceExtensionProperties(
+            nullptr, &extension_count, extensions.data());
 
         NRC_CORE_LOG("Available Vulkan Extensions:");
         for (auto& extension : extensions)
@@ -113,12 +112,12 @@ namespace narechi
         uint32_t glfw_extension_count = 0;
         const char** glfw_extensions = nullptr;
 
-        glfw_extensions = glfwGetRequiredInstanceExtensions(
-            &glfw_extension_count);
+        glfw_extensions
+            = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
 
-        vector<const char*> extensions(glfw_extensions, 
-            glfw_extensions + glfw_extension_count);
-        
+        vector<const char*> extensions(
+            glfw_extensions, glfw_extensions + glfw_extension_count);
+
         if (enable_validation_layers)
         {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -133,8 +132,8 @@ namespace narechi
         vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
 
         vector<VkLayerProperties> available_layers(layer_count);
-        vkEnumerateInstanceLayerProperties(&layer_count, 
-            available_layers.data());
+        vkEnumerateInstanceLayerProperties(
+            &layer_count, available_layers.data());
 
         for (const char* layer_name : validation_layers)
         {
@@ -167,45 +166,44 @@ namespace narechi
         }
 
         auto create_info = get_debug_messenger_create_info();
-        VkResult result = create_debug_utils_messenger_ext(instance, 
-            &create_info, nullptr, &debug_messenger);
+        VkResult result = create_debug_utils_messenger_ext(
+            instance, &create_info, nullptr, &debug_messenger);
         NRC_ASSERT(result == VK_SUCCESS, "Failed to setup debug messenger");
         NRC_CORE_LOG("Vulkan debug messenger created");
     }
 
-    VkDebugUtilsMessengerCreateInfoEXT vulkan_renderer_api::get_debug_messenger_create_info() const
+    VkDebugUtilsMessengerCreateInfoEXT
+    vulkan_renderer_api::get_debug_messenger_create_info() const
     {
-        VkDebugUtilsMessengerCreateInfoEXT create_info{};
-        create_info.sType = 
-            VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        create_info.messageSeverity = 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT; 
-        create_info.messageType = 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        VkDebugUtilsMessengerCreateInfoEXT create_info {};
+        create_info.sType
+            = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        create_info.messageSeverity
+            = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+            | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         create_info.pfnUserCallback = debug_callback;
         return create_info;
     }
 
     VkResult vulkan_renderer_api::create_debug_utils_messenger_ext(
-        VkInstance instance, 
-        const VkDebugUtilsMessengerCreateInfoEXT* create_info, 
+        VkInstance instance,
+        const VkDebugUtilsMessengerCreateInfoEXT* create_info,
         const VkAllocationCallbacks* allocator,
         VkDebugUtilsMessengerEXT* debug_messenger)
     {
         auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
             vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
-        return func != nullptr ? 
+        return func != nullptr ?
             func(instance, create_info, allocator, debug_messenger) :
             VK_ERROR_EXTENSION_NOT_PRESENT;
     }
 
     void vulkan_renderer_api::destroy_debug_utils_messenge_ext(
-        VkInstance instance, 
-        VkDebugUtilsMessengerEXT debug_messenger, 
+        VkInstance instance, VkDebugUtilsMessengerEXT debug_messenger,
         const VkAllocationCallbacks* allocator)
     {
         auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
@@ -221,7 +219,7 @@ namespace narechi
         }
     }
 
-    void vulkan_renderer_api::pick_physical_device() 
+    void vulkan_renderer_api::pick_physical_device()
     {
         uint32_t device_count = 0;
         vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
@@ -231,26 +229,27 @@ namespace narechi
         std::vector<VkPhysicalDevice> devices(device_count);
         vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
 
-        for (const auto& device : devices) 
+        for (const auto& device : devices)
         {
-            if (physical_device_suitable(device)) 
+            if (physical_device_suitable(device))
             {
                 physical_device = device;
                 break;
             }
         }
 
-        NRC_VERIFY(physical_device != VK_NULL_HANDLE, 
-            "Failed to find suitable GPU");
+        NRC_VERIFY(
+            physical_device != VK_NULL_HANDLE, "Failed to find suitable GPU");
     }
 
-    bool vulkan_renderer_api::physical_device_suitable(VkPhysicalDevice device) const
+    bool vulkan_renderer_api::physical_device_suitable(
+        VkPhysicalDevice device) const
     {
         return true;
     }
 
-    vulkan_renderer_api::queue_family_indices vulkan_renderer_api::find_queue_families(
-        VkPhysicalDevice device)
+    vulkan_renderer_api::queue_family_indices
+    vulkan_renderer_api::find_queue_families(VkPhysicalDevice device)
     {
         return queue_family_indices();
     }

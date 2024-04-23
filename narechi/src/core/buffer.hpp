@@ -13,12 +13,9 @@ namespace narechi
         buffer() = default;
         buffer(const buffer&) = default;
 
-        buffer(uint64_t size)
-        {
+        buffer(uint64_t size) {}
 
-        }
-
-        static buffer clone(const buffer& other) 
+        static buffer clone(const buffer& other)
         {
             buffer temp(other.size);
             memcpy(temp.data, other.data, other.size);
@@ -29,7 +26,7 @@ namespace narechi
         {
             release();
 
-            data = new uint8_t[size];            
+            data = new uint8_t[size];
             this->size = size;
         }
 

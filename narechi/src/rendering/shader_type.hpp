@@ -26,34 +26,34 @@ namespace narechi
     {
         switch (type)
         {
-            case shader_data_type::float1:
-                return 4;
-            case shader_data_type::float2:
-                return 4 * 2;
-            case shader_data_type::float3:
-                return 4 * 3;
-            case shader_data_type::float4:
-                return 4 * 4;
-            case shader_data_type::mat3:
-                return 4 * 3 * 3;
-            case shader_data_type::mat4:
-                return 4 * 4 * 4;
-            case shader_data_type::int1:
-                return 4;
-            case shader_data_type::int2:
-                return 4 * 2;
-            case shader_data_type::int3:
-                return 4 * 3;
-            case shader_data_type::int4:
-                return 4 * 4;
-            case shader_data_type::bool1:
-                return 1;
-            default:
-                break;
+        case shader_data_type::float1:
+            return 4;
+        case shader_data_type::float2:
+            return 4 * 2;
+        case shader_data_type::float3:
+            return 4 * 3;
+        case shader_data_type::float4:
+            return 4 * 4;
+        case shader_data_type::mat3:
+            return 4 * 3 * 3;
+        case shader_data_type::mat4:
+            return 4 * 4 * 4;
+        case shader_data_type::int1:
+            return 4;
+        case shader_data_type::int2:
+            return 4 * 2;
+        case shader_data_type::int3:
+            return 4 * 3;
+        case shader_data_type::int4:
+            return 4 * 4;
+        case shader_data_type::bool1:
+            return 1;
+        default:
+            break;
         }
 
-        NRC_ASSERT(false, "shader data type not handled,"
-            " shader data type: ", type);
+        NRC_ASSERT(
+            false, "shader data type not handled, shader data type: ", type);
         return 0;
     }
 }

@@ -27,11 +27,11 @@ namespace narechi
 
     void layer_stack::pop_layer(layer* layer)
     {
-        auto it = std::find(layers.begin(), layers.begin() + 
-            layer_insert_index, layer);
+        auto it = std::find(
+            layers.begin(), layers.begin() + layer_insert_index, layer);
         if (it != layers.begin() + layer_insert_index)
         {
-            // Call on_detach, remove from the stack, 
+            // Call on_detach, remove from the stack,
             // and reset the layer insert index
             layer->on_detach();
             layers.erase(it);
@@ -41,8 +41,8 @@ namespace narechi
 
     void layer_stack::pop_overlay(layer* overlay)
     {
-        auto it = std::find(layers.begin() + layer_insert_index, 
-            layers.end(), overlay);
+        auto it = std::find(
+            layers.begin() + layer_insert_index, layers.end(), overlay);
         if (it != layers.end())
         {
             // Call on_detach, remove from the stack

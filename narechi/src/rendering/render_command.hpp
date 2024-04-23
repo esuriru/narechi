@@ -20,7 +20,6 @@ namespace narechi
 
     private:
         static uptr<renderer_api> renderer_api;
-
     };
 
 }

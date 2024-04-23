@@ -6,7 +6,7 @@
 
 namespace narechi
 {
-    class layer 
+    class layer
     {
     public:
         layer(const std::string& name) : debug_name(name) {}

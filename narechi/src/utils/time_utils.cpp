@@ -13,8 +13,8 @@ namespace narechi
     {
         using namespace std::chrono;
 
-        const auto now = 
-            floor<seconds>(current_zone()->to_local(system_clock::now()));
+        const auto now
+            = floor<seconds>(current_zone()->to_local(system_clock::now()));
         return std::format(R"({:%X})", now);
     }
 
@@ -27,4 +27,3 @@ namespace narechi
 #endif
     }
 }
-   

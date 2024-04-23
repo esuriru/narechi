@@ -12,8 +12,10 @@ namespace narechi
 
     public:
         window_resize_event(uint32_t width, uint32_t height)
-            : width(width), height(height) {}
-        
+            : width(width), height(height)
+        {
+        }
+
         uint32_t get_width()
         {
             return width;
@@ -31,7 +33,6 @@ namespace narechi
 
     private:
         uint32_t width, height;
-
     };
 
     class window_close_event : public event
@@ -41,6 +42,5 @@ namespace narechi
 
     public:
         window_close_event() = default;
-
     };
 }

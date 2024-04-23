@@ -20,7 +20,7 @@ namespace narechi
     {
     public:
         virtual ~window() = default;
-    
+
         static uptr<window> create(
             const window_properties& properties = window_properties());
 
@@ -29,7 +29,7 @@ namespace narechi
         virtual void set_event_callback(event_callback_fn func) = 0;
 
         virtual void* get_native_internal() const = 0;
-        
+
         virtual uint32_t get_width() const = 0;
         virtual uint32_t get_height() const = 0;
     };

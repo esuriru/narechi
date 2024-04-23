@@ -13,7 +13,7 @@ namespace narechi
 {
     using std::vector;
 
-    class vulkan_renderer_api final : public renderer_api 
+    class vulkan_renderer_api final : public renderer_api
     {
     public:
         vulkan_renderer_api() = default;
@@ -21,22 +21,21 @@ namespace narechi
 
         void init() override;
         void cleanup() override;
-    
+
     private:
-        struct queue_family_indices 
+        struct queue_family_indices
         {
             uint32_t graphics_family;
         };
 
 #ifdef NRC_DEBUG
         const bool enable_validation_layers = true;
-#else 
+#else
         const bool enable_validation_layers = false;
 #endif
 
-        const vector<const char*> validation_layers 
-        {
-            "VK_LAYER_KHRONOS_validation" 
+        const vector<const char*> validation_layers {
+            "VK_LAYER_KHRONOS_validation"
         };
 
         VkInstance instance;
@@ -49,7 +48,7 @@ namespace narechi
         bool validation_layer_supported();
 
         void setup_debug_messenger();
-        VkDebugUtilsMessengerCreateInfoEXT get_debug_messenger_create_info() 
+        VkDebugUtilsMessengerCreateInfoEXT get_debug_messenger_create_info()
             const;
         VkResult create_debug_utils_messenger_ext(VkInstance instance,
             const VkDebugUtilsMessengerCreateInfoEXT* create_info,

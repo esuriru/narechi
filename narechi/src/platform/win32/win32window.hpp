@@ -39,7 +39,7 @@ namespace narechi
         void init(const window_properties& properties);
         void cleanup();
 
-        struct window_data 
+        struct window_data
         {
             std::string title;
 

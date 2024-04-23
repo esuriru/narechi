@@ -63,6 +63,5 @@ namespace narechi
     private:
         std::vector<layer*> layers;
         uint32_t layer_insert_index = 0;
-
     };
 }

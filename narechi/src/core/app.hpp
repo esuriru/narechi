@@ -14,9 +14,9 @@ namespace narechi
 
         void run();
         app& get();
-    
+
     protected:
-        void push_layer(layer* layer); 
+        void push_layer(layer* layer);
         void push_overlay(layer* overlay);
 
     private:
@@ -31,7 +31,6 @@ namespace narechi
         bool is_minimized;
 
         float last_frame_time;
-
     };
 
     app* create_app();

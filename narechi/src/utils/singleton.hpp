@@ -1,7 +1,6 @@
 namespace narechi::utils
 {
-    template<typename T>
-    class singleton
+    template<typename T> class singleton
     {
     public:
         static T& get()
@@ -17,6 +16,5 @@ namespace narechi::utils
     protected:
         singleton() {}
         virtual ~singleton() {}
-
     };
 }
