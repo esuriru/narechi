@@ -28,7 +28,6 @@ namespace narechi
     {
         create_instance();
         setup_debug_messenger();
-        check_extensions();
 
     }
 
@@ -61,6 +60,7 @@ namespace narechi
         create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         create_info.pApplicationInfo = &app_info;
 
+        check_extensions();
         auto extensions = get_required_extensions();
         create_info.enabledExtensionCount = 
             static_cast<uint32_t>(extensions.size());
@@ -71,44 +71,41 @@ namespace narechi
             create_info.enabledLayerCount = 
                 static_cast<uint32_t>(validation_layers.size());
             create_info.ppEnabledLayerNames = validation_layers.data();
+
+            auto debug_messenger_create_info = 
+                get_debug_messenger_create_info();
+            create_info.pNext = 
+                reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>(
+                    &debug_messenger_create_info);
         }
         else
         {
             create_info.enabledLayerCount = 0;
+
+            create_info.pNext = nullptr;
         }
 
         VkResult result = vkCreateInstance(&create_info, nullptr, &instance);
 
         NRC_ASSERT(result == VK_SUCCESS, "Failed to create Vulkan instance");
         NRC_CORE_LOG("Vulkan instance created");
-
     }
 
-    void vulkan_renderer_api::setup_debug_messenger()
+    void vulkan_renderer_api::check_extensions()
     {
-        if (!enable_validation_layers)
+        uint32_t extension_count = 0;
+        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
+            nullptr);
+
+        vector<VkExtensionProperties> extensions(extension_count);
+        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
+            extensions.data());
+
+        NRC_CORE_LOG("Available Vulkan Extensions:");
+        for (auto& extension : extensions)
         {
-            return;
+            NRC_CORE_LOG("\t", extension.extensionName);
         }
-
-        VkDebugUtilsMessengerCreateInfoEXT create_info{};
-        create_info.sType = 
-            VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        create_info.messageSeverity = 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT; 
-        create_info.messageType = 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | 
-            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-        create_info.pfnUserCallback = debug_callback;
-        create_info.pUserData = nullptr;
-
-        VkResult result = create_debug_utils_messenger_ext(instance, 
-            &create_info, nullptr, &debug_messenger);
-        NRC_ASSERT(result == VK_SUCCESS, "Failed to setup debug messenger");
-        NRC_CORE_LOG("Vulkan Debug Messenger Setup");
     }
 
     vector<const char*> vulkan_renderer_api::get_required_extensions() const
@@ -128,53 +125,6 @@ namespace narechi
         }
 
         return extensions;
-    }
-
-    VkResult vulkan_renderer_api::create_debug_utils_messenger_ext(
-        VkInstance instance, 
-        const VkDebugUtilsMessengerCreateInfoEXT* create_info, 
-        const VkAllocationCallbacks* allocator,
-        VkDebugUtilsMessengerEXT* debug_messenger)
-    {
-        auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
-            vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
-        return func != nullptr ? 
-            func(instance, create_info, allocator, debug_messenger) :
-            VK_ERROR_EXTENSION_NOT_PRESENT;
-    }
-
-    void vulkan_renderer_api::destroy_debug_utils_messenge_ext(
-        VkInstance instance, 
-        VkDebugUtilsMessengerEXT debug_messenger, 
-        const VkAllocationCallbacks* allocator)
-    {
-        auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
-            vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"));
-        if (func != nullptr)
-        {
-            func(instance, debug_messenger, allocator);
-        }
-        else
-        {
-            NRC_CORE_ERROR("Could not destroy Vulkan debug messenger");
-        }
-    }
-
-    void vulkan_renderer_api::check_extensions()
-    {
-        uint32_t extension_count = 0;
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
-            nullptr);
-
-        vector<VkExtensionProperties> extensions(extension_count);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
-            extensions.data());
-
-        NRC_CORE_LOG("Available Vulkan Extensions:");
-        for (auto& extension : extensions)
-        {
-            NRC_CORE_LOG("\t", extension.extensionName);
-        }
     }
 
     bool vulkan_renderer_api::validation_layer_supported()
@@ -206,5 +156,68 @@ namespace narechi
         }
 
         return true;
+    }
+
+
+    void vulkan_renderer_api::setup_debug_messenger()
+    {
+        if (!enable_validation_layers)
+        {
+            return;
+        }
+
+        auto create_info = get_debug_messenger_create_info();
+        VkResult result = create_debug_utils_messenger_ext(instance, 
+            &create_info, nullptr, &debug_messenger);
+        NRC_ASSERT(result == VK_SUCCESS, "Failed to setup debug messenger");
+        NRC_CORE_LOG("Vulkan debug messenger created");
+    }
+
+    VkDebugUtilsMessengerCreateInfoEXT vulkan_renderer_api::get_debug_messenger_create_info() const
+    {
+        VkDebugUtilsMessengerCreateInfoEXT create_info{};
+        create_info.sType = 
+            VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        create_info.messageSeverity = 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT; 
+        create_info.messageType = 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        create_info.pfnUserCallback = debug_callback;
+        return create_info;
+    }
+
+    VkResult vulkan_renderer_api::create_debug_utils_messenger_ext(
+        VkInstance instance, 
+        const VkDebugUtilsMessengerCreateInfoEXT* create_info, 
+        const VkAllocationCallbacks* allocator,
+        VkDebugUtilsMessengerEXT* debug_messenger)
+    {
+        auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
+        return func != nullptr ? 
+            func(instance, create_info, allocator, debug_messenger) :
+            VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+
+    void vulkan_renderer_api::destroy_debug_utils_messenge_ext(
+        VkInstance instance, 
+        VkDebugUtilsMessengerEXT debug_messenger, 
+        const VkAllocationCallbacks* allocator)
+    {
+        auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"));
+        if (func != nullptr)
+        {
+            func(instance, debug_messenger, allocator);
+            NRC_CORE_LOG("Destroyed Vulkan debug messenger");
+        }
+        else
+        {
+            NRC_CORE_ERROR("Could not destroy Vulkan debug messenger");
+        }
     }
 }
