@@ -28,6 +28,7 @@ namespace narechi
     {
         create_instance();
         setup_debug_messenger();
+        pick_physical_device();
     }
 
     void vulkan_renderer_api::cleanup()
@@ -219,14 +220,36 @@ namespace narechi
         }
     }
 
+    // TODO - Move this out to a static utils class
+    static const char* physical_device_type_to_string(
+        VkPhysicalDeviceType device_type)
+    {
+        switch (device_type)
+        {
+        case VK_PHYSICAL_DEVICE_TYPE_OTHER:
+            return "Other Device";
+        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+            return "Integrated GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+            return "Discrete GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+            return "Virtual GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_CPU:
+            return "CPU";
+        }
+
+        return nullptr;
+    }
+
     void vulkan_renderer_api::pick_physical_device()
     {
         uint32_t device_count = 0;
         vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
+        NRC_CORE_LOG("Device count: ", device_count);
 
         NRC_VERIFY(device_count > 0, "Failed to find Vulkan-compatible GPUs");
 
-        std::vector<VkPhysicalDevice> devices(device_count);
+        vector<VkPhysicalDevice> devices(device_count);
         vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
 
         for (const auto& device : devices)
@@ -240,17 +263,51 @@ namespace narechi
 
         NRC_VERIFY(
             physical_device != VK_NULL_HANDLE, "Failed to find suitable GPU");
+
+        VkPhysicalDeviceProperties properties;
+        vkGetPhysicalDeviceProperties(physical_device, &properties);
+
+        NRC_CORE_LOG("Vulkan is using physical device:");
+        NRC_CORE_LOG("\tDevice name: ", properties.deviceName);
+        NRC_CORE_LOG("\tDevice type: ",
+            physical_device_type_to_string(properties.deviceType));
+        NRC_CORE_LOG("\tDriver version: ", properties.driverVersion);
     }
 
     bool vulkan_renderer_api::physical_device_suitable(
         VkPhysicalDevice device) const
     {
-        return true;
+        auto indices = find_queue_families(device);
+
+        return indices.is_complete();
     }
 
     vulkan_renderer_api::queue_family_indices
-    vulkan_renderer_api::find_queue_families(VkPhysicalDevice device)
+    vulkan_renderer_api::find_queue_families(VkPhysicalDevice device) const
     {
-        return queue_family_indices();
+        queue_family_indices indices {};
+
+        uint32_t queue_family_count = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(
+            device, &queue_family_count, nullptr);
+
+        vector<VkQueueFamilyProperties> queue_families(queue_family_count);
+        vkGetPhysicalDeviceQueueFamilyProperties(
+            device, &queue_family_count, queue_families.data());
+
+        for (int i = 0; i < queue_family_count; ++i)
+        {
+            if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            {
+                indices.graphics_family = i;
+            }
+
+            if (indices.is_complete())
+            {
+                break;
+            }
+        }
+
+        return indices;
     }
 }

@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
+#include <optional>
 
 namespace narechi
 {
@@ -25,7 +26,12 @@ namespace narechi
     private:
         struct queue_family_indices
         {
-            uint32_t graphics_family;
+            std::optional<uint32_t> graphics_family;
+
+            bool is_complete() const
+            {
+                return graphics_family.has_value();
+            }
         };
 
 #ifdef NRC_DEBUG
@@ -60,6 +66,6 @@ namespace narechi
 
         void pick_physical_device();
         bool physical_device_suitable(VkPhysicalDevice device) const;
-        queue_family_indices find_queue_families(VkPhysicalDevice device);
+        queue_family_indices find_queue_families(VkPhysicalDevice device) const;
     };
 }
