@@ -1,5 +1,4 @@
-#include "entry.hpp"
-
+#include "core/entry.hpp"
 #include "core/app.hpp"
 #include "core/assert.hpp"
 #include "core/core.hpp"

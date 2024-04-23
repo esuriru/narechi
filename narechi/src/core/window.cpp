@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "core/window.hpp"
 
 #include <platform/win32/win32window.hpp>
 

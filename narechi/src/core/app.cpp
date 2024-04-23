@@ -1,4 +1,4 @@
-#include "app.hpp"
+#include "core/app.hpp"
 
 #include "core/assert.hpp"
 #include "core/events/app_event.hpp"
