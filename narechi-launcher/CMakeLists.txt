@@ -1,8 +1,5 @@
 set(NARECHI_LAUNCHER_SOURCES
-    "src/editor_app.hpp"
     "src/editor_app.cpp"
-
-    "src/editor_layer.hpp"
     "src/editor_layer.cpp"
 )
 
@@ -16,7 +13,7 @@ target_link_libraries(
 )
 
 target_include_directories(narechi-launcher PRIVATE
-    "src")
+    "include")
 
 target_compile_definitions(narechi-launcher PRIVATE
     "NRC_PLATFORM_WINDOWS;NRC_DEBUG;")
