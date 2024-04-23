@@ -7,9 +7,8 @@ namespace narechi::editor
     class editor_layer final : public layer
     {
     public:
-        explicit editor_layer();    
+        explicit editor_layer();
 
         virtual void on_update(float dt) override;
-
     };
 }
