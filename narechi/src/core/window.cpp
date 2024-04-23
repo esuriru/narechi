@@ -10,7 +10,7 @@ namespace narechi
         return make_uptr<win32window>(properties);
 #else
         // TODO: Make a fatal instead of false assertions
-        NRC_ASSERT("")
+        NRC_ASSERT(false, "")
 #endif
     }
 }
