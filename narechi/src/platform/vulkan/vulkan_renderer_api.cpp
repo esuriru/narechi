@@ -2,13 +2,53 @@
 
 #include "core/assert.hpp"
 
-#include <vector>
+#include <string.h>
 
 // NOTE: https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Instance
 namespace narechi
 {
+    using std::vector;
+
+    static uptr<logger> validation_layer_logger = 
+        make_uptr<logger>("Vulkan Validation Layer");        
+
+    static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
+        VkDebugUtilsMessageTypeFlagsEXT message_type,
+        const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
+        void* user_data)
+    {
+        // TODO - Convert message severity to log_level
+        validation_layer_logger->log(logger::log_level::error,
+            callback_data->pMessage);
+        return VK_FALSE;
+    }
+
     void vulkan_renderer_api::init()
     {
+        create_instance();
+        setup_debug_messenger();
+        check_extensions();
+
+    }
+
+    void vulkan_renderer_api::cleanup()
+    {
+        if (enable_validation_layers)
+        {
+            destroy_debug_utils_messenge_ext(instance,
+                debug_messenger, nullptr);
+        }
+
+        vkDestroyInstance(instance, nullptr);
+        NRC_CORE_INFO("Vulkan cleanup done");
+    }
+
+    void vulkan_renderer_api::create_instance()
+    {
+        NRC_ASSERT(!enable_validation_layers || validation_layer_supported(), 
+            "Vulkan validation layers requested, but not available");
+
         VkApplicationInfo app_info{};
         app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         app_info.pApplicationName = "narechi window";
@@ -21,27 +61,112 @@ namespace narechi
         create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         create_info.pApplicationInfo = &app_info;
 
-        uint32_t glfw_extension_count = 0;
-        const char** glfw_extensions = nullptr;
+        auto extensions = get_required_extensions();
+        create_info.enabledExtensionCount = 
+            static_cast<uint32_t>(extensions.size());
+        create_info.ppEnabledExtensionNames = extensions.data();
 
-        glfw_extensions = glfwGetRequiredInstanceExtensions(
-            &glfw_extension_count);
-        
-        create_info.enabledExtensionCount = glfw_extension_count;
-        create_info.ppEnabledExtensionNames = glfw_extensions;
-
-        create_info.enabledLayerCount = 0;
+        if (enable_validation_layers)
+        {
+            create_info.enabledLayerCount = 
+                static_cast<uint32_t>(validation_layers.size());
+            create_info.ppEnabledLayerNames = validation_layers.data();
+        }
+        else
+        {
+            create_info.enabledLayerCount = 0;
+        }
 
         VkResult result = vkCreateInstance(&create_info, nullptr, &instance);
 
         NRC_ASSERT(result == VK_SUCCESS, "Failed to create Vulkan instance");
         NRC_CORE_LOG("Vulkan instance created");
 
+    }
+
+    void vulkan_renderer_api::setup_debug_messenger()
+    {
+        if (!enable_validation_layers)
+        {
+            return;
+        }
+
+        VkDebugUtilsMessengerCreateInfoEXT create_info{};
+        create_info.sType = 
+            VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        create_info.messageSeverity = 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT; 
+        create_info.messageType = 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | 
+            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        create_info.pfnUserCallback = debug_callback;
+        create_info.pUserData = nullptr;
+
+        VkResult result = create_debug_utils_messenger_ext(instance, 
+            &create_info, nullptr, &debug_messenger);
+        NRC_ASSERT(result == VK_SUCCESS, "Failed to setup debug messenger");
+        NRC_CORE_LOG("Vulkan Debug Messenger Setup");
+    }
+
+    vector<const char*> vulkan_renderer_api::get_required_extensions() const
+    {
+        uint32_t glfw_extension_count = 0;
+        const char** glfw_extensions = nullptr;
+
+        glfw_extensions = glfwGetRequiredInstanceExtensions(
+            &glfw_extension_count);
+
+        vector<const char*> extensions(glfw_extensions, 
+            glfw_extensions + glfw_extension_count);
+        
+        if (enable_validation_layers)
+        {
+            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+        }
+
+        return extensions;
+    }
+
+    VkResult vulkan_renderer_api::create_debug_utils_messenger_ext(
+        VkInstance instance, 
+        const VkDebugUtilsMessengerCreateInfoEXT* create_info, 
+        const VkAllocationCallbacks* allocator,
+        VkDebugUtilsMessengerEXT* debug_messenger)
+    {
+        auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"));
+        return func != nullptr ? 
+            func(instance, create_info, allocator, debug_messenger) :
+            VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+
+    void vulkan_renderer_api::destroy_debug_utils_messenge_ext(
+        VkInstance instance, 
+        VkDebugUtilsMessengerEXT debug_messenger, 
+        const VkAllocationCallbacks* allocator)
+    {
+        auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
+            vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"));
+        if (func != nullptr)
+        {
+            func(instance, debug_messenger, allocator);
+        }
+        else
+        {
+            NRC_CORE_ERROR("Could not destroy Vulkan debug messenger");
+        }
+    }
+
+    void vulkan_renderer_api::check_extensions()
+    {
         uint32_t extension_count = 0;
         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
             nullptr);
 
-        std::vector<VkExtensionProperties> extensions(extension_count);
+        vector<VkExtensionProperties> extensions(extension_count);
         vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, 
             extensions.data());
 
@@ -52,9 +177,34 @@ namespace narechi
         }
     }
 
-    void vulkan_renderer_api::cleanup()
+    bool vulkan_renderer_api::validation_layer_supported()
     {
-        vkDestroyInstance(instance, nullptr);
-        NRC_CORE_LOG("Vulkan cleanup done");
+        uint32_t layer_count;
+        vkEnumerateInstanceLayerProperties(&layer_count, nullptr);
+
+        vector<VkLayerProperties> available_layers(layer_count);
+        vkEnumerateInstanceLayerProperties(&layer_count, 
+            available_layers.data());
+
+        for (const char* layer_name : validation_layers)
+        {
+            bool layer_found = false;
+
+            for (const auto& layer_properties : available_layers)
+            {
+                if (strcmp(layer_name, layer_properties.layerName) == 0)
+                {
+                    layer_found = true;
+                    break;
+                }
+            }
+
+            if (!layer_found)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
