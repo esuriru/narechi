@@ -23,6 +23,11 @@ namespace narechi
         void cleanup() override;
     
     private:
+        struct queue_family_indices 
+        {
+            uint32_t graphics_family;
+        };
+
 #ifdef NRC_DEBUG
         const bool enable_validation_layers = true;
 #else 
@@ -36,6 +41,7 @@ namespace narechi
 
         VkInstance instance;
         VkDebugUtilsMessengerEXT debug_messenger;
+        VkPhysicalDevice physical_device = VK_NULL_HANDLE;
 
         void create_instance();
         void check_extensions();
@@ -43,7 +49,8 @@ namespace narechi
         bool validation_layer_supported();
 
         void setup_debug_messenger();
-        VkDebugUtilsMessengerCreateInfoEXT get_debug_messenger_create_info() const;
+        VkDebugUtilsMessengerCreateInfoEXT get_debug_messenger_create_info() 
+            const;
         VkResult create_debug_utils_messenger_ext(VkInstance instance,
             const VkDebugUtilsMessengerCreateInfoEXT* create_info,
             const VkAllocationCallbacks* allocator,
@@ -52,5 +59,8 @@ namespace narechi
             VkDebugUtilsMessengerEXT debug_messenger,
             const VkAllocationCallbacks* allocator);
 
+        void pick_physical_device();
+        bool physical_device_suitable(VkPhysicalDevice device) const;
+        queue_family_indices find_queue_families(VkPhysicalDevice device);
     };
 }

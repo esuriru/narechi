@@ -220,4 +220,38 @@ namespace narechi
             NRC_CORE_ERROR("Could not destroy Vulkan debug messenger");
         }
     }
+
+    void vulkan_renderer_api::pick_physical_device() 
+    {
+        uint32_t device_count = 0;
+        vkEnumeratePhysicalDevices(instance, &device_count, nullptr);
+
+        NRC_VERIFY(device_count > 0, "Failed to find Vulkan-compatible GPUs");
+
+        std::vector<VkPhysicalDevice> devices(device_count);
+        vkEnumeratePhysicalDevices(instance, &device_count, devices.data());
+
+        for (const auto& device : devices) 
+        {
+            if (physical_device_suitable(device)) 
+            {
+                physical_device = device;
+                break;
+            }
+        }
+
+        NRC_VERIFY(physical_device != VK_NULL_HANDLE, 
+            "Failed to find suitable GPU");
+    }
+
+    bool vulkan_renderer_api::physical_device_suitable(VkPhysicalDevice device) const
+    {
+        return true;
+    }
+
+    vulkan_renderer_api::queue_family_indices vulkan_renderer_api::find_queue_families(
+        VkPhysicalDevice device)
+    {
+        return queue_family_indices();
+    }
 }
