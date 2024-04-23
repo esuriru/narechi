@@ -77,7 +77,8 @@ public:                                             \
     public:
         event_handler(event& event) : event(event) {}
 
-        template<typename T, typename F> bool handle(const F& callback)
+        template<typename T, typename F>
+        bool handle(const F& callback)
         {
             if (T::get_static_type() == event.get_type())
             {

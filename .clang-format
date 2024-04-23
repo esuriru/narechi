@@ -10,6 +10,7 @@ BreakBeforeInheritanceComma: false
 BreakBeforeConceptDeclarations: false
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: BeforeColon
+AlwaysBreakTemplateDeclarations: Yes 
 BinPackArguments: false
 ColumnLimit: 80
 ContinuationIndentWidth: 4
