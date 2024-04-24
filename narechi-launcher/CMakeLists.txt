@@ -22,6 +22,7 @@ target_compile_definitions(narechi-launcher PRIVATE
 add_custom_command(TARGET narechi-launcher POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy 
         $<TARGET_RUNTIME_DLLS:narechi-launcher> 
+        $<TARGET_FILE:narechi-launcher> 
         $<TARGET_FILE_DIR:narechi-launcher>
     COMMAND_EXPAND_LISTS
 )
