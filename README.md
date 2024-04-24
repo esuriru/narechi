@@ -1,3 +1,5 @@
 # narechi
 
-A 2D Game Engine
+narechi is a game engine that primarily focuses on producing 2D games.
+
+
