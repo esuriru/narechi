@@ -1,11 +1,15 @@
 #pragma once
 
+#include "vulkan/vulkan_core.h"
 #include <core/logger.hpp>
 
 #include <rendering/renderer_api.hpp>
 
+#define VK_USE_PLATFORM_WIN32_KHR
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 #include <vector>
 #include <optional>
@@ -27,11 +31,20 @@ namespace narechi
         struct queue_family_indices
         {
             std::optional<uint32_t> graphics_family;
+            std::optional<uint32_t> present_family;
 
             bool is_complete() const
             {
-                return graphics_family.has_value();
+                return graphics_family.has_value()
+                    && present_family.has_value();
             }
+        };
+
+        struct swap_chain_support_props
+        {
+            VkSurfaceCapabilitiesKHR capabilites;
+            vector<VkSurfaceFormatKHR> formats;
+            vector<VkPresentModeKHR> present_modes;
         };
 
 #ifdef NRC_DEBUG
@@ -39,6 +52,9 @@ namespace narechi
 #else
         const bool enable_validation_layers = false;
 #endif
+        const vector<const char*> device_extensions {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+        };
 
         const vector<const char*> validation_layers {
             "VK_LAYER_KHRONOS_validation"
@@ -46,9 +62,10 @@ namespace narechi
 
         VkInstance instance;
         VkDebugUtilsMessengerEXT debug_messenger;
+        VkSurfaceKHR surface;
         VkPhysicalDevice physical_device = VK_NULL_HANDLE;
         VkDevice device;
-        VkQueue graphics_queue;
+        VkQueue graphics_queue, present_queue;
 
         void create_instance();
         void check_extensions();
@@ -66,10 +83,15 @@ namespace narechi
             VkDebugUtilsMessengerEXT debug_messenger,
             const VkAllocationCallbacks* allocator);
 
+        void create_surface();
+
         void pick_physical_device();
         bool physical_device_suitable(VkPhysicalDevice device) const;
+        bool device_extensions_supported(VkPhysicalDevice device) const;
         queue_family_indices find_queue_families(VkPhysicalDevice device) const;
 
         void create_logical_device();
+        swap_chain_support_props get_swap_chain_support_props(
+            VkPhysicalDevice device) const;
     };
 }

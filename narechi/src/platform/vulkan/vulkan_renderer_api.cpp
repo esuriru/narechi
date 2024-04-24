@@ -1,9 +1,11 @@
 #include "platform/vulkan/vulkan_renderer_api.hpp"
 
+#include "core/app.hpp"
 #include "core/assert.hpp"
 #include "vulkan/vulkan_core.h"
 
 #include <string.h>
+#include <set>
 
 // NOTE: https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Instance
 namespace narechi
@@ -29,6 +31,7 @@ namespace narechi
     {
         create_instance();
         setup_debug_messenger();
+        create_surface();
         pick_physical_device();
         create_logical_device();
     }
@@ -43,6 +46,7 @@ namespace narechi
                 instance, debug_messenger, nullptr);
         }
 
+        vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);
         NRC_CORE_INFO("Vulkan cleanup done");
     }
@@ -223,6 +227,19 @@ namespace narechi
         }
     }
 
+    void vulkan_renderer_api::create_surface()
+    {
+        // TODO - This seems fishy. Probably needs some abstraction
+        NRC_VERIFY(glfwCreateWindowSurface(instance,
+                       reinterpret_cast<GLFWwindow*>(
+                           app::get().get_window().get_native_internal()),
+                       nullptr,
+                       &surface)
+                == VK_SUCCESS,
+            "Could not create window surface");
+        NRC_CORE_LOG("Vulkan window surface created");
+    }
+
     // TODO - Move this out to a static utils class
     static const char* physical_device_type_to_string(
         VkPhysicalDeviceType device_type)
@@ -283,7 +300,43 @@ namespace narechi
     {
         auto indices = find_queue_families(device);
 
-        return indices.is_complete();
+        // TODO - Can place the rvalue into the bool condition,
+        // but not going to for now
+        bool extensions_supported = device_extensions_supported(device);
+
+        if (!extensions_supported)
+        {
+            return false;
+        }
+
+        bool swap_chain_adequate = false;
+        auto swap_chain_support_props = get_swap_chain_support_props(device);
+        swap_chain_adequate = !swap_chain_support_props.formats.empty()
+            && !swap_chain_support_props.present_modes.empty();
+
+        return indices.is_complete() && swap_chain_adequate;
+    }
+
+    bool vulkan_renderer_api::device_extensions_supported(
+        VkPhysicalDevice device) const
+    {
+        uint32_t extension_count = 0;
+        vkEnumerateDeviceExtensionProperties(
+            device, nullptr, &extension_count, nullptr);
+
+        vector<VkExtensionProperties> extensions(extension_count);
+        vkEnumerateDeviceExtensionProperties(
+            device, nullptr, &extension_count, extensions.data());
+
+        std::set<std::string> required_extensions(
+            device_extensions.begin(), device_extensions.end());
+
+        for (const auto& extension : extensions)
+        {
+            required_extensions.erase(extension.extensionName);
+        }
+
+        return required_extensions.empty();
     }
 
     vulkan_renderer_api::queue_family_indices
@@ -301,6 +354,15 @@ namespace narechi
 
         for (int i = 0; i < queue_family_count; ++i)
         {
+            VkBool32 present_support = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(
+                device, i, surface, &present_support);
+
+            if (present_support)
+            {
+                indices.present_family = i;
+            }
+
             if (queue_families[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
                 indices.graphics_family = i;
@@ -320,25 +382,39 @@ namespace narechi
         // TODO - Maybe cache the indices when finding a physical device
         queue_family_indices indices = find_queue_families(physical_device);
 
-        VkDeviceQueueCreateInfo queue_create_info {};
-        queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        queue_create_info.queueFamilyIndex = indices.graphics_family.value();
-        queue_create_info.queueCount = 1;
+        vector<VkDeviceQueueCreateInfo> queue_create_infos {};
+        std::set<uint32_t> unique_queue_families {
+            indices.graphics_family.value(), indices.present_family.value()
+        };
 
         float queue_priority = 1.0f;
-        queue_create_info.pQueuePriorities = &queue_priority;
+
+        for (uint32_t queue_family : unique_queue_families)
+        {
+            VkDeviceQueueCreateInfo queue_create_info {};
+            queue_create_info.sType
+                = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queue_create_info.queueFamilyIndex
+                = indices.graphics_family.value();
+            queue_create_info.queueCount = 1;
+            queue_create_info.pQueuePriorities = &queue_priority;
+            queue_create_infos.push_back(queue_create_info);
+        }
 
         VkPhysicalDeviceFeatures device_features {};
         vkGetPhysicalDeviceFeatures(physical_device, &device_features);
 
         VkDeviceCreateInfo create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        create_info.pQueueCreateInfos = &queue_create_info;
-        create_info.queueCreateInfoCount = 1;
+        create_info.queueCreateInfoCount
+            = static_cast<uint32_t>(queue_create_infos.size());
+        create_info.pQueueCreateInfos = queue_create_infos.data();
 
         create_info.pEnabledFeatures = &device_features;
 
-        create_info.enabledExtensionCount = 0;
+        create_info.enabledExtensionCount
+            = static_cast<uint32_t>(device_extensions.size());
+        create_info.ppEnabledExtensionNames = device_extensions.data();
 
         if (enable_validation_layers)
         {
@@ -359,5 +435,42 @@ namespace narechi
 
         vkGetDeviceQueue(
             device, indices.graphics_family.value(), 0, &graphics_queue);
+        vkGetDeviceQueue(
+            device, indices.present_family.value(), 0, &graphics_queue);
+    }
+
+    vulkan_renderer_api::swap_chain_support_props
+    vulkan_renderer_api::get_swap_chain_support_props(
+        VkPhysicalDevice device) const
+    {
+        swap_chain_support_props props {};
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
+            device, surface, &props.capabilites);
+
+        uint32_t format_count;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(
+            device, surface, &format_count, nullptr);
+
+        if (format_count != 0)
+        {
+            props.formats.resize(format_count);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(
+                device, surface, &format_count, props.formats.data());
+        }
+
+        uint32_t present_mode_count;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(
+            device, surface, &present_mode_count, nullptr);
+
+        if (present_mode_count != 0)
+        {
+            props.present_modes.resize(present_mode_count);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device,
+                surface,
+                &present_mode_count,
+                props.present_modes.data());
+        }
+
+        return props;
     }
 }

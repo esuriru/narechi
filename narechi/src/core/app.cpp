@@ -49,6 +49,11 @@ namespace narechi
         return *app_instance;
     }
 
+    window& app::get_window()
+    {
+        return *window;    
+    }
+
     void app::push_layer(layer* layer)
     {
         layer_stack.push_layer(layer);

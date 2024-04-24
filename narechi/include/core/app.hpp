@@ -12,8 +12,10 @@ namespace narechi
         explicit app();
         virtual ~app() {}
 
+        static app& get();
+
         void run();
-        app& get();
+        window& get_window();
 
     protected:
         void push_layer(layer* layer);
