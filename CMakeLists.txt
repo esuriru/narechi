@@ -38,6 +38,8 @@ target_link_libraries(narechi-engine PUBLIC glm::glm)
 add_subdirectory("deps/glfw")
 target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 
+find_package(Vulkan)
+
 if (Vulkan_FOUND)
     message("Using Vulkan Lib at: " ${Vulkan_LIBRARY})
 endif()
