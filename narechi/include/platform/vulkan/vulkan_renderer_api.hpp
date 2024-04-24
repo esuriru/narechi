@@ -47,6 +47,8 @@ namespace narechi
         VkInstance instance;
         VkDebugUtilsMessengerEXT debug_messenger;
         VkPhysicalDevice physical_device = VK_NULL_HANDLE;
+        VkDevice device;
+        VkQueue graphics_queue;
 
         void create_instance();
         void check_extensions();
@@ -67,5 +69,7 @@ namespace narechi
         void pick_physical_device();
         bool physical_device_suitable(VkPhysicalDevice device) const;
         queue_family_indices find_queue_families(VkPhysicalDevice device) const;
+
+        void create_logical_device();
     };
 }
