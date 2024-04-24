@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-# set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-# set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
 project(narechi LANGUAGES CXX)
 
 add_subdirectory("narechi")
@@ -40,8 +37,6 @@ target_link_libraries(narechi-engine PUBLIC glm::glm)
 
 add_subdirectory("deps/glfw")
 target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
-
-target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})
 
 if (Vulkan_FOUND)
     message("Using Vulkan Lib at: " ${Vulkan_LIBRARY})
