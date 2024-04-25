@@ -67,6 +67,11 @@ namespace narechi
         VkDevice device;
         VkQueue graphics_queue, present_queue;
 
+        VkSwapchainKHR swap_chain;
+        vector<VkImage> swap_chain_images;
+        VkFormat swap_chain_image_format;
+        VkExtent2D swap_chain_extent;
+
         void create_instance();
         void check_extensions();
         vector<const char*> get_required_extensions() const;
@@ -91,7 +96,15 @@ namespace narechi
         queue_family_indices find_queue_families(VkPhysicalDevice device) const;
 
         void create_logical_device();
+
+        void create_swap_chain();
         swap_chain_support_props get_swap_chain_support_props(
             VkPhysicalDevice device) const;
+        VkSurfaceFormatKHR get_swap_surface_format(
+            const std::vector<VkSurfaceFormatKHR>& available_formats) const;
+        VkPresentModeKHR get_swap_present_mode(
+            const std::vector<VkPresentModeKHR>& available_present_modes) const;
+        VkExtent2D get_swap_extent(
+            const VkSurfaceCapabilitiesKHR& capabilities) const;
     };
 }

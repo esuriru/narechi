@@ -22,6 +22,6 @@ target_include_directories(narechi-engine PUBLIC "include")
 
 if (WIN32)
     target_compile_definitions(narechi-engine PRIVATE 
-        "NRC_PLATFORM_WINDOWS;NRC_DEBUG;NRC_BUILD_DLL;")
+        "NRC_PLATFORM_WINDOWS;NRC_DEBUG;NRC_BUILD_DLL;NOMINMAX")
 else()
 endif()

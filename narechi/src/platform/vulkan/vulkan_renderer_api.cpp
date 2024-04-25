@@ -1,11 +1,14 @@
 #include "platform/vulkan/vulkan_renderer_api.hpp"
 
+#include "GLFW/glfw3.h"
 #include "core/app.hpp"
 #include "core/assert.hpp"
 #include "vulkan/vulkan_core.h"
 
 #include <string.h>
 #include <set>
+#include <limits>
+#include <algorithm>
 
 // NOTE: https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Instance
 namespace narechi
@@ -34,10 +37,12 @@ namespace narechi
         create_surface();
         pick_physical_device();
         create_logical_device();
+        create_swap_chain();
     }
 
     void vulkan_renderer_api::cleanup()
     {
+        vkDestroySwapchainKHR(device, swap_chain, nullptr);
         vkDestroyDevice(device, nullptr);
 
         if (enable_validation_layers)
@@ -439,6 +444,76 @@ namespace narechi
             device, indices.present_family.value(), 0, &graphics_queue);
     }
 
+    void vulkan_renderer_api::create_swap_chain()
+    {
+        auto swap_chain_support = get_swap_chain_support_props(physical_device);
+
+        auto surface_format
+            = get_swap_surface_format(swap_chain_support.formats);
+        auto present_mode
+            = get_swap_present_mode(swap_chain_support.present_modes);
+        auto extent = get_swap_extent(swap_chain_support.capabilites);
+
+        uint32_t image_count = swap_chain_support.capabilites.minImageCount + 1;
+
+        // Clamp the image count
+        if (swap_chain_support.capabilites.maxImageCount > 0
+            && image_count > swap_chain_support.capabilites.maxImageCount)
+        {
+            image_count = swap_chain_support.capabilites.maxImageCount;
+        }
+
+        VkSwapchainCreateInfoKHR create_info {};
+        create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        create_info.surface = surface;
+        create_info.minImageCount = image_count;
+        create_info.imageFormat = surface_format.format;
+        create_info.imageColorSpace = surface_format.colorSpace;
+        create_info.imageExtent = extent;
+        create_info.imageArrayLayers = 1;
+        create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+        auto indices = find_queue_families(physical_device);
+        uint32_t queue_family_indices[] { indices.graphics_family.value(),
+            indices.present_family.value() };
+
+        if (indices.graphics_family != indices.present_family)
+        {
+            create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+            create_info.queueFamilyIndexCount = 2;
+            create_info.pQueueFamilyIndices = queue_family_indices;
+        }
+        else
+        {
+            create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            create_info.queueFamilyIndexCount = 0;
+            create_info.pQueueFamilyIndices = nullptr;
+        }
+
+        create_info.preTransform
+            = swap_chain_support.capabilites.currentTransform;
+        create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+
+        create_info.presentMode = present_mode;
+        create_info.clipped = VK_TRUE;
+
+        create_info.oldSwapchain = VK_NULL_HANDLE;
+
+        NRC_VERIFY(
+            vkCreateSwapchainKHR(device, &create_info, nullptr, &swap_chain)
+                == VK_SUCCESS,
+            "Failed to create Vulkan swap chain");
+        NRC_CORE_LOG("Vulkan swap chain created");
+
+        vkGetSwapchainImagesKHR(device, swap_chain, &image_count, nullptr);
+        swap_chain_images.resize(image_count);
+        vkGetSwapchainImagesKHR(
+            device, swap_chain, &image_count, swap_chain_images.data());
+
+        swap_chain_image_format = surface_format.format;
+        swap_chain_extent = extent;
+    }
+
     vulkan_renderer_api::swap_chain_support_props
     vulkan_renderer_api::get_swap_chain_support_props(
         VkPhysicalDevice device) const
@@ -472,5 +547,64 @@ namespace narechi
         }
 
         return props;
+    }
+
+    VkSurfaceFormatKHR vulkan_renderer_api::get_swap_surface_format(
+        const std::vector<VkSurfaceFormatKHR>& available_formats) const
+    {
+        for (const auto& available_format : available_formats)
+        {
+            if (available_format.format == VK_FORMAT_B8G8R8A8_SRGB
+                && available_format.colorSpace
+                    == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+            {
+                return available_format;
+            }
+        }
+
+        return available_formats.front();
+    }
+
+    VkPresentModeKHR vulkan_renderer_api::get_swap_present_mode(
+        const std::vector<VkPresentModeKHR>& available_present_modes) const
+    {
+        for (const auto& available_present_mode : available_present_modes)
+        {
+            if (available_present_mode == VK_PRESENT_MODE_MAILBOX_KHR)
+            {
+                return available_present_mode;
+            }
+        }
+
+        return VK_PRESENT_MODE_FIFO_KHR;
+    }
+
+    VkExtent2D vulkan_renderer_api::get_swap_extent(
+        const VkSurfaceCapabilitiesKHR& capabilities) const
+    {
+        if (capabilities.currentExtent.width
+            != std::numeric_limits<uint32_t>::max())
+        {
+            return capabilities.currentExtent;
+        }
+
+        int width, height;
+        glfwGetFramebufferSize(
+            reinterpret_cast<GLFWwindow*>(
+                app::get().get_window().get_native_internal()),
+            &width,
+            &height);
+
+        VkExtent2D extent { static_cast<uint32_t>(width),
+            static_cast<uint32_t>(height) };
+
+        extent.width = std::clamp(extent.width,
+            capabilities.minImageExtent.width,
+            capabilities.maxImageExtent.width);
+        extent.height = std::clamp(extent.height,
+            capabilities.minImageExtent.height,
+            capabilities.maxImageExtent.height);
+
+        return extent;
     }
 }
