@@ -14,13 +14,13 @@ add_subdirectory("narechi-launcher")
 
 include(FetchContent)
 
-if (POLICY CMP0135)
+if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
 FetchContent_Declare(
-	glm
-	URL https://github.com/g-truc/glm/archive/refs/tags/1.0.1.zip 
+    glm
+    URL https://github.com/g-truc/glm/archive/refs/tags/1.0.1.zip 
     URL_HASH
         SHA256=09C5716296787E1F7FCB87B1CBDBF26814EC1288ED6259CCD30D5D9795809FA5
 )
@@ -40,8 +40,10 @@ target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 
 find_package(Vulkan)
 
-if (Vulkan_FOUND)
-    message("Using Vulkan Lib at: " ${Vulkan_LIBRARY})
+if(Vulkan_FOUND)
+    message(STATUS "Using Vulkan Lib at: " ${Vulkan_LIBRARY})
+else()
+    message(FATAL_ERROR "Vulkan was not found")
 endif()
 
 target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})

@@ -106,5 +106,7 @@ namespace narechi
             const std::vector<VkPresentModeKHR>& available_present_modes) const;
         VkExtent2D get_swap_extent(
             const VkSurfaceCapabilitiesKHR& capabilities) const;
+        
+        void create_image_views();
     };
 }
