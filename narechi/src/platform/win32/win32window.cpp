@@ -33,11 +33,11 @@ namespace narechi
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        if (window = glfwCreateWindow(properties.width,
+        if ((window = glfwCreateWindow(properties.width,
                 properties.height,
                 properties.title.c_str(),
                 nullptr,
-                nullptr))
+                nullptr)))
         {
             NRC_CORE_DEBUG("GLFW Window created");
         }
