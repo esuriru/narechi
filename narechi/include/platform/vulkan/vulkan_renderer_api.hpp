@@ -47,11 +47,6 @@ namespace narechi
             vector<VkPresentModeKHR> present_modes;
         };
 
-#ifdef NRC_DEBUG
-        const bool enable_validation_layers = true;
-#else
-        const bool enable_validation_layers = false;
-#endif
         const vector<const char*> device_extensions {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
         };
@@ -71,6 +66,7 @@ namespace narechi
         vector<VkImage> swap_chain_images;
         VkFormat swap_chain_image_format;
         VkExtent2D swap_chain_extent;
+        vector<VkImageView> swap_chain_image_views;
 
         void create_instance();
         void check_extensions();
@@ -106,7 +102,7 @@ namespace narechi
             const std::vector<VkPresentModeKHR>& available_present_modes) const;
         VkExtent2D get_swap_extent(
             const VkSurfaceCapabilitiesKHR& capabilities) const;
-        
+
         void create_image_views();
     };
 }

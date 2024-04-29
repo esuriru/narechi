@@ -15,6 +15,12 @@ namespace narechi
 {
     using std::vector;
 
+#ifdef NRC_DEBUG
+    constexpr bool enable_validation_layers = true;
+#else
+    constexpr bool enable_validation_layers = false;
+#endif
+
     static uptr<logger> validation_layer_logger
         = make_uptr<logger>("Vulkan Validation Layer");
 
@@ -42,6 +48,11 @@ namespace narechi
 
     void vulkan_renderer_api::cleanup()
     {
+        for (auto image_view : swap_chain_image_views)
+        {
+            vkDestroyImageView(device, image_view, nullptr);
+        }
+
         vkDestroySwapchainKHR(device, swap_chain, nullptr);
         vkDestroyDevice(device, nullptr);
 
@@ -606,5 +617,38 @@ namespace narechi
             capabilities.maxImageExtent.height);
 
         return extent;
+    }
+
+    void vulkan_renderer_api::create_image_views()
+    {
+        size_t swap_chain_images_count = swap_chain_images.size();
+        swap_chain_image_views.resize(swap_chain_images_count);
+
+        for (size_t i = 0; i < swap_chain_images_count; ++i)
+        {
+            VkImageViewCreateInfo create_info {};
+
+            create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            create_info.image = swap_chain_images[i];
+            create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            create_info.format = swap_chain_image_format;
+
+            create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+            create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            create_info.subresourceRange.baseMipLevel = 0;
+            create_info.subresourceRange.levelCount = 1;
+            create_info.subresourceRange.baseArrayLayer = 0;
+            create_info.subresourceRange.layerCount = 1;
+
+            NRC_VERIFY(
+                vkCreateImageView(
+                    device, &create_info, nullptr, &swap_chain_image_views[i])
+                    != VK_SUCCESS,
+                "Failed to create a Vulkan image view");
+        }
     }
 }
