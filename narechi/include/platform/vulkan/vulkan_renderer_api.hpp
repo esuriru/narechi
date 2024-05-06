@@ -68,6 +68,11 @@ namespace narechi
         VkExtent2D swap_chain_extent;
         vector<VkImageView> swap_chain_image_views;
 
+        VkRenderPass render_pass;
+        VkPipelineLayout pipeline_layout;
+
+        VkPipeline graphics_pipeline;
+
         void create_instance();
         void check_extensions();
         vector<const char*> get_required_extensions() const;
@@ -106,5 +111,9 @@ namespace narechi
         void create_image_views();
 
         void create_graphics_pipeline();
+        std::string read_file(const std::string& file_path);
+        VkShaderModule create_shader_module(const std::string& raw_shader);
+
+        void create_render_pass();
     };
 }
