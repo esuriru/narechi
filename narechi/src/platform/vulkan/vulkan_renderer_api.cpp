@@ -48,6 +48,7 @@ namespace narechi
         pick_physical_device();
         create_logical_device();
         create_swap_chain();
+        create_image_views();
         create_render_pass();
         create_graphics_pipeline();
         create_framebuffers();
@@ -477,7 +478,7 @@ namespace narechi
         vkGetDeviceQueue(
             device, indices.graphics_family.value(), 0, &graphics_queue);
         vkGetDeviceQueue(
-            device, indices.present_family.value(), 0, &graphics_queue);
+            device, indices.present_family.value(), 0, &present_queue);
     }
 
     void vulkan_renderer_api::create_swap_chain()
@@ -672,7 +673,7 @@ namespace narechi
             NRC_VERIFY(
                 vkCreateImageView(
                     device, &create_info, nullptr, &swap_chain_image_views[i])
-                    != VK_SUCCESS,
+                    == VK_SUCCESS,
                 "Failed to create a Vulkan image view");
         }
     }
@@ -905,12 +906,22 @@ namespace narechi
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &color_attachment_reference;
 
+        VkSubpassDependency dependency {};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
         VkRenderPassCreateInfo create_info {};
         create_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         create_info.attachmentCount = 1;
         create_info.pAttachments = &color_attachment;
         create_info.subpassCount = 1;
         create_info.pSubpasses = &subpass;
+        create_info.dependencyCount = 1;
+        create_info.pDependencies = &dependency;
 
         VkResult result
             = vkCreateRenderPass(device, &create_info, nullptr, &render_pass);
@@ -987,7 +998,6 @@ namespace narechi
             = vkBeginCommandBuffer(command_buffer, &begin_info);
         NRC_VERIFY(begin_result == VK_SUCCESS,
             "Could not begin recording Vulkan command buffer");
-        NRC_CORE_LOG("Begin recording vulkan command buffer");
 
         VkRenderPassBeginInfo render_pass_info {};
         render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -996,7 +1006,7 @@ namespace narechi
         render_pass_info.renderArea.offset = { 0, 0 };
         render_pass_info.renderArea.extent = swap_chain_extent;
 
-        VkClearValue clear_color = { { { 0.527f, 0.807f, 0.980f, 1.0f } } };
+        VkClearValue clear_color = { { { 0.1f, 0.1f, 0.1f, 1.0f } } };
         render_pass_info.clearValueCount = 1;
         render_pass_info.pClearValues = &clear_color;
 
@@ -1012,10 +1022,12 @@ namespace narechi
         viewport.height = static_cast<float>(swap_chain_extent.height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(command_buffer, 0, 1, &viewport);
 
         VkRect2D scissor {};
         scissor.offset = { 0, 0 };
         scissor.extent = swap_chain_extent;
+        vkCmdSetScissor(command_buffer, 0, 1, &scissor);
 
         vkCmdDraw(command_buffer, 3, 1, 0, 0);
 
@@ -1024,7 +1036,6 @@ namespace narechi
         VkResult end_result = vkEndCommandBuffer(command_buffer);
         NRC_VERIFY(end_result == VK_SUCCESS,
             "Could not end recording Vulkan command buffer");
-        NRC_CORE_LOG("End recording vulkan command buffer");
     }
 
     void vulkan_renderer_api::create_sync_objects()
@@ -1034,6 +1045,7 @@ namespace narechi
 
         VkFenceCreateInfo fence_info {};
         fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fence_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
         NRC_VERIFY(
             vkCreateSemaphore(
@@ -1048,5 +1060,59 @@ namespace narechi
                     == VK_SUCCESS,
             "Failed to create Vulkan synchronization objects");
         NRC_CORE_LOG("Vulkan sync objects created");
+    }
+
+    void vulkan_renderer_api::draw_frame()
+    {
+        vkWaitForFences(device, 1, &in_flight_fence, VK_TRUE, UINT64_MAX);
+        vkResetFences(device, 1, &in_flight_fence);
+
+        uint32_t image_index;
+        vkAcquireNextImageKHR(device,
+            swap_chain,
+            UINT64_MAX,
+            image_available_semaphore,
+            VK_NULL_HANDLE,
+            &image_index);
+
+        vkResetCommandBuffer(command_buffer, 0);
+        record_command_buffer(command_buffer, image_index);
+
+        VkSubmitInfo submit_info {};
+        submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+        VkSemaphore wait_semaphores[] { image_available_semaphore };
+        VkPipelineStageFlags wait_stages[] {
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+        };
+        submit_info.waitSemaphoreCount = 1;
+        submit_info.pWaitSemaphores = wait_semaphores;
+        submit_info.pWaitDstStageMask = wait_stages;
+        submit_info.commandBufferCount = 1;
+        submit_info.pCommandBuffers = &command_buffer;
+
+        VkSemaphore signal_semaphores[] { render_finished_semaphore };
+        submit_info.signalSemaphoreCount = 1;
+        submit_info.pSignalSemaphores = signal_semaphores;
+
+        NRC_VERIFY(
+            vkQueueSubmit(graphics_queue, 1, &submit_info, in_flight_fence)
+                == VK_SUCCESS,
+            "Failed to submit draw command buffer");
+
+        VkPresentInfoKHR present_info {};
+        present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        present_info.waitSemaphoreCount = 1;
+        present_info.pWaitSemaphores = signal_semaphores;
+
+        VkSwapchainKHR swap_chains[] = { swap_chain };
+        present_info.swapchainCount = 1;
+        present_info.pSwapchains = swap_chains;
+        present_info.pImageIndices = &image_index;
+        present_info.pResults = nullptr;
+
+        NRC_VERIFY(
+            vkQueuePresentKHR(present_queue, &present_info) == VK_SUCCESS,
+            "Could not present queue");
     }
 }

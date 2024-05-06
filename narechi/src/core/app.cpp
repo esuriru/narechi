@@ -39,6 +39,7 @@ namespace narechi
             }
 
             window->update();
+            render_command::draw();
         }
 
         render_command::cleanup();
@@ -51,7 +52,7 @@ namespace narechi
 
     window& app::get_window()
     {
-        return *window;    
+        return *window;
     }
 
     void app::push_layer(layer* layer)

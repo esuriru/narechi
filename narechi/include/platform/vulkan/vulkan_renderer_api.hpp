@@ -27,6 +27,8 @@ namespace narechi
         void init() override;
         void cleanup() override;
 
+        void draw_frame();
+
     private:
         struct queue_family_indices
         {
