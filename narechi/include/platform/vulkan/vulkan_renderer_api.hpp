@@ -104,5 +104,7 @@ namespace narechi
             const VkSurfaceCapabilitiesKHR& capabilities) const;
 
         void create_image_views();
+
+        void create_graphics_pipeline();
     };
 }
