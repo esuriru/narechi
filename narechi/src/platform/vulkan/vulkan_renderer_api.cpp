@@ -59,6 +59,8 @@ namespace narechi
 
     void vulkan_renderer_api::cleanup()
     {
+        vkDeviceWaitIdle(device);
+
         vkDestroySemaphore(device, image_available_semaphore, nullptr);
         vkDestroySemaphore(device, render_finished_semaphore, nullptr);
         vkDestroyFence(device, in_flight_fence, nullptr);
