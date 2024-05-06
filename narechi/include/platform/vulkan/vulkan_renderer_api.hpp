@@ -76,6 +76,11 @@ namespace narechi
         vector<VkFramebuffer> swap_chain_frame_buffers;
 
         VkCommandPool command_pool;
+        VkCommandBuffer command_buffer;
+
+        VkSemaphore image_available_semaphore;
+        VkSemaphore render_finished_semaphore;
+        VkFence in_flight_fence;
 
         void create_instance();
         void check_extensions();
@@ -123,5 +128,10 @@ namespace narechi
         void create_framebuffers();
 
         void create_command_pool();
+        void create_command_buffer();
+        void record_command_buffer(
+            VkCommandBuffer command_buffer, uint32_t image_index);
+
+        void create_sync_objects();
     };
 }

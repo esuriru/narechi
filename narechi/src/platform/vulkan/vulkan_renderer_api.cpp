@@ -52,10 +52,16 @@ namespace narechi
         create_graphics_pipeline();
         create_framebuffers();
         create_command_pool();
+        create_command_buffer();
+        create_sync_objects();
     }
 
     void vulkan_renderer_api::cleanup()
     {
+        vkDestroySemaphore(device, image_available_semaphore, nullptr);
+        vkDestroySemaphore(device, render_finished_semaphore, nullptr);
+        vkDestroyFence(device, in_flight_fence, nullptr);
+
         vkDestroyCommandPool(device, command_pool, nullptr);
 
         for (auto framebuffer : swap_chain_frame_buffers)
@@ -952,5 +958,95 @@ namespace narechi
         NRC_VERIFY(
             result == VK_SUCCESS, "Could not create Vulkan command pool");
         NRC_CORE_LOG("Vulkan command pool created");
+    }
+
+    void vulkan_renderer_api::create_command_buffer()
+    {
+        VkCommandBufferAllocateInfo allocate_info {};
+        allocate_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        allocate_info.commandPool = command_pool;
+        allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocate_info.commandBufferCount = 1;
+
+        VkResult result
+            = vkAllocateCommandBuffers(device, &allocate_info, &command_buffer);
+        NRC_VERIFY(
+            result == VK_SUCCESS, "Could not allocate Vulkan command buffer");
+        NRC_CORE_LOG("Allocated vulkan comand buffers");
+    }
+
+    void vulkan_renderer_api::record_command_buffer(
+        VkCommandBuffer command_buffer, uint32_t image_index)
+    {
+        VkCommandBufferBeginInfo begin_info {};
+        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        begin_info.flags = 0;
+        begin_info.pInheritanceInfo = nullptr;
+
+        VkResult begin_result
+            = vkBeginCommandBuffer(command_buffer, &begin_info);
+        NRC_VERIFY(begin_result == VK_SUCCESS,
+            "Could not begin recording Vulkan command buffer");
+        NRC_CORE_LOG("Begin recording vulkan command buffer");
+
+        VkRenderPassBeginInfo render_pass_info {};
+        render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        render_pass_info.renderPass = render_pass;
+        render_pass_info.framebuffer = swap_chain_frame_buffers[image_index];
+        render_pass_info.renderArea.offset = { 0, 0 };
+        render_pass_info.renderArea.extent = swap_chain_extent;
+
+        VkClearValue clear_color = { { { 0.527f, 0.807f, 0.980f, 1.0f } } };
+        render_pass_info.clearValueCount = 1;
+        render_pass_info.pClearValues = &clear_color;
+
+        vkCmdBeginRenderPass(
+            command_buffer, &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+
+        vkCmdBindPipeline(
+            command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphics_pipeline);
+
+        VkViewport viewport {};
+        viewport.x = viewport.y = 0.0f;
+        viewport.width = static_cast<float>(swap_chain_extent.width);
+        viewport.height = static_cast<float>(swap_chain_extent.height);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        VkRect2D scissor {};
+        scissor.offset = { 0, 0 };
+        scissor.extent = swap_chain_extent;
+
+        vkCmdDraw(command_buffer, 3, 1, 0, 0);
+
+        vkCmdEndRenderPass(command_buffer);
+
+        VkResult end_result = vkEndCommandBuffer(command_buffer);
+        NRC_VERIFY(end_result == VK_SUCCESS,
+            "Could not end recording Vulkan command buffer");
+        NRC_CORE_LOG("End recording vulkan command buffer");
+    }
+
+    void vulkan_renderer_api::create_sync_objects()
+    {
+        VkSemaphoreCreateInfo semaphore_info {};
+        semaphore_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+        VkFenceCreateInfo fence_info {};
+        fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+        NRC_VERIFY(
+            vkCreateSemaphore(
+                device, &semaphore_info, nullptr, &image_available_semaphore)
+                    == VK_SUCCESS
+                && vkCreateSemaphore(device,
+                       &semaphore_info,
+                       nullptr,
+                       &render_finished_semaphore)
+                    == VK_SUCCESS
+                && vkCreateFence(device, &fence_info, nullptr, &in_flight_fence)
+                    == VK_SUCCESS,
+            "Failed to create Vulkan synchronization objects");
+        NRC_CORE_LOG("Vulkan sync objects created");
     }
 }
