@@ -73,6 +73,10 @@ namespace narechi
 
         VkPipeline graphics_pipeline;
 
+        vector<VkFramebuffer> swap_chain_frame_buffers;
+
+        VkCommandPool command_pool;
+
         void create_instance();
         void check_extensions();
         vector<const char*> get_required_extensions() const;
@@ -115,5 +119,9 @@ namespace narechi
         VkShaderModule create_shader_module(const std::string& raw_shader);
 
         void create_render_pass();
+
+        void create_framebuffers();
+
+        void create_command_pool();
     };
 }

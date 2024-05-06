@@ -10,6 +10,7 @@
 #include <limits>
 #include <algorithm>
 #include <fstream>
+#include <winnt.h>
 
 // TODO: Possible Verify macro for each create check.
 
@@ -49,10 +50,19 @@ namespace narechi
         create_swap_chain();
         create_render_pass();
         create_graphics_pipeline();
+        create_framebuffers();
+        create_command_pool();
     }
 
     void vulkan_renderer_api::cleanup()
     {
+        vkDestroyCommandPool(device, command_pool, nullptr);
+
+        for (auto framebuffer : swap_chain_frame_buffers)
+        {
+            vkDestroyFramebuffer(device, framebuffer, nullptr);
+        }
+
         vkDestroyPipeline(device, graphics_pipeline, nullptr);
         vkDestroyPipelineLayout(device, pipeline_layout, nullptr);
         vkDestroyRenderPass(device, render_pass, nullptr);
@@ -900,5 +910,47 @@ namespace narechi
             = vkCreateRenderPass(device, &create_info, nullptr, &render_pass);
         NRC_VERIFY(result == VK_SUCCESS, "Could not create Vulkan render pass");
         NRC_CORE_LOG("Vulkan render pass created");
+    }
+
+    void vulkan_renderer_api::create_framebuffers()
+    {
+        swap_chain_frame_buffers.resize(swap_chain_image_views.size());
+
+        for (size_t i = 0; i < swap_chain_image_views.size(); ++i)
+        {
+            VkImageView attachments[] { swap_chain_image_views[i] };
+
+            VkFramebufferCreateInfo create_info {};
+            create_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            create_info.renderPass = render_pass;
+            create_info.attachmentCount = 1;
+            create_info.pAttachments = attachments;
+            create_info.width = swap_chain_extent.width;
+            create_info.height = swap_chain_extent.height;
+            create_info.layers = 1;
+
+            VkResult result = vkCreateFramebuffer(
+                device, &create_info, nullptr, &swap_chain_frame_buffers[i]);
+            NRC_VERIFY(
+                result == VK_SUCCESS, "Could not create Vulkan framebuffer");
+            NRC_CORE_LOG("Vulkan framebuffer index ", i, " created");
+        }
+    }
+
+    void vulkan_renderer_api::create_command_pool()
+    {
+        auto queue_family_indices = find_queue_families(physical_device);
+
+        VkCommandPoolCreateInfo create_info {};
+        create_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        create_info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        create_info.queueFamilyIndex
+            = queue_family_indices.graphics_family.value();
+
+        VkResult result
+            = vkCreateCommandPool(device, &create_info, nullptr, &command_pool);
+        NRC_VERIFY(
+            result == VK_SUCCESS, "Could not create Vulkan command pool");
+        NRC_CORE_LOG("Vulkan command pool created");
     }
 }
