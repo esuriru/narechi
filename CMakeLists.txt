@@ -48,4 +48,3 @@ endif()
 
 target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})
 target_include_directories(narechi-engine PUBLIC ${Vulkan_INCLUDE_DIR})
-
