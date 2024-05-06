@@ -8,6 +8,7 @@ set(NARECHI_SOURCES
     "src/rendering/render_command.cpp"
 
     "src/platform/vulkan/vulkan_renderer_api.cpp"
+    "src/platform/vulkan/vulkan_shader.cpp"
 
     "src/platform/win32/win32window.cpp"
 
