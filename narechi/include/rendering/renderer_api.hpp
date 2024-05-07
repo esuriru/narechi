@@ -20,6 +20,11 @@ namespace narechi
 
         static uptr<renderer_api> create();
 
+        inline static api get_api()
+        {
+            return api_type;
+        }
+
     private:
         static api api_type;
     };
