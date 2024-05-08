@@ -22,11 +22,13 @@ namespace narechi
         };
 
         explicit logger(std::string_view name);
+        ~logger();
 
         template<typename Arg, typename... Args>
         void log(const log_level level, Arg&& arg, Args&&... args)
         {
             // TODO - Singular format string
+            set_text_color(level);
             std::cout << std::vformat(output_format,
                 std::make_format_args(utils::get_formatted_time(), name))
                       << " ";
@@ -38,6 +40,8 @@ namespace narechi
     private:
         std::string name;
         std::string output_format;
+
+        void set_text_color(log_level level);
     };
 
     static logger core_logger = logger("CORE");
@@ -53,8 +57,8 @@ namespace narechi
     narechi::core_logger.log(narechi::logger::log_level::none, __VA_ARGS__)
 #define NRC_CORE_ERROR(...) \
     narechi::core_logger.log(narechi::logger::log_level::error, __VA_ARGS__)
-#define NRC_CORE_FATAL(...)                                                  \
+#define NRC_CORE_FATAL(...)                                                   \
     narechi::core_logger.log(narechi::logger::log_level::error, __VA_ARGS__); \
-        NRC_DEBUG_BREAK
+    NRC_DEBUG_BREAK
 // TODO - Should a fatal log have a different message log,
 // just like the assert?
