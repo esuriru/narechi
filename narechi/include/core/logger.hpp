@@ -1,7 +1,8 @@
 #pragma once
 
-#include <utils/time_utils.hpp>
-#include <core/core.hpp>
+#include "utils/time_utils.hpp"
+#include "core/core.hpp"
+#include "core/assert.hpp"
 
 #include <iostream>
 #include <format>
@@ -52,3 +53,8 @@ namespace narechi
     narechi::core_logger.log(narechi::logger::log_level::none, __VA_ARGS__)
 #define NRC_CORE_ERROR(...) \
     narechi::core_logger.log(narechi::logger::log_level::error, __VA_ARGS__)
+#define NRC_CORE_FATAL(...)                                                  \
+    narechi::core_logger.log(narechi::logger::log_level::error, __VA_ARGS__); \
+        NRC_DEBUG_BREAK
+// TODO - Should a fatal log have a different message log,
+// just like the assert?
