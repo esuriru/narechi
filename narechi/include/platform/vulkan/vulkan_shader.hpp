@@ -1,6 +1,7 @@
 #pragma once
 
-#include <rendering/shader.hpp>
+#include "rendering/shader.hpp"
+
 #include <vulkan/vulkan.h>
 
 namespace narechi

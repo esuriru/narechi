@@ -1,8 +1,8 @@
 #pragma once
 
-#include <core/core.hpp>
-#include <core/window.hpp>
-#include <core/layer_stack.hpp>
+#include "core/core.hpp"
+#include "core/window.hpp"
+#include "core/layer_stack.hpp"
 
 namespace narechi
 {

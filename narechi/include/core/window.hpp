@@ -1,7 +1,7 @@
 #pragma once
 
-#include <core/core.hpp>
-#include <core/events/event.hpp>
+#include "core/core.hpp"
+#include "core/events/event.hpp"
 
 #include <string>
 #include <cstdint>

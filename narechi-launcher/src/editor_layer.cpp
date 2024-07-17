@@ -1,6 +1,6 @@
 #include "editor_layer.hpp"
 
-#include <core/logger.hpp>
+#include "core/logger.hpp"
 
 namespace narechi::editor
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <rendering/shader_type.hpp>
+#include "rendering/shader_type.hpp"
 
 #include <string>
 

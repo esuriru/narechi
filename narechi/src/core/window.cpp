@@ -1,6 +1,7 @@
 #include "core/window.hpp"
+#include "core/logger.hpp"
 
-#include <platform/win32/win32window.hpp>
+#include "platform/win32/win32window.hpp"
 
 namespace narechi
 {
