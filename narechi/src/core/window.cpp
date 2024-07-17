@@ -10,8 +10,7 @@ namespace narechi
 #ifdef NRC_PLATFORM_WINDOWS
         return make_uptr<win32window>(properties);
 #else
-        // TODO: Make a fatal instead of false assertions
-        NRC_ASSERT(false, "")
+        NRC_CORE_FATAL("Could not create a window: unsupported platform");
 #endif
     }
 }
