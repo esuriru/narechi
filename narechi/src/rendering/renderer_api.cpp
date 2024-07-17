@@ -1,6 +1,9 @@
 #include "rendering/renderer_api.hpp"
 
+#include "core/logger.hpp"
+
 #include <platform/vulkan/vulkan_renderer_api.hpp>
+#include <platform/vulkan/opengl_renderer_api.hpp>
 
 namespace narechi
 {
@@ -11,8 +14,10 @@ namespace narechi
         switch (api_type)
         {
         case renderer_api::api::none:
-            // TODO - Fatal here
+            NRC_CORE_FATAL("Renderer API cannot be none!");
             break;
+        case renderer_api::api::opengl:
+            return make_uptr<opengl_renderer_api>();
         case renderer_api::api::vulkan:
             return make_uptr<vulkan_renderer_api>();
         }

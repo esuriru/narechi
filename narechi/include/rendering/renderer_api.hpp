@@ -10,6 +10,7 @@ namespace narechi
         enum class api
         {
             none = 0,
+            opengl,
             vulkan
         };
 
