@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rendering/graphics_context.hpp"
+
 #include "core/window.hpp"
 #include "core/events/event.hpp"
 
@@ -48,6 +50,8 @@ namespace narechi
         };
 
         window_data data;
+
+        uptr<graphics_context> graphics_context;
         GLFWwindow* window;
     };
 }
