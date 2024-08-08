@@ -40,7 +40,7 @@ target_link_libraries(narechi-engine PUBLIC glm::glm)
 add_subdirectory("deps/glfw")
 target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 
-if (${NRC_RENDERER_API} STREQUAL "vulkan")
+if(${NRC_RENDERER_API} STREQUAL "vulkan")
     find_package(Vulkan)
 
     if(Vulkan_FOUND)
@@ -51,7 +51,7 @@ if (${NRC_RENDERER_API} STREQUAL "vulkan")
 
     target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})
     target_include_directories(narechi-engine PUBLIC ${Vulkan_INCLUDE_DIR})
-elseif (${NRC_RENDERER_API} STREQUAL "opengl")
+elseif(${NRC_RENDERER_API} STREQUAL "opengl")
     add_subdirectory("deps/glad")
 
     target_link_libraries(narechi-engine PUBLIC glad)
