@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-project(narechi LANGUAGES CXX)
+set(NRC_RENDERER_API "opengl")
+
+project(narechi LANGUAGES C CXX)
 
 add_subdirectory("narechi")
 add_subdirectory("narechi-launcher")
@@ -38,13 +40,20 @@ target_link_libraries(narechi-engine PUBLIC glm::glm)
 add_subdirectory("deps/glfw")
 target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 
-find_package(Vulkan)
+if (${NRC_RENDERER_API} STREQUAL "vulkan")
+    find_package(Vulkan)
 
-if(Vulkan_FOUND)
-    message(STATUS "Using Vulkan Lib at: " ${Vulkan_LIBRARY})
-else()
-    message(FATAL_ERROR "Vulkan was not found")
+    if(Vulkan_FOUND)
+        message(STATUS "Using Vulkan Lib at: " ${Vulkan_LIBRARY})
+    else()
+        message(FATAL_ERROR "Vulkan was not found")
+    endif()
+
+    target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})
+    target_include_directories(narechi-engine PUBLIC ${Vulkan_INCLUDE_DIR})
+elseif (${NRC_RENDERER_API} STREQUAL "opengl")
+    add_subdirectory("deps/glad")
+
+    target_link_libraries(narechi-engine PUBLIC glad)
+    target_include_directories(narechi-engine PUBLIC "deps/glad/include")
 endif()
-
-target_link_libraries(narechi-engine PUBLIC ${Vulkan_LIBRARY})
-target_include_directories(narechi-engine PUBLIC ${Vulkan_INCLUDE_DIR})
