@@ -1,6 +1,10 @@
 #include "platform/win32/win32window.hpp"
 
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
+
 #include "core/logger.hpp"
+#include "core/assert.hpp"
 #include "core/events/app_event.hpp"
 
 namespace narechi
@@ -28,22 +32,32 @@ namespace narechi
         data.width = properties.width;
         data.height = properties.height;
 
-        glfwInit();
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-
-        if ((window = glfwCreateWindow(properties.width,
-                properties.height,
-                properties.title.c_str(),
-                nullptr,
-                nullptr)))
+        NRC_VERIFY(glfwInit() == GLFW_TRUE, "GLFW could not initialize");
+        glfwSetErrorCallback([](int error, const char* desc)
         {
-            NRC_CORE_DEBUG("GLFW Window created");
-        }
+            NRC_CORE_ERROR("GLFW error: (", error, "): {", desc, "}");
+        });
+
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        // TODO - Versions
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  
+
+        NRC_VERIFY((window = glfwCreateWindow(properties.width,
+                 properties.height,
+                 properties.title.c_str(),
+                 nullptr,
+                 nullptr)));
+        NRC_CORE_DEBUG("GLFW Window created");
+        
+        glfwMakeContextCurrent(window);
+
+        NRC_ASSERT(gladLoadGL(glfwGetProcAddress), "GLAD could not initialize");
 
         glfwSetWindowUserPointer(window, &data);
 
+        // TODO - Use reinterpret_cast
         glfwSetWindowSizeCallback(window,
             [](GLFWwindow* window, int width, int height)
             {
