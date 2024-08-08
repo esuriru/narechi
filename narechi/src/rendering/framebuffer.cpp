@@ -2,7 +2,10 @@
 #include "rendering/renderer_api.hpp"
 #include "core/core.hpp"
 #include "core/logger.hpp"
-#include "platform/vulkan/vulkan_framebuffer.hpp"
+
+#ifdef NRC_RENDERER_API_VULKAN
+    #include "platform/vulkan/vulkan_framebuffer.hpp"
+#endif
 
 namespace narechi
 {
@@ -11,7 +14,11 @@ namespace narechi
         switch (renderer_api::get_api())
         {
         case renderer_api::api::vulkan:
+#ifdef NRC_RENDERER_API_VULKAN
             return make_sptr<vulkan_framebuffer>(spec);
+#else
+            NRC_CORE_FATAL("Vulkan is not compiled, but selected");
+#endif
         default:
             break;
         }
