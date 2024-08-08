@@ -8,23 +8,51 @@ set(NARECHI_SOURCES
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
 
-    "src/platform/vulkan/vulkan_renderer_api.cpp"
-    "src/platform/vulkan/vulkan_shader.cpp"
-    "src/platform/vulkan/vulkan_framebuffer.cpp"
 
     "src/platform/win32/win32window.cpp"
 
     "src/utils/time_utils.cpp"
 )
 
-add_library(narechi-engine SHARED ${NARECHI_SOURCES})
+if(${NRC_RENDERER_API} STREQUAL "opengl")
+    set(RENDERER_API_SOURCES
+        "")
+elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
+    set(RENDERER_API_SOURCES
+        "src/platform/vulkan/vulkan_renderer_api.cpp"
+        "src/platform/vulkan/vulkan_shader.cpp"
+        "src/platform/vulkan/vulkan_framebuffer.cpp"
+    )
+else()
+    error("Unsupported Renderer API: " ${NRC_RENDERER_API})
+endif()
+
+add_library(narechi-engine SHARED ${NARECHI_SOURCES} ${RENDERER_API_SOURCES})
 
 target_link_libraries(narechi-engine PRIVATE glfw)
 
 target_include_directories(narechi-engine PUBLIC "include")
 
-if (WIN32)
+# TODO - Build static or shared setting
+target_compile_definitions(narechi-engine PRIVATE
+    "NOMINMAX")
+
+if(WIN32)
     target_compile_definitions(narechi-engine PRIVATE 
-        "NRC_PLATFORM_WINDOWS;NRC_DEBUG;NRC_BUILD_DLL;NOMINMAX")
+        "NRC_PLATFORM_WINDOWS"
+        "NRC_DEBUG"
+        "NRC_BUILD_DLL"
+    )
 else()
+
+endif()
+
+if(${NRC_RENDERER_API} STREQUAL "opengl")
+    target_compile_definitions(narechi-engine PRIVATE 
+        "NRC_RENDERER_API_OPENGL")
+elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
+    target_compile_definitions(narechi-engine PRIVATE 
+        "NRC_RENDERER_API_VULKAN")
+else()
+    error("Unsupported Renderer API: " ${NRC_RENDERER_API})
 endif()
