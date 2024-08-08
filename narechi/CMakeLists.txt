@@ -16,7 +16,7 @@ set(NARECHI_SOURCES
 
 if(${NRC_RENDERER_API} STREQUAL "opengl")
     set(RENDERER_API_SOURCES
-        "")
+        "src/platform/opengl/opengl_context.cpp")
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
     set(RENDERER_API_SOURCES
         "src/platform/vulkan/vulkan_renderer_api.cpp"
