@@ -1,4 +1,7 @@
 message(STATUS "Fetching glad")
 
 add_library(glad STATIC
-    "src/glad.c")
+    "src/gl.c")
+
+target_include_directories(glad PRIVATE
+    "include")
