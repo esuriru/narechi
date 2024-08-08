@@ -3,7 +3,7 @@
 #include "core/window.hpp"
 #include "core/events/event.hpp"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace narechi
 {
