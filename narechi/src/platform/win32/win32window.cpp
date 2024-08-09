@@ -50,7 +50,8 @@ namespace narechi
                         properties.height,
                         properties.title.c_str(),
                         nullptr,
-                        nullptr)));
+                        nullptr)),
+            "Could not create GLFW window");
         NRC_CORE_DEBUG("GLFW Window created");
 
         graphics_context = make_uptr<opengl_context>(window);
