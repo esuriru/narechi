@@ -52,8 +52,8 @@ namespace narechi
             break;
         }
 
-        NRC_ASSERT(
-            false, "shader data type not handled, shader data type: ", type);
+        NRC_CORE_FATAL(
+            "shader data type not handled, shader data type: ", type);
         return 0;
     }
 }
