@@ -59,7 +59,6 @@ namespace narechi
 
         glfwSetWindowUserPointer(window, &data);
 
-        // TODO - Use reinterpret_cast
         glfwSetWindowSizeCallback(window,
             [](GLFWwindow* window, int width, int height)
             {
