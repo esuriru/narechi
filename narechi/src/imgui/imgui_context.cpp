@@ -17,6 +17,9 @@ namespace narechi
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
+        auto& io = ImGui::GetIO();
+        io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+
         NRC_CORE_DEBUG("ImGui Context initialized");
 
         // TODO - Use DI
