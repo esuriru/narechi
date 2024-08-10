@@ -36,3 +36,5 @@ add_library(imgui STATIC
 target_include_directories(imgui PRIVATE
     ${imgui_SOURCE_DIR}
     ${GLFW_SOURCE_DIR}/include)
+
+set(NRC_IMGUI_SOURCE_DIR ${imgui_SOURCE_DIR} PARENT_SCOPE)

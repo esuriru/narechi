@@ -50,7 +50,7 @@ target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 
 add_subdirectory("deps/imgui")
 target_link_libraries(narechi-engine PUBLIC imgui)
-target_include_directories(narechi-engine PUBLIC ${imgui_SOURCE_DIR})
+target_include_directories(narechi-engine PUBLIC ${NRC_IMGUI_SOURCE_DIR})
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
@@ -66,8 +66,8 @@ if(${NRC_RENDERER_API} STREQUAL "vulkan")
     target_include_directories(narechi-engine PUBLIC ${Vulkan_INCLUDE_DIR})
 elseif(${NRC_RENDERER_API} STREQUAL "opengl")
     message(STATUS "narechi using OpenGL")
-    add_subdirectory("deps/glad")
 
+    add_subdirectory("deps/glad")
     target_link_libraries(narechi-engine PUBLIC glad)
     target_include_directories(narechi-engine PUBLIC "deps/glad/include")
 endif()
