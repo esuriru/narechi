@@ -25,6 +25,7 @@ namespace narechi
     void win32window::update()
     {
         glfwPollEvents();
+        graphics_context->swap_buffers();
     }
 
     void win32window::init(const window_properties& properties)
