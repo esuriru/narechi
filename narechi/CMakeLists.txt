@@ -4,10 +4,12 @@ set(NARECHI_SOURCES
     "src/core/window.cpp"
     "src/core/layer_stack.cpp"
 
+    "src/imgui/imgui_context.cpp"
+    "src/imgui/imgui_layer.cpp"
+
     "src/rendering/renderer_api.cpp"
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
-
 
     "src/platform/win32/win32window.cpp"
 
