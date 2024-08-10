@@ -6,6 +6,8 @@
 
 #include "rendering/render_command.hpp"
 
+#include "imgui/imgui_layer.hpp"
+
 #include "utils/time_utils.hpp"
 
 
@@ -21,6 +23,8 @@ namespace narechi
 
         window = window::create({ "narechi window", 1280, 720 });
         window->set_event_callback(NRC_BIND_FN(on_event));
+
+        layer_stack.push_overlay(new imgui_layer());
 
         render_command::init();
     }
