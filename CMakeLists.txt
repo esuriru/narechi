@@ -34,11 +34,23 @@ FetchContent_Declare(
         SHA256=A133DDC3D3C66143EBA9035621DB8E0BCF34DBA1EE9514A9E23E96AFD39FD57A
 )
 
+FetchContent_Declare(
+    imgui
+    URL https://github.com/ocornut/imgui/archive/refs/tags/v1.91.0-docking.zip 
+    URL_HASH
+        SHA256=657B225D99FD34CE10A3BD0DA2A72359362AE709A774811AA22EE30085660240
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
 add_subdirectory("deps/glfw")
+target_link_libraries(narechi-engine PUBLIC glfw)
 target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
+
+add_subdirectory("deps/imgui")
+target_link_libraries(narechi-engine PUBLIC imgui)
+target_include_directories(narechi-engine PUBLIC ${imgui_SOURCE_DIR})
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
