@@ -24,7 +24,7 @@ namespace narechi
         ImGui_ImplGlfw_InitForOpenGL(
             reinterpret_cast<GLFWwindow*>(
                 app::get().get_window().get_native_internal()),
-            false);
+            true);
         // TODO - Hardcoded, remove later
         ImGui_ImplOpenGL3_Init("#version 460");
 #elif defined(NRC_RENDERER_API_VULKAN)
@@ -54,9 +54,9 @@ namespace narechi
             has_init, "imgui_context::render() called before initializing");
 
         bool render_demo = true;
-        //ImGui::Begin("test");
+        // ImGui::Begin("test");
         ImGui::ShowDemoWindow(&render_demo);
-        //ImGui::End();
+        // ImGui::End();
 
         ImGui::Render();
 #if defined(NRC_RENDERER_API_OPENGL)
