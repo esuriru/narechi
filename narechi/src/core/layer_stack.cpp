@@ -17,12 +17,14 @@ namespace narechi
     {
         // Place it in the back of whatever layer is in front of it
         layers.emplace(layers.begin() + layer_insert_index, layer);
+        layer->on_attach();
     }
 
     void layer_stack::push_overlay(layer* overlay)
     {
         // Place it to the back
         layers.emplace_back(overlay);
+        overlay->on_attach();
     }
 
     void layer_stack::pop_layer(layer* layer)
