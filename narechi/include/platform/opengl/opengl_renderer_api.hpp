@@ -9,5 +9,7 @@ namespace narechi
     public:
         virtual void init() override {}
         virtual void cleanup() override {}
+
+        virtual void clear_color(const glm::vec4& color) override;
     };
 }
