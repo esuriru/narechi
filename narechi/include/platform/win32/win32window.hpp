@@ -50,8 +50,6 @@ namespace narechi
         };
 
         window_data data;
-
-        uptr<graphics_context> graphics_context;
         GLFWwindow* window;
     };
 }

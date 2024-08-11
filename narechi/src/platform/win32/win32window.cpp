@@ -25,7 +25,6 @@ namespace narechi
     void win32window::update()
     {
         glfwPollEvents();
-        graphics_context->swap_buffers();
     }
 
     void win32window::init(const window_properties& properties)
@@ -55,9 +54,6 @@ namespace narechi
             "Could not create GLFW window");
         NRC_CORE_DEBUG("GLFW Window created");
 
-        graphics_context = make_uptr<opengl_context>(window);
-        graphics_context->init();
-
         glfwSetWindowUserPointer(window, &data);
 
         glfwSetWindowSizeCallback(window,
@@ -86,8 +82,6 @@ namespace narechi
 
     void win32window::cleanup()
     {
-        graphics_context.reset();
-
         glfwDestroyWindow(window);
         glfwTerminate();
     }
