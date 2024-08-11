@@ -1,5 +1,7 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
 #include "core/core.hpp"
 
 namespace narechi
@@ -18,6 +20,8 @@ namespace narechi
 
         virtual void init() = 0;
         virtual void cleanup() = 0;
+
+        virtual void clear_color(const glm::vec4& color) = 0;
 
         static uptr<renderer_api> create();
 

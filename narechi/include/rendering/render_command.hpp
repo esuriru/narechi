@@ -18,10 +18,13 @@ namespace narechi
             renderer_api->cleanup();
         }
 
-        static void draw()
+        // TODO -  Color class
+        static void clear_color(const glm::vec4& color)
         {
-
+            renderer_api->clear_color(color);
         }
+
+        static void draw() {}
 
     private:
         static uptr<renderer_api> renderer_api;
