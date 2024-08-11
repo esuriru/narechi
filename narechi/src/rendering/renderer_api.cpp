@@ -35,7 +35,6 @@ namespace narechi
             return make_uptr<opengl_renderer_api>();
 #else
             NRC_CORE_FATAL("OpenGL is not compiled, but selected");
-            NRC_DEBUG_BREAK;
 #endif
         case renderer_api::api::vulkan:
 #ifdef NRC_RENDERER_API_VULKAN
