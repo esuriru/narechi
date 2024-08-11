@@ -4,18 +4,21 @@
 #include "core/window.hpp"
 #include "core/layer_stack.hpp"
 
+#include "rendering/graphics_context.hpp"
+
 namespace narechi
 {
     class NRC_API app
     {
     public:
         explicit app();
-        virtual ~app() {}
+        virtual ~app() = default;
 
         static app& get();
 
         void run();
         window& get_window();
+        graphics_context& get_graphics_context();
 
     protected:
         void push_layer(layer* layer);
@@ -27,6 +30,7 @@ namespace narechi
         static app* app_instance;
 
         uptr<window> window;
+        uptr<graphics_context> gfx_ctx;
         layer_stack layer_stack;
 
         bool is_running;

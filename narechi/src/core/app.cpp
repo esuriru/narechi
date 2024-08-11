@@ -24,6 +24,10 @@ namespace narechi
         window = window::create({ "narechi window", 1280, 720 });
         window->set_event_callback(NRC_BIND_FN(on_event));
 
+        // The app should own the graphics context
+        gfx_ctx = graphics_context::create(this);
+        gfx_ctx->init();
+
         layer_stack.push_overlay(new imgui_layer());
 
         render_command::init();
@@ -37,13 +41,17 @@ namespace narechi
             float step = current_time - last_frame_time;
             last_frame_time = current_time;
 
+            render_command::clear_color(glm::vec4(0.32f, 0.32f, 0.32f, 1.0f));
+
             for (auto& layer : layer_stack)
             {
                 layer->on_update(step);
             }
 
-            window->update();
             render_command::draw();
+
+            window->update();
+            gfx_ctx->swap_buffers();
         }
 
         render_command::cleanup();
@@ -57,6 +65,11 @@ namespace narechi
     window& app::get_window()
     {
         return *window;
+    }
+
+    graphics_context& app::get_graphics_context()
+    {
+        return *gfx_ctx;
     }
 
     void app::push_layer(layer* layer)
