@@ -7,6 +7,7 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_layer.cpp"
 
+    "src/rendering/graphics_context.cpp"
     "src/rendering/renderer_api.cpp"
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
@@ -18,7 +19,9 @@ set(NARECHI_SOURCES
 
 if(${NRC_RENDERER_API} STREQUAL "opengl")
     set(RENDERER_API_SOURCES
-        "src/platform/opengl/opengl_context.cpp")
+        "src/platform/opengl/opengl_context.cpp"
+        "src/platform/opengl/opengl_renderer_api.cpp"
+    )
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
     set(RENDERER_API_SOURCES
         "src/platform/vulkan/vulkan_renderer_api.cpp"
