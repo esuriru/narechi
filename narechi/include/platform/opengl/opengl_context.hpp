@@ -10,6 +10,7 @@ namespace narechi
     {
     public:
         opengl_context(GLFWwindow* window);
+        ~opengl_context();
 
         void init() override;
         void swap_buffers() override;

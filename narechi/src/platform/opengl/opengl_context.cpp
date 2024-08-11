@@ -15,6 +15,11 @@ namespace narechi
             "window is null");
     }
 
+    opengl_context::~opengl_context()
+    {
+        
+    }
+
     void opengl_context::init()
     {
         NRC_ASSERT(window,
