@@ -24,13 +24,22 @@ namespace narechi
         window = window::create({ "narechi window", 1280, 720 });
         window->set_event_callback(NRC_BIND_FN(on_event));
 
+        init_contexts();
+
+        layer_stack.push_overlay(
+            new imgui_layer(get_imgui_context()));
+
+        render_command::init();
+    }
+
+    void app::init_contexts() 
+    {
         // The app should own the graphics context
         gfx_ctx = graphics_context::create(this);
         gfx_ctx->init();
 
-        layer_stack.push_overlay(new imgui_layer());
-
-        render_command::init();
+        imgui_ctx = make_uptr<imgui_context>();
+        imgui_ctx->init();
     }
 
     void app::run()
@@ -64,12 +73,20 @@ namespace narechi
 
     window& app::get_window()
     {
+        NRC_ASSERT(window, "window is not created yet");
         return *window;
     }
 
     graphics_context& app::get_graphics_context()
     {
+        NRC_ASSERT(window, "graphics context is not created yet");
         return *gfx_ctx;
+    }
+
+    imgui_context& app::get_imgui_context() 
+    {
+        NRC_ASSERT(window, "ImGui context is not created yet");
+        return *imgui_ctx;
     }
 
     void app::push_layer(layer* layer)

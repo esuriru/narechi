@@ -14,6 +14,8 @@ namespace narechi
 
     void imgui_context::init()
     {
+        NRC_ASSERT(!has_init, "imgui_context is already initialized");
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -22,7 +24,6 @@ namespace narechi
 
         NRC_CORE_DEBUG("ImGui Context initialized");
 
-        // TODO - Use DI
 #if defined(NRC_RENDERER_API_OPENGL)
         ImGui_ImplGlfw_InitForOpenGL(
             reinterpret_cast<GLFWwindow*>(

@@ -4,12 +4,12 @@
 
 namespace narechi
 {
-    imgui_layer::imgui_layer() : layer("ImGuiLayer") {}
-
-    void imgui_layer::on_attach()
+    imgui_layer::imgui_layer(imgui_context& context)
+        : layer("ImGuiLayer"), context(context)
     {
-        context.init();
     }
+
+    void imgui_layer::on_attach() {}
 
     void imgui_layer::on_detach() {}
 

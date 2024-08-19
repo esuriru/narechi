@@ -9,7 +9,7 @@ namespace narechi
     class imgui_layer : public layer
     {
     public:
-        imgui_layer();
+        imgui_layer(imgui_context& context);
         ~imgui_layer() = default;
 
         void on_attach() override;
@@ -18,6 +18,6 @@ namespace narechi
         void on_update(float dt) override;
         void on_event(event& event) override;
     private:
-        imgui_context context;
+        imgui_context& context;
     };
 }
