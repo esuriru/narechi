@@ -57,11 +57,6 @@ namespace narechi
         NRC_ASSERT(
             has_init, "imgui_context::render() called before initializing");
 
-        bool render_demo = true;
-        // ImGui::Begin("test");
-        ImGui::ShowDemoWindow(&render_demo);
-        // ImGui::End();
-
         ImGui::Render();
 #if defined(NRC_RENDERER_API_OPENGL)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
