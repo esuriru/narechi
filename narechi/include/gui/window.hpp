@@ -6,14 +6,24 @@
 
 namespace narechi::gui
 {
+    struct window_properties
+    {
+        std::string name;
+        uint32_t width, height;
+
+        static bool verify(const window_properties& props);
+    };
+
     class NRC_API window
     {
     public:
-        window(std::string&& name);
+        virtual void render() = 0;
 
-        void render();
+        static uptr<window> create_window(const window_properties& props);
 
-    private:
+    protected:
+        window(const window_properties& props);
+
         std::string name;
     };
 }

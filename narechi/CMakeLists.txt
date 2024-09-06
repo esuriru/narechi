@@ -8,6 +8,7 @@ set(NARECHI_SOURCES
 
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_layer.cpp"
+    "src/imgui/imgui_window.cpp"
 
     "src/rendering/graphics_context.cpp"
     "src/rendering/renderer_api.cpp"
