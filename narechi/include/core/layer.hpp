@@ -15,6 +15,8 @@ namespace narechi
         virtual void on_attach() {}
         virtual void on_detach() {}
 
+        virtual void on_gui_update() {}
+
         virtual void on_update(float dt) {}
         virtual void on_event(event& event) {}
 
