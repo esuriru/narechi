@@ -1,8 +1,10 @@
 set(NARECHI_LAUNCHER_SOURCES
+    "src/main.cpp"
     "src/editor_app.cpp"
     "src/editor_layer.cpp"
-)
 
+    "src/panels/content_browser_panel.cpp"
+)
 
 add_executable(narechi-launcher ${NARECHI_LAUNCHER_SOURCES})
 
@@ -16,7 +18,8 @@ target_include_directories(narechi-launcher PRIVATE
     "include")
 
 target_compile_definitions(narechi-launcher PRIVATE
-    "NRC_PLATFORM_WINDOWS;NRC_DEBUG;")
+    "NRC_PLATFORM_WINDOWS"
+    "NRC_DEBUG")
 
 # Copy asset dependencies
 add_custom_command(
