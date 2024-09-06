@@ -4,6 +4,8 @@ set(NARECHI_SOURCES
     "src/core/window.cpp"
     "src/core/layer_stack.cpp"
 
+    "src/gui/window.cpp"
+
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_layer.cpp"
 
@@ -41,9 +43,11 @@ target_include_directories(narechi-engine PUBLIC "include")
 # TODO - Build static or shared setting
 target_compile_definitions(narechi-engine PRIVATE
     "NOMINMAX")
+target_compile_definitions(narechi-engine INTERFACE 
+    "IMGUI_DISABLE_OBSOLETE_FUNCTIONS")
 
 if(WIN32)
-    target_compile_definitions(narechi-engine PRIVATE 
+    target_compile_definitions(narechi-engine PRIVATE
         "NRC_PLATFORM_WINDOWS"
         "NRC_DEBUG"
         "NRC_BUILD_DLL"
