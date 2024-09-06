@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gui/window.hpp"
+#include "imgui.h"
 
 namespace narechi
 {
@@ -10,5 +11,8 @@ namespace narechi
         imgui_window(const gui::window_properties& props);
 
         void render() override;
+
+    private:
+        ImVec2 position;
     };
 }
