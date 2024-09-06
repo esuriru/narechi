@@ -26,13 +26,12 @@ namespace narechi
 
         init_contexts();
 
-        layer_stack.push_overlay(
-            new imgui_layer(get_imgui_context()));
+        // layer_stack.push_overlay(new imgui_layer(get_imgui_context()));
 
         render_command::init();
     }
 
-    void app::init_contexts() 
+    void app::init_contexts()
     {
         // The app should own the graphics context
         gfx_ctx = graphics_context::create(this);
@@ -51,6 +50,15 @@ namespace narechi
             last_frame_time = current_time;
 
             render_command::clear_color(glm::vec4(0.32f, 0.32f, 0.32f, 1.0f));
+
+            imgui_ctx->new_frame();
+
+            for (auto& layer : layer_stack)
+            {
+                layer->on_gui_update();
+            }
+
+            imgui_ctx->render();
 
             for (auto& layer : layer_stack)
             {
@@ -83,7 +91,7 @@ namespace narechi
         return *gfx_ctx;
     }
 
-    imgui_context& app::get_imgui_context() 
+    imgui_context& app::get_imgui_context()
     {
         NRC_ASSERT(window, "ImGui context is not created yet");
         return *imgui_ctx;
