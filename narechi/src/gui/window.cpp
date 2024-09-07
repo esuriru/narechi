@@ -14,14 +14,20 @@ namespace narechi::gui
         return true;
     }
 
-    uptr<window> window::create(
-        const window_properties& props)
+    uptr<window> window::create(const window_properties& props)
     {
         NRC_VERIFY(window_properties::verify(props),
             "GUI window properties argument error");
 
         // There is only IMGUI for now
         return make_uptr<imgui_window>(props);
+    }
+
+    void window::set_width_height(uint32_t width, uint32_t height)
+    {
+        this->width = width;
+        this->height = height;
+        set_width_height_impl(width, height);
     }
 
     window::window(const window_properties& props) : name(props.name) {}

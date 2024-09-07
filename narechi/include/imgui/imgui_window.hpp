@@ -15,9 +15,11 @@ namespace narechi
 
         void render() override;
         void add_element(uptr<gui::element>&& element) override;
+        void set_width_height_impl(uint32_t width, uint32_t height) override;
 
     private:
         ImVec2 position;
+        ImVec2 size;
 
         std::vector<uptr<gui::element>> elements;
     };
