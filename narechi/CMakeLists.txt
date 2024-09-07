@@ -5,10 +5,12 @@ set(NARECHI_SOURCES
     "src/core/layer_stack.cpp"
 
     "src/gui/window.cpp"
+    "src/gui/text_element.cpp"
 
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_layer.cpp"
     "src/imgui/imgui_window.cpp"
+    "src/imgui/imgui_text_element.cpp"
 
     "src/rendering/graphics_context.cpp"
     "src/rendering/renderer_api.cpp"

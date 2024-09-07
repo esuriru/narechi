@@ -4,3 +4,4 @@
 #include "core/logger.hpp"
 
 #include "gui/window.hpp"
+#include "gui/text_element.hpp"
