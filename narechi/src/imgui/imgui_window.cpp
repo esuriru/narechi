@@ -14,7 +14,17 @@ namespace narechi
     {
         ImGui::SetNextWindowPos(position);
         ImGui::Begin(name.c_str(), 0);
-        ImGui::Text("imgui window text");
+
+        for (auto& elem : elements)
+        {
+            elem->render();
+        }
+
         ImGui::End();
+    }
+
+    void imgui_window::add_element(uptr<gui::element>&& element)
+    {
+        elements.push_back(std::move(element));
     }
 }

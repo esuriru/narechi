@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/core.hpp"
+#include "gui/element.hpp"
 
 #include <string>
 
@@ -22,6 +23,7 @@ namespace narechi::gui
         virtual void render() = 0;
 
         static uptr<window> create_window(const window_properties& props);
+        virtual void add_element(uptr<element>&& element) = 0;
 
     protected:
         window(const window_properties& props);
