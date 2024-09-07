@@ -8,6 +8,9 @@ namespace narechi::editor
               .start_position_x = 0,
               .start_position_y = 0 }))
     {
+        window->add_element(
+            gui::text_element::create({ .text = "Content Browser Text " }));
+        window->add_element(gui::text_element::create({ .text = "More Text" }));
     }
 
     void content_browser_panel::render()
