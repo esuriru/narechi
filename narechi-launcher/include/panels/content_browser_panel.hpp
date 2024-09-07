@@ -12,6 +12,7 @@ namespace narechi::editor
         content_browser_panel();
 
         void render() override;
+        void on_event(event& event) override;
 
     private:
         sptr<narechi::gui::window> window;

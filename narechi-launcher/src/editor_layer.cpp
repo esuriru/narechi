@@ -30,4 +30,17 @@ namespace narechi::editor
     }
 
     void editor_layer::on_update(float dt) {}
+
+    void editor_layer::on_event(event& event)
+    {
+        for (auto& panel : panels)
+        {
+            if (event.handled)
+            {
+                break;
+            }
+
+            panel->on_event(event);
+        }
+    }
 }

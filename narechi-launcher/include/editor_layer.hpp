@@ -18,6 +18,8 @@ namespace narechi::editor
         void on_gui_update() override;
         void on_update(float dt) override;
 
+        void on_event(event& event) override;
+
     private:
         std::vector<editor_panel*> panels;
     };

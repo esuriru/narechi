@@ -115,7 +115,7 @@ namespace narechi
             [](auto& event)
             {
                 NRC_CORE_LOG(event.to_string());
-                return true;
+                return false;
             });
 
         handler.handle<window_close_event>(
