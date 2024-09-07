@@ -22,7 +22,8 @@ namespace narechi::gui
     public:
         virtual void render() = 0;
 
-        static uptr<window> create_window(const window_properties& props);
+        static uptr<window> create(
+            const window_properties& props);
         virtual void add_element(uptr<element>&& element) = 0;
 
     protected:

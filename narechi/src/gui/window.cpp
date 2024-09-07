@@ -14,7 +14,8 @@ namespace narechi::gui
         return true;
     }
 
-    uptr<window> window::create_window(const window_properties& props)
+    uptr<window> window::create(
+        const window_properties& props)
     {
         NRC_VERIFY(window_properties::verify(props),
             "GUI window properties argument error");
