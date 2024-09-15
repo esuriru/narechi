@@ -10,6 +10,7 @@ namespace narechi::gui
     struct window_properties
     {
         std::string name;
+        bool no_init = false;
         uint32_t width = 0, height = 0;
 
         uint32_t start_position_x = 0, start_position_y = 0;
@@ -29,20 +30,20 @@ namespace narechi::gui
 
         uint32_t get_width()
         {
-            return width;
+            return props.width;
         }
 
         uint32_t get_height()
         {
-            return height;
+            return props.height;
         }
 
     protected:
         window(const window_properties& props);
 
         virtual void set_width_height_impl(uint32_t width, uint32_t height) = 0;
+        window_properties props;
 
-        std::string name;
-        uint32_t width, height;
+        bool has_rendered = false;
     };
 }

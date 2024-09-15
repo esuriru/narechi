@@ -25,10 +25,10 @@ namespace narechi::gui
 
     void window::set_width_height(uint32_t width, uint32_t height)
     {
-        this->width = width;
-        this->height = height;
+        props.width = width;
+        props.height = height;
         set_width_height_impl(width, height);
     }
 
-    window::window(const window_properties& props) : name(props.name) {}
+    window::window(const window_properties& props) : props(props.name) {}
 }
