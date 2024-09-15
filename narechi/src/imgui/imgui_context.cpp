@@ -1,7 +1,11 @@
 #include "imgui/imgui_context.hpp"
 
 #include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+
+#ifdef NRC_RENDERER_API_OPENGL
+    #include "backends/imgui_impl_opengl3.h"
+#endif
+
 #include "imgui.h"
 
 #include "core/app.hpp"
@@ -20,7 +24,7 @@ namespace narechi
         ImGui::CreateContext();
 
         auto& io = ImGui::GetIO();
-        io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         NRC_CORE_DEBUG("ImGui Context initialized");
 
@@ -50,6 +54,7 @@ namespace narechi
         // TDOO - ImGui Vulkan new frame
 #endif
         ImGui::NewFrame();
+        ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
     }
 
     void imgui_context::render()
