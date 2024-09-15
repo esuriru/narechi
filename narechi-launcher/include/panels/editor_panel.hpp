@@ -13,7 +13,7 @@ namespace narechi::editor
         virtual ~editor_panel() = default;
 
         virtual void render() = 0;
-        virtual void on_event(event& event) = 0;
+        virtual void on_event(event& event) {}
 
     protected:
         std::string name;
