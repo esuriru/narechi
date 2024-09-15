@@ -8,14 +8,23 @@ namespace narechi
         : window(props),
           position(ImVec2(props.start_position_x, props.start_position_y))
     {
-        set_width_height(props.width, props.height);
+        if (!props.no_init)
+        {
+            set_width_height(props.width, props.height);
+        }
     }
 
     void imgui_window::render()
     {
-        ImGui::SetNextWindowSize(size);
-        ImGui::SetNextWindowPos(position);
-        ImGui::Begin(name.c_str(), 0, ImGuiWindowFlags_NoResize);
+        if (!props.no_init && has_rendered)
+        {
+            ImGui::SetNextWindowSize(size);
+            ImGui::SetNextWindowPos(position);
+            has_rendered = false;
+        }
+
+        ImGui::Begin(props.name.c_str(), 0, ImGuiWindowFlags_NoResize);
+        size = ImGui::GetWindowSize();
 
         for (auto& elem : elements)
         {
