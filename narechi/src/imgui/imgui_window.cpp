@@ -34,9 +34,9 @@ namespace narechi
         ImGui::End();
     }
 
-    void imgui_window::add_element(uptr<gui::element>&& element)
+    void imgui_window::add_element(sptr<gui::element> element)
     {
-        elements.push_back(std::move(element));
+        elements.push_back(element);
     }
 
     void imgui_window::set_width_height_impl(uint32_t width, uint32_t height)

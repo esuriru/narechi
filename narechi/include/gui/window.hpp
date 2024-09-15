@@ -24,7 +24,7 @@ namespace narechi::gui
         virtual void render() = 0;
 
         static uptr<window> create(const window_properties& props);
-        virtual void add_element(uptr<element>&& element) = 0;
+        virtual void add_element(sptr<element> element) = 0;
 
         void set_width_height(uint32_t width, uint32_t height);
 
