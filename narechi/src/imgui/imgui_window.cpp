@@ -41,6 +41,7 @@ namespace narechi
 
     void imgui_window::set_width_height_impl(uint32_t width, uint32_t height)
     {
-        size = ImVec2(width, height);
+        size.x = width;
+        size.y = height;
     }
 }
