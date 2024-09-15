@@ -15,7 +15,7 @@ namespace narechi::gui
     class NRC_API text_element : public element
     {
     public:
-        static uptr<text_element> create(const text_element_properties& props);
+        static sptr<text_element> create(const text_element_properties& props);
 
     protected:
         text_element(const text_element_properties& props);

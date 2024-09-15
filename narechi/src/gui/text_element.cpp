@@ -4,11 +4,11 @@
 
 namespace narechi::gui
 {
-    uptr<text_element> text_element::create(
+    sptr<text_element> text_element::create(
         const text_element_properties& props)
     {
         // For now there is only ImGui
-        return make_uptr<imgui_text_element>(props);
+        return make_sptr<imgui_text_element>(props);
     }
 
     text_element::text_element(const text_element_properties& props)
