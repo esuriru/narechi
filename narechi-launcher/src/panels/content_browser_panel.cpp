@@ -15,17 +15,4 @@ namespace narechi::editor
     {
         window->render();
     }
-
-    void content_browser_panel::on_event(event& event)
-    {
-        // event_handler handler(event);
-
-        // handler.handle<window_resize_event>(
-        //     [this](auto& event)
-        //     {
-        //         window->set_width_height(
-        //             window->get_width(), event.get_height());
-        //         return false;
-        //     });
-    }
 }
