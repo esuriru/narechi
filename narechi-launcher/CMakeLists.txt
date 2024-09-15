@@ -1,6 +1,5 @@
 set(NARECHI_LAUNCHER_SOURCES
     "src/main.cpp"
-    "src/editor_app.cpp"
     "src/editor_layer.cpp"
 
     "src/panels/content_browser_panel.cpp"
