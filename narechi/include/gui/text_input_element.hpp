@@ -9,6 +9,7 @@ namespace narechi::gui
 {
     struct text_input_element_properties
     {
+        std::string label;
         std::string text;
     };
 
@@ -21,6 +22,6 @@ namespace narechi::gui
     protected:
         text_input_element(const text_input_element_properties& props);
 
-        std::string text;
+        text_input_element_properties props;
     };
 }

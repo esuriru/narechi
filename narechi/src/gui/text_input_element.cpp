@@ -11,9 +11,10 @@ namespace narechi::gui
         return make_sptr<imgui_text_input_element>(props);
     }
 
-    text_input_element::text_input_element(const text_input_element_properties& props)
+    text_input_element::text_input_element(
+        const text_input_element_properties& props)
     {
         // TODO - Verify props
-        text = props.text;
+        this->props = props;
     }
 }
