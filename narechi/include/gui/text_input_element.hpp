@@ -10,6 +10,7 @@ namespace narechi::gui
     struct text_input_element_properties
     {
         float width = 100;
+        bool label_on_left = true;
         std::string label;
         std::string text;
     };
