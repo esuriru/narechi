@@ -8,6 +8,8 @@ set (IMGUI_SRC_FILES
     "imgui_demo.cpp"
     "imgui_tables.cpp"
     "imgui_widgets.cpp"
+
+    "misc/cpp/imgui_stdlib.cpp"
 )
 list(TRANSFORM IMGUI_SRC_FILES PREPEND ${imgui_SOURCE_DIR}/)
 
