@@ -9,6 +9,7 @@ namespace narechi::gui
 {
     struct text_input_element_properties
     {
+        float width = 100;
         std::string label;
         std::string text;
     };

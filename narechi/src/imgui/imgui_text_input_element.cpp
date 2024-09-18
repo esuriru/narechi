@@ -13,6 +13,8 @@ namespace narechi
 
     void imgui_text_input_element::render()
     {
+        ImGui::PushItemWidth(props.width);
         ImGui::InputText(props.label.c_str(), &props.text, 0);
+        ImGui::PopItemWidth();
     }
 }
