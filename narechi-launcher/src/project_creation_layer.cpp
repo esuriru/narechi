@@ -1,5 +1,6 @@
 #include "project_creation_layer.hpp"
 
+#include "gui/space_element.hpp"
 #include "gui/text_element.hpp"
 #include "gui/text_input_element.hpp"
 #include "gui/window.hpp"
@@ -16,6 +17,7 @@ namespace narechi::editor
 
         form_window->add_element(
             gui::text_element::create({ .text = "Create Project" }));
+        form_window->add_element(gui::space_element::create({}));
         form_window->add_element(project_name_input);
     }
 
