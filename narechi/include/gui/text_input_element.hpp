@@ -21,6 +21,8 @@ namespace narechi::gui
         static sptr<text_input_element> create(
             const text_input_element_properties& props);
 
+        std::string get_text() const;
+
     protected:
         text_input_element(const text_input_element_properties& props);
 
