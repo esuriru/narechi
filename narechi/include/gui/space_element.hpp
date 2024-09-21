@@ -3,8 +3,6 @@
 #include "core/core.hpp"
 #include "element.hpp"
 
-#include <string>
-
 namespace narechi::gui
 {
     struct space_element_properties

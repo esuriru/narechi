@@ -9,4 +9,5 @@
 #include "gui/text_element.hpp"
 #include "gui/text_input_element.hpp"
 #include "gui/space_element.hpp"
+#include "gui/button_element.hpp"
 // IWYU pragma: end_keep

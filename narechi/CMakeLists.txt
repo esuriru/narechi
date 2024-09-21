@@ -8,6 +8,7 @@ set(NARECHI_SOURCES
     "src/gui/text_element.cpp"
     "src/gui/space_element.cpp"
     "src/gui/text_input_element.cpp"
+    "src/gui/button_element.cpp"
 
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_layer.cpp"
@@ -15,6 +16,7 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_text_element.cpp"
     "src/imgui/imgui_space_element.cpp"
     "src/imgui/imgui_text_input_element.cpp"
+    "src/imgui/imgui_button_element.cpp"
 
     "src/rendering/graphics_context.cpp"
     "src/rendering/renderer_api.cpp"
