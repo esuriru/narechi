@@ -19,6 +19,8 @@ namespace narechi::editor
 
     private:
         uptr<gui::window> form_window;
+
         sptr<gui::text_input_element> project_name_input;
+        sptr<gui::button_element> create_project_button;
     };
 }
