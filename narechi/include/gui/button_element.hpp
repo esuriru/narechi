@@ -10,6 +10,7 @@ namespace narechi::gui
 {
     struct button_element_properties
     {
+        bool same_line = false;
         std::string label;
         std::function<void()> on_click = nullptr;
     };

@@ -12,6 +12,11 @@ namespace narechi
 
     void imgui_button_element::render()
     {
+        if (props.same_line)
+        {
+            ImGui::SameLine();
+        }
+
         if (ImGui::Button(props.label.c_str()))
         {
             if (props.on_click)
