@@ -41,6 +41,13 @@ FetchContent_Declare(
         SHA256=657B225D99FD34CE10A3BD0DA2A72359362AE709A774811AA22EE30085660240
 )
 
+FetchContent_Declare(
+    nativefiledialog-extended
+    URL https://github.com/btzy/nativefiledialog-extended/archive/refs/tags/v1.2.1.zip
+    URL_HASH
+        SHA256=FC359B212E56011931B90BF4241057EDDEC45308BB4D8B9AAB4DFB2F70E3B211
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
@@ -51,6 +58,9 @@ target_include_directories(narechi-engine PUBLIC ${GLFW_SOURCE_DIR})
 add_subdirectory("deps/imgui")
 target_link_libraries(narechi-engine PUBLIC imgui)
 target_include_directories(narechi-engine PUBLIC ${NRC_IMGUI_SOURCE_DIR})
+
+add_subdirectory("deps/nativefiledialog-extended")
+target_link_libraries(narechi-engine PUBLIC nfd)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
