@@ -21,6 +21,17 @@ namespace narechi::gui
         props.text = text;
     }
 
+    float text_input_element::get_label_length()
+    {
+        // For GUI libraries that don't have impl this
+        return 0.0f;
+    }
+
+    text_input_element_properties& text_input_element::get_props()
+    {
+        return props;
+    }
+
     text_input_element::text_input_element(
         const text_input_element_properties& props)
     {

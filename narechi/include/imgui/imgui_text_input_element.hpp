@@ -8,6 +8,11 @@ namespace narechi
         imgui_text_input_element(
             const gui::text_input_element_properties& props);
 
+        float get_label_length() override;
         void render() override;
+
+    private:
+        float label_length;
+
     };
 }

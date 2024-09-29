@@ -11,17 +11,30 @@ namespace narechi
     {
     }
 
+    float imgui_text_input_element::get_label_length()
+    {
+        return label_length;
+    }
+
     void imgui_text_input_element::render()
     {
+        label_length = props.label.empty() ?
+            0.0f :
+            ImGui::CalcTextSize(props.label.c_str()).x;
+
         if (props.label_on_left)
         {
             ImGui::Text("%s", props.label.c_str());
             ImGui::SameLine();
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + props.label_gap);
         }
 
         ImGui::PushItemWidth(props.width);
-        ImGui::InputText(
-            props.label_on_left ? "##" : props.label.c_str(), &props.text, 0);
+        // TODO - Create GUID gen and append to double hash
+        ImGui::InputText(props.label_on_left ? ("##" + props.label).c_str() :
+                                               props.label.c_str(),
+            &props.text,
+            0);
         ImGui::PopItemWidth();
     }
 }
