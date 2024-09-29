@@ -4,6 +4,8 @@ set(NARECHI_SOURCES
     "src/core/window.cpp"
     "src/core/layer_stack.cpp"
 
+    "src/file/nfd_context.cpp"
+
     "src/gui/window.cpp"
     "src/gui/text_element.cpp"
     "src/gui/space_element.cpp"

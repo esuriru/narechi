@@ -22,6 +22,7 @@ namespace narechi::gui
             const text_input_element_properties& props);
 
         std::string get_text() const;
+        virtual void set_text(const std::string& text);
 
     protected:
         text_input_element(const text_input_element_properties& props);

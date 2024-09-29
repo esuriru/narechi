@@ -16,6 +16,11 @@ namespace narechi::gui
         return props.text;
     }
 
+    void text_input_element::set_text(const std::string& text)
+    {
+        props.text = text;
+    }
+
     text_input_element::text_input_element(
         const text_input_element_properties& props)
     {
