@@ -15,12 +15,17 @@ namespace narechi
 
         void render() override;
         void add_element(sptr<gui::element> element) override;
+        void add_element(sptr<gui::text_input_element> element) override;
         void set_width_height_impl(uint32_t width, uint32_t height) override;
 
     private:
+        void align_text_input_elements();
+
+        bool is_dirty = true;
         ImVec2 position;
         ImVec2 size;
 
+        std::vector<sptr<gui::text_input_element>> text_input_elements;
         std::vector<sptr<gui::element>> elements;
     };
 }

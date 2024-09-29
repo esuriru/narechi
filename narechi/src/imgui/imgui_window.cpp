@@ -1,6 +1,10 @@
 #include "imgui/imgui_window.hpp"
 
+#include "gui/text_input_element.hpp"
+#include "gui/window.hpp"
 #include "imgui.h"
+
+#include <limits>
 
 namespace narechi
 {
@@ -31,11 +35,29 @@ namespace narechi
             elem->render();
         }
 
+        if (is_dirty)
+        {
+            is_dirty = false;
+            if (props.flags & gui::window_flags::align_text_elements)
+            {
+                align_text_input_elements();
+            }
+        }
+
         ImGui::End();
     }
 
     void imgui_window::add_element(sptr<gui::element> element)
     {
+        is_dirty = true;
+        elements.push_back(element);
+    }
+
+    void imgui_window::add_element(sptr<gui::text_input_element> element)
+    {
+        is_dirty = true;
+        text_input_elements.push_back(element);
+
         elements.push_back(element);
     }
 
@@ -43,5 +65,25 @@ namespace narechi
     {
         size.x = width;
         size.y = height;
+    }
+
+    void imgui_window::align_text_input_elements()
+    {
+        float max_length = std::numeric_limits<float>::min();
+
+        for (const auto& element : text_input_elements)
+        {
+            float length = element->get_label_length();
+            if (max_length < length)
+            {
+                max_length = length;
+            }
+        }
+
+        for (auto& element : text_input_elements)
+        {
+            element->get_props().label_gap
+                = max_length - element->get_label_length();
+        }
     }
 }
