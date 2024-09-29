@@ -19,9 +19,12 @@ namespace narechi::editor
         select_directory_button
             = gui::button_element::create({ .same_line = true,
                 .label = "Dir",
-                .on_click = []()
+                .on_click = [this]()
                 {
-                    NRC_CORE_LOG("Select Directory");
+                    static std::string folder_path;
+                    static auto nfd_ctx = app::get().get_nfd_context();
+                    nfd_ctx.pick_folder(folder_path);
+                    project_directory_input->set_text(folder_path);
                 } });
 
         form_window = gui::window::create({ .name = "Project Creation" });
