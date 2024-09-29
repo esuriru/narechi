@@ -4,6 +4,7 @@
 #include "core/events/app_event.hpp"
 #include "core/logger.hpp"
 
+#include "file/nfd_context.hpp"
 #include "rendering/render_command.hpp"
 
 #include "imgui/imgui_layer.hpp"
@@ -39,6 +40,9 @@ namespace narechi
 
         imgui_ctx = make_uptr<imgui_context>();
         imgui_ctx->init();
+
+        nfd_ctx = make_uptr<file::nfd_context>();
+        nfd_ctx->init();
     }
 
     void app::run()
@@ -93,8 +97,14 @@ namespace narechi
 
     imgui_context& app::get_imgui_context()
     {
-        NRC_ASSERT(window, "ImGui context is not created yet");
+        NRC_ASSERT(imgui_ctx, "ImGui context is not created yet");
         return *imgui_ctx;
+    }
+
+    file::nfd_context& app::get_nfd_context()
+    {
+        NRC_ASSERT(nfd_ctx, "NFDe context is not created yet");
+        return *nfd_ctx;
     }
 
     void app::push_layer(layer* layer)

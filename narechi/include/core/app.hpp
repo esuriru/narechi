@@ -6,6 +6,7 @@
 
 #include "rendering/graphics_context.hpp"
 #include "imgui/imgui_context.hpp"
+#include "file/nfd_context.hpp"
 
 namespace narechi
 {
@@ -23,6 +24,7 @@ namespace narechi
         window& get_window();
         graphics_context& get_graphics_context();
         imgui_context& get_imgui_context();
+        file::nfd_context& get_nfd_context();
 
     protected:
         void push_layer(layer* layer);
@@ -36,6 +38,7 @@ namespace narechi
         uptr<window> window;
         uptr<graphics_context> gfx_ctx;
         uptr<imgui_context> imgui_ctx;
+        uptr<file::nfd_context> nfd_ctx;
 
         layer_stack layer_stack;
 
