@@ -21,13 +21,14 @@ namespace narechi::editor
                 .label = "Dir",
                 .on_click = [this]()
                 {
-                    static std::string folder_path;
+                    std::string folder_path;
                     static auto nfd_ctx = app::get().get_nfd_context();
                     nfd_ctx.pick_folder(folder_path);
                     project_directory_input->set_text(folder_path);
                 } });
 
-        form_window = gui::window::create({ .name = "Project Creation" });
+        form_window = gui::window::create({ .name = "Project Creation",
+            .flags = gui::window_flags::align_text_elements });
 
         form_window->add_element(
             gui::text_element::create({ .text = "Create Project" }));
