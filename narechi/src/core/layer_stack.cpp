@@ -18,6 +18,7 @@ namespace narechi
         // Place it in the back of whatever layer is in front of it
         layers.emplace(layers.begin() + layer_insert_index, layer);
         layer->on_attach();
+        layer_insert_index++;
     }
 
     void layer_stack::push_overlay(layer* overlay)
