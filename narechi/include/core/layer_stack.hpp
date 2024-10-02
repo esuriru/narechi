@@ -12,56 +12,55 @@ namespace narechi
     {
     public:
         layer_stack() = default;
-        virtual ~layer_stack();
 
-        void push_layer(layer* layer);
-        void push_overlay(layer* overlay);
+        void push_layer(sptr<layer> layer);
+        void push_overlay(sptr<layer> overlay);
 
-        void pop_layer(layer* layer);
-        void pop_overlay(layer* overlay);
+        void pop_layer(sptr<layer> layer);
+        void pop_overlay(sptr<layer> overlay);
 
-        inline std::vector<layer*>::iterator begin()
+        inline std::vector<sptr<layer>>::iterator begin()
         {
             return layers.begin();
         }
 
-        inline std::vector<layer*>::iterator end()
+        inline std::vector<sptr<layer>>::iterator end()
         {
             return layers.end();
         }
 
-        inline std::vector<layer*>::reverse_iterator rbegin()
+        inline std::vector<sptr<layer>>::reverse_iterator rbegin()
         {
             return layers.rbegin();
         }
 
-        inline std::vector<layer*>::reverse_iterator rend()
+        inline std::vector<sptr<layer>>::reverse_iterator rend()
         {
             return layers.rend();
         }
 
-        inline std::vector<layer*>::const_iterator begin() const
+        inline std::vector<sptr<layer>>::const_iterator begin() const
         {
             return layers.begin();
         }
 
-        inline std::vector<layer*>::const_iterator end() const
+        inline std::vector<sptr<layer>>::const_iterator end() const
         {
             return layers.end();
         }
 
-        inline std::vector<layer*>::const_reverse_iterator rbegin() const
+        inline std::vector<sptr<layer>>::const_reverse_iterator rbegin() const
         {
             return layers.rbegin();
         }
 
-        inline std::vector<layer*>::const_reverse_iterator rend() const
+        inline std::vector<sptr<layer>>::const_reverse_iterator rend() const
         {
             return layers.rend();
         }
 
     private:
-        std::vector<layer*> layers;
+        std::vector<sptr<layer>> layers;
         uint32_t layer_insert_index = 0;
     };
 }
