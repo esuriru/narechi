@@ -4,7 +4,8 @@
 
 namespace narechi::editor
 {
-    project_creation_layer::project_creation_layer()
+    project_creation_layer::project_creation_layer(
+        std::function<void()> exit_callback)
         : layer("ProjectCreationLayer")
     {
         project_name_input = gui::text_input_element::create(
@@ -12,9 +13,9 @@ namespace narechi::editor
         project_directory_input = gui::text_input_element::create(
             { .width = 400, .label_on_left = true, .label = "Directory" });
         create_project_button = gui::button_element::create({ .label = "Create",
-            .on_click = []()
+            .on_click = [=]()
             {
-                NRC_CORE_LOG("Create Project");
+                exit_callback();
             } });
         select_directory_button
             = gui::button_element::create({ .same_line = true,

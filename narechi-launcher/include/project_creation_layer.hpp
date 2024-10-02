@@ -4,12 +4,14 @@
 
 #include "narechi.hpp"
 
+#include <functional>
+
 namespace narechi::editor
 {
     class project_creation_layer final : public layer
     {
     public:
-        explicit project_creation_layer();
+        explicit project_creation_layer(std::function<void()> exit_callback);
 
         void on_attach() override;
         void on_detach() override;
