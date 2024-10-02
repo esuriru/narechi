@@ -16,7 +16,8 @@ namespace narechi
 {
     app* app::app_instance = nullptr;
 
-    app::app() : is_running(true), last_frame_time(0.0f)
+    app::app()
+        : is_running(true), last_frame_time(0.0f), in_layer_loop_scope(false)
     {
         NRC_ASSERT(app_instance == nullptr,
             "An instance of app has already been created");
@@ -57,25 +58,64 @@ namespace narechi
 
             imgui_ctx->new_frame();
 
+            in_layer_loop_scope = true;
+
             for (auto& layer : layer_stack)
             {
                 layer->on_gui_update();
             }
 
+            in_layer_loop_scope = false;
+
             imgui_ctx->render();
+
+            in_layer_loop_scope = true;
 
             for (auto& layer : layer_stack)
             {
                 layer->on_update(step);
             }
 
+            in_layer_loop_scope = false;
+
             render_command::draw();
 
             window->update();
             gfx_ctx->swap_buffers();
+
+            // Clear layer changes
+            flush_layer_change_queue();
         }
 
         render_command::cleanup();
+    }
+
+    void app::flush_layer_change_queue()
+    {
+        while (!layer_change_queue.empty())
+        {
+            auto layer_change_pair = layer_change_queue.front();
+            auto layer_to_transition = layer_change_pair.first;
+            auto current_layer_change_command = layer_change_pair.second;
+
+            switch (current_layer_change_command)
+            {
+            case layer_change_queue_command::push_l:
+                layer_stack.push_layer(layer_to_transition);
+                break;
+            case layer_change_queue_command::push_o:
+                layer_stack.push_overlay(layer_to_transition);
+                break;
+            case layer_change_queue_command::pop_l:
+                layer_stack.pop_layer(layer_to_transition);
+                break;
+            case layer_change_queue_command::pop_o:
+                layer_stack.pop_overlay(layer_to_transition);
+                break;
+            }
+
+            layer_change_queue.pop();
+        }
     }
 
     app& app::get()
@@ -107,14 +147,56 @@ namespace narechi
         return *nfd_ctx;
     }
 
-    void app::push_layer(layer* layer)
+    void app::push_layer(sptr<layer> layer)
     {
-        layer_stack.push_layer(layer);
+        if (in_layer_loop_scope)
+        {
+            layer_change_queue.push(
+                std::make_pair(layer, layer_change_queue_command::push_l));
+        }
+        else
+        {
+            layer_stack.push_layer(layer);
+        }
     }
 
-    void app::push_overlay(layer* overlay)
+    void app::push_overlay(sptr<layer> overlay)
     {
-        layer_stack.push_overlay(overlay);
+        if (in_layer_loop_scope)
+        {
+            layer_change_queue.push(
+                std::make_pair(overlay, layer_change_queue_command::push_o));
+        }
+        else
+        {
+            layer_stack.push_overlay(overlay);
+        }
+    }
+
+    void app::pop_layer(sptr<layer> layer)
+    {
+        if (in_layer_loop_scope)
+        {
+            layer_change_queue.push(
+                std::make_pair(layer, layer_change_queue_command::pop_l));
+        }
+        else
+        {
+            layer_stack.pop_layer(layer);
+        }
+    }
+
+    void app::pop_overlay(sptr<layer> overlay)
+    {
+        if (in_layer_loop_scope)
+        {
+            layer_change_queue.push(
+                std::make_pair(overlay, layer_change_queue_command::pop_o));
+        }
+        else
+        {
+            layer_stack.pop_overlay(overlay);
+        }
     }
 
     void app::on_event(event& event)
