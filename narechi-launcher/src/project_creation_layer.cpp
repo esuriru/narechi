@@ -1,6 +1,10 @@
 #include "project_creation_layer.hpp"
 
 #include "narechi.hpp"
+#include "yaml-cpp/emitter.h"
+
+#include <fstream>
+#include <filesystem>
 
 namespace narechi::editor
 {
@@ -13,8 +17,24 @@ namespace narechi::editor
         project_directory_input = gui::text_input_element::create(
             { .width = 400, .label_on_left = true, .label = "Directory" });
         create_project_button = gui::button_element::create({ .label = "Create",
-            .on_click = [=]()
+            .on_click = [=, this]()
             {
+                YAML::Emitter out;
+                out << YAML::BeginMap;
+                out << YAML::Key << "Project Name" << YAML::Value
+                    << project_name_input->get_text();
+                out << YAML::EndMap;
+
+                std::filesystem::path file_path(
+                    project_directory_input->get_text());
+                std::string file_name = project_name_input->get_text().append(".yaml");
+                file_path.append(file_name);
+
+                std::ofstream file_out(file_path);
+                NRC_ASSERT(
+                    file_out.is_open(), "Project directory is not valid");
+                file_out << out.c_str();
+
                 exit_callback();
             } });
         select_directory_button
