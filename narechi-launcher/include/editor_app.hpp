@@ -15,7 +15,7 @@ namespace narechi::editor
             {
                 // TODO - Submit to a queue to flush these in app
                 pop_layer(pc_layer);
-                push_layer(create_and_push_layer<editor_layer>());
+                create_and_push_layer<editor_layer>();
             };
 
             pc_layer = create_and_push_layer<project_creation_layer>(
