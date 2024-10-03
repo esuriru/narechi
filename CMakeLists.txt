@@ -48,6 +48,13 @@ FetchContent_Declare(
         SHA256=FC359B212E56011931B90BF4241057EDDEC45308BB4D8B9AAB4DFB2F70E3B211
 )
 
+FetchContent_Declare(
+    yaml-cpp
+    URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.zip
+    URL_HASH
+        SHA256=334E80AB7B52E14C23F94E041C74BAB0742F2281AAD55F66BE2F19F4B7747071
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
@@ -61,6 +68,9 @@ target_include_directories(narechi-engine PUBLIC ${NRC_IMGUI_SOURCE_DIR})
 
 add_subdirectory("deps/nativefiledialog-extended")
 target_link_libraries(narechi-engine PUBLIC nfd)
+
+add_subdirectory("deps/yaml-cpp")
+target_link_libraries(narechi-engine PUBLIC yaml-cpp::yaml-cpp)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
