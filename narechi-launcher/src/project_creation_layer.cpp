@@ -12,10 +12,15 @@ namespace narechi::editor
         std::function<void()> exit_callback)
         : layer("ProjectCreationLayer")
     {
-        project_name_input = gui::text_input_element::create(
-            { .width = 400, .label_on_left = true, .label = "Project Name" });
-        project_directory_input = gui::text_input_element::create(
-            { .width = 400, .label_on_left = true, .label = "Directory" });
+        float input_width = 850.0f;
+        project_name_input
+            = gui::text_input_element::create({ .width = input_width,
+                .label_on_left = true,
+                .label = "Project Name" });
+        project_directory_input
+            = gui::text_input_element::create({ .width = input_width,
+                .label_on_left = true,
+                .label = "Directory" });
         create_project_button = gui::button_element::create({ .label = "Create",
             .on_click = [=, this]()
             {

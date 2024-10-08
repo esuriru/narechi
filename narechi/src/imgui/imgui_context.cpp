@@ -25,6 +25,7 @@ namespace narechi
 
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.FontGlobalScale = 2.0f;
 
         NRC_CORE_DEBUG("ImGui Context initialized");
 
@@ -38,6 +39,7 @@ namespace narechi
 #elif defined(NRC_RENDERER_API_VULKAN)
         // TODO - ImGui Vulkan init
 #endif
+        ImGui::GetStyle().ScaleAllSizes(3.0f);
 
         has_init = true;
     }
