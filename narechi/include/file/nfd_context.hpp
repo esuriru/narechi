@@ -3,6 +3,7 @@
 #include "core/core.hpp"
 
 #include <string>
+#include <optional>
 
 namespace narechi::file
 {
@@ -15,7 +16,7 @@ namespace narechi::file
         void init();
         void cleanup();
 
-        void open_file_dialog(std::string& out_path);
-        void pick_folder(std::string& out_path);
+        std::optional<std::string> open_file_dialog();
+        std::optional<std::string> pick_folder();
     };
 }

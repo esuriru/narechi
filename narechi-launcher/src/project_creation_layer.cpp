@@ -27,7 +27,8 @@ namespace narechi::editor
 
                 std::filesystem::path file_path(
                     project_directory_input->get_text());
-                std::string file_name = project_name_input->get_text().append(".yaml");
+                std::string file_name
+                    = project_name_input->get_text().append(".yaml");
                 file_path.append(file_name);
 
                 std::ofstream file_out(file_path);
@@ -42,10 +43,13 @@ namespace narechi::editor
                 .label = "Dir",
                 .on_click = [this]()
                 {
-                    std::string folder_path;
                     static auto nfd_ctx = app::get().get_nfd_context();
-                    nfd_ctx.pick_folder(folder_path);
-                    project_directory_input->set_text(folder_path);
+                    std::optional<std::string> folder_path
+                        = nfd_ctx.pick_folder();
+                    if (folder_path.has_value())
+                    {
+                        project_directory_input->set_text(folder_path.value());
+                    }
                 } });
 
         form_window = gui::window::create({ .name = "Project Creation",

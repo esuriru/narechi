@@ -1,6 +1,8 @@
 #include "file/nfd_context.hpp"
 
-#include "nfd.h"
+#include "core/logger.hpp"
+
+#include "nfd.hpp"
 
 namespace narechi::file
 {
@@ -14,19 +16,37 @@ namespace narechi::file
         NFD_Quit();
     }
 
-    void nfd_context::open_file_dialog(std::string& out_path)
+    std::optional<std::string> nfd_context::open_file_dialog()
     {
-        nfdu8char_t* buf;
-        nfdopendialogu8args_t args { .filterCount = 0 };
-        NFD_OpenDialogU8_With(&buf, &args);
-        out_path = buf;
+        NFD::UniquePath nfd_out_path = nullptr;
+        nfdresult_t result = NFD::OpenDialog(nfd_out_path);
+
+        if (result == NFD_OKAY)
+        {
+            return std::make_optional(std::string(nfd_out_path.get()));
+        }
+        else if (result == NFD_ERROR)
+        {
+            NRC_CORE_FATAL("NFDe Error: ", NFD::GetError());
+        }
+
+        return std::nullopt;
     }
 
-    void nfd_context::pick_folder(std::string& out_path)
+    std::optional<std::string> nfd_context::pick_folder()
     {
-        nfdu8char_t* buf;
-        nfdpickfolderu8args_t args {};
-        NFD_PickFolderU8_With(&buf, &args);
-        out_path = buf;
+        NFD::UniquePath nfd_out_path = nullptr;
+        nfdresult_t result = NFD::PickFolder(nfd_out_path);
+
+        if (result == NFD_OKAY)
+        {
+            return std::make_optional(std::string(nfd_out_path.get()));
+        }
+        else if (result == NFD_ERROR)
+        {
+            NRC_CORE_FATAL("NFDe Error: ", NFD::GetError());
+        }
+
+        return std::nullopt;
     }
 }
