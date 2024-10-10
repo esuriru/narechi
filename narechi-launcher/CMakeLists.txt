@@ -1,5 +1,6 @@
 set(NARECHI_LAUNCHER_SOURCES
     "src/main.cpp"
+    "src/project.cpp"
 
     "src/editor_layer.cpp"
     "src/project_creation_layer.cpp"
