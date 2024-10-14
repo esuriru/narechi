@@ -13,7 +13,6 @@ namespace narechi::editor
         {
             exit_project_creation_callback = [&]()
             {
-                // TODO - Submit to a queue to flush these in app
                 pop_layer(pc_layer);
                 create_and_push_layer<editor_layer>();
             };
