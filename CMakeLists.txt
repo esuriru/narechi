@@ -55,6 +55,13 @@ FetchContent_Declare(
         SHA256=334E80AB7B52E14C23F94E041C74BAB0742F2281AAD55F66BE2F19F4B7747071
 )
 
+FetchContent_Declare(
+    flecs
+    URL https://github.com/SanderMertens/flecs/archive/refs/tags/v4.0.2.zip
+    URL_HASH
+        SHA256=AE67CD00BCB5D7665451CF440A87DAE92981765DB683204396622DF10123C018
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
@@ -71,6 +78,9 @@ target_link_libraries(narechi-engine PUBLIC nfd)
 
 add_subdirectory("deps/yaml-cpp")
 target_link_libraries(narechi-engine PUBLIC yaml-cpp::yaml-cpp)
+
+add_subdirectory("deps/flecs")
+target_link_libraries(narechi-engine PUBLIC flecs)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
