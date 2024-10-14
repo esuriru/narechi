@@ -4,7 +4,6 @@
 #include "project.hpp"
 #include "yaml-cpp/emitter.h"
 
-#include <fstream>
 #include <filesystem>
 
 namespace narechi::editor
