@@ -2,3 +2,6 @@
 
 /.cache
 /.vscode
+
+# Compiled SPIR-V Shaders
+*.spv

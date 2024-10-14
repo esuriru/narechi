@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/core.hpp>
+#include <string>
 #include <functional>
 
 namespace narechi

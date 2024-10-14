@@ -1,9 +1,11 @@
 #pragma once
 
-#include <core/window.hpp>
-#include <core/events/event.hpp>
+#include "rendering/graphics_context.hpp"
 
-#include <GLFW/glfw3.h>
+#include "core/window.hpp"
+#include "core/events/event.hpp"
+
+struct GLFWwindow;
 
 namespace narechi
 {

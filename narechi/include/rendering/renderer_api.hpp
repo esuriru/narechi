@@ -1,6 +1,8 @@
 #pragma once
 
-#include <core/core.hpp>
+#include "glm/glm.hpp"
+
+#include "core/core.hpp"
 
 namespace narechi
 {
@@ -10,6 +12,7 @@ namespace narechi
         enum class api
         {
             none = 0,
+            opengl,
             vulkan
         };
 
@@ -18,7 +21,14 @@ namespace narechi
         virtual void init() = 0;
         virtual void cleanup() = 0;
 
+        virtual void clear_color(const glm::vec4& color) = 0;
+
         static uptr<renderer_api> create();
+
+        inline static api get_api()
+        {
+            return api_type;
+        }
 
     private:
         static api api_type;

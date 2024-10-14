@@ -1,7 +1,12 @@
 #include "platform/win32/win32window.hpp"
 
-#include <core/logger.hpp>
-#include <core/events/app_event.hpp>
+#include "platform/opengl/opengl_context.hpp"
+
+#include "GLFW/glfw3.h"
+
+#include "core/logger.hpp"
+#include "core/assert.hpp"
+#include "core/events/app_event.hpp"
 
 namespace narechi
 {
@@ -28,43 +33,50 @@ namespace narechi
         data.width = properties.width;
         data.height = properties.height;
 
-        glfwInit();
+        NRC_VERIFY(glfwInit() == GLFW_TRUE, "GLFW could not initialize");
+        glfwSetErrorCallback(
+            [](int error, const char* desc)
+            {
+                NRC_CORE_ERROR("GLFW error: (", error, "): {", desc, "}");
+            });
 
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        // TODO - Versions
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        if (window = glfwCreateWindow(properties.width,
-                properties.height,
-                properties.title.c_str(),
-                nullptr,
-                nullptr))
-        {
-            NRC_CORE_DEBUG("GLFW Window created");
-        }
+        NRC_VERIFY((window = glfwCreateWindow(properties.width,
+                        properties.height,
+                        properties.title.c_str(),
+                        nullptr,
+                        nullptr)),
+            "Could not create GLFW window");
+        NRC_CORE_DEBUG("GLFW Window created");
 
         glfwSetWindowUserPointer(window, &data);
 
         glfwSetWindowSizeCallback(window,
             [](GLFWwindow* window, int width, int height)
             {
-                window_data& data
-                    = *(window_data*)glfwGetWindowUserPointer(window);
+                window_data* data = reinterpret_cast<window_data*>(
+                    glfwGetWindowUserPointer(window));
 
-                data.width = width;
-                data.height = height;
+                data->width = width;
+                data->height = height;
 
                 window_resize_event event(width, height);
-                data.event_callback(event);
+                data->event_callback(event);
             });
 
         glfwSetWindowCloseCallback(window,
             [](GLFWwindow* window)
             {
-                window_data& data
-                    = *(window_data*)glfwGetWindowUserPointer(window);
+                window_data* data = reinterpret_cast<window_data*>(
+                    glfwGetWindowUserPointer(window));
 
                 window_close_event event;
-                data.event_callback(event);
+                data->event_callback(event);
             });
     }
 

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <editor_layer.hpp>
-#include <narechi.hpp>
-
-// TODO:
-// https://www.youtube.com/watch?v=88dmtleVywk&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=11
+#include "launcher_layer.hpp"
+#include "editor_layer.hpp"
+#include "narechi.hpp"
 
 namespace narechi::editor
 {
@@ -13,7 +11,19 @@ namespace narechi::editor
     public:
         editor_app()
         {
-            push_layer(new editor::editor_layer());
+            exit_project_creation_callback = [&]()
+            {
+                pop_layer(pc_layer);
+                create_and_push_layer<editor_layer>();
+            };
+
+            pc_layer = create_and_push_layer<launcher_layer>(
+                exit_project_creation_callback);
         }
+
+    private:
+        std::function<void()> exit_project_creation_callback;
+
+        sptr<launcher_layer> pc_layer;
     };
 }

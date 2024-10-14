@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/logger.hpp>
+#include "core/logger.hpp"
 
 #ifdef NRC_PLATFORM_WINDOWS
     #if defined(__clang__)
