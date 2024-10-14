@@ -3,7 +3,7 @@ set(NARECHI_LAUNCHER_SOURCES
     "src/project.cpp"
 
     "src/editor_layer.cpp"
-    "src/project_creation_layer.cpp"
+    "src/launcher_layer.cpp"
 
     "src/panels/content_browser_panel.cpp"
 )

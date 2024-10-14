@@ -8,10 +8,10 @@
 
 namespace narechi::editor
 {
-    class project_creation_layer final : public layer
+    class launcher_layer final : public layer
     {
     public:
-        explicit project_creation_layer(std::function<void()> exit_callback);
+        explicit launcher_layer(std::function<void()> exit_callback);
 
         void on_attach() override;
         void on_detach() override;

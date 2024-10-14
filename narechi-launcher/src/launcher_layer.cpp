@@ -1,4 +1,4 @@
-#include "project_creation_layer.hpp"
+#include "launcher_layer.hpp"
 
 #include "narechi.hpp"
 #include "project.hpp"
@@ -9,7 +9,7 @@
 
 namespace narechi::editor
 {
-    project_creation_layer::project_creation_layer(
+    launcher_layer::launcher_layer(
         std::function<void()> exit_callback)
         : layer("ProjectCreationLayer")
     {
@@ -59,14 +59,14 @@ namespace narechi::editor
         form_window->add_element(create_project_button);
     }
 
-    void project_creation_layer::on_attach() {}
+    void launcher_layer::on_attach() {}
 
-    void project_creation_layer::on_detach() {}
+    void launcher_layer::on_detach() {}
 
-    void project_creation_layer::on_gui_update()
+    void launcher_layer::on_gui_update()
     {
         form_window->render();
     }
 
-    void project_creation_layer::on_update(float dt) {}
+    void launcher_layer::on_update(float dt) {}
 }
