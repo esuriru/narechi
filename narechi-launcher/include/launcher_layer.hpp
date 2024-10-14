@@ -20,7 +20,10 @@ namespace narechi::editor
         void on_update(float dt) override;
 
     private:
+        uptr<gui::window> main_window;
         uptr<gui::window> form_window;
+        gui::window& current_window;
+        bool render_form;
 
         sptr<gui::text_input_element> project_name_input;
         sptr<gui::text_input_element> project_directory_input;

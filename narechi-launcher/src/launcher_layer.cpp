@@ -8,10 +8,30 @@
 
 namespace narechi::editor
 {
-    launcher_layer::launcher_layer(
-        std::function<void()> exit_callback)
-        : layer("ProjectCreationLayer")
+    launcher_layer::launcher_layer(std::function<void()> exit_callback)
+        : layer("ProjectCreationLayer"),
+          main_window(gui::window::create({ .name = "Main" })),
+          current_window(*main_window), render_form(false)
     {
+        static auto nfd_ctx = app::get().get_nfd_context();
+
+        form_window = gui::window::create({ .name = "Project Creation",
+            .flags = gui::window_flags::align_text_elements });
+
+        main_window->add_element(
+            gui::button_element::create({ .label = "Create Project",
+                .on_click = [&]()
+                {
+                    render_form = true;
+                } }));
+        main_window->add_element(
+            gui::button_element::create({ .label = "Select Project",
+                .on_click = [=, this]()
+                {
+                    auto file = nfd_ctx.open_file_dialog();
+                    exit_callback();
+                } }));
+
         float input_width = 850.0f;
         project_name_input
             = gui::text_input_element::create({ .width = input_width,
@@ -46,9 +66,6 @@ namespace narechi::editor
                     }
                 } });
 
-        form_window = gui::window::create({ .name = "Project Creation",
-            .flags = gui::window_flags::align_text_elements });
-
         form_window->add_element(
             gui::text_element::create({ .text = "Create Project" }));
         form_window->add_element(gui::space_element::create({}));
@@ -64,7 +81,14 @@ namespace narechi::editor
 
     void launcher_layer::on_gui_update()
     {
-        form_window->render();
+        if (render_form)
+        {
+            form_window->render();
+        }
+        else
+        {
+            main_window->render();
+        }
     }
 
     void launcher_layer::on_update(float dt) {}
