@@ -4,6 +4,8 @@ set(NARECHI_SOURCES
     "src/core/window.cpp"
     "src/core/layer_stack.cpp"
 
+    "src/asset/asset.cpp"
+
     "src/file/nfd_context.cpp"
 
     "src/gui/window.cpp"
