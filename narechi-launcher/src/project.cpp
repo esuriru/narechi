@@ -8,24 +8,15 @@
 
 namespace narechi::editor
 {
-    void project::serialize(
-        const std::filesystem::path& output_path, const project& project)
+    project::project(std::filesystem::path&& path, const project_properties& props)
+        : props(props) 
+        , asset(std::move(path), this->props)
     {
-        YAML::Emitter emitter;
-        emitter << YAML::BeginMap;
-        emitter << YAML::Key << "Project Name" << YAML::Value
-            << project.name;
-        emitter << YAML::EndMap;
 
-        std::ofstream file_out(output_path);
-        NRC_ASSERT(
-            file_out.is_open(), "Project directory is not valid");
-        file_out << emitter.c_str();
     }
 
-    project::project(const project_properties& props)
-        : name(props.name) 
+    void project::serialize() 
     {
-    
+        asset.serialize();    
     }
 }

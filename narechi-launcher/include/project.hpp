@@ -1,5 +1,7 @@
 #pragma once
 
+#include "project_asset.hpp"
+
 #include <string>
 #include <filesystem>
 
@@ -13,12 +15,13 @@ namespace narechi::editor
     class project
     {
     public:
-        static void serialize(
-            const std::filesystem::path& output_path, const project& project);
-        
-        project(const project_properties& props);
+        project(std::filesystem::path&& output_path,
+            const project_properties& props);
+
+        void serialize();
 
     private:
-        std::string name;
+        project_properties props;
+        project_asset asset;
     };
 }
