@@ -2,6 +2,8 @@
 
 #include "narechi.hpp"
 #include "project.hpp"
+#include "file_extensions.hpp"
+
 #include "yaml-cpp/emitter.h"
 
 #include <filesystem>
@@ -29,6 +31,10 @@ namespace narechi::editor
                 .on_click = [=, this]()
                 {
                     auto file = nfd_ctx.open_file_dialog();
+                    if (!file.has_value())
+                    {
+                        return;
+                    }
                     exit_callback();
                 } }));
 
@@ -45,11 +51,12 @@ namespace narechi::editor
             .on_click = [=, this]()
             {
                 std::string project_name = project_name_input->get_text();
-                project project({ .name = project_name });
                 std::filesystem::path folder_path(
                     project_directory_input->get_text());
-                project::serialize(
-                    folder_path / (project_name + ".yaml"), project);
+                project project(
+                    folder_path / (project_name + project_file_extension),
+                    { .name = project_name });
+                project.serialize();
                 exit_callback();
             } });
         select_directory_button
