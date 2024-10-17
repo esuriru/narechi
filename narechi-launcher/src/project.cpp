@@ -15,6 +15,21 @@ namespace narechi::editor
 
     }
 
+    project::project(const std::filesystem::path& path, const std::string& data)
+        : props{}
+        , asset(path, data, props)
+    {
+    }
+
+    uptr<project> project::load(const std::filesystem::path& path)
+    {
+        std::ifstream file_in(path);
+        std::ostringstream buffer;
+        buffer << file_in.rdbuf();
+
+        return make_uptr<project>(path, buffer.str());
+    }
+
     void project::serialize_and_write() 
     {
         asset.serialize();    

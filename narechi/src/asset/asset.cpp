@@ -8,6 +8,13 @@
 
 namespace narechi::asset
 {
+    asset::asset(const std::filesystem::path& path, const std::string& data)
+        : path(path)
+        , node()
+    {
+        load(data);
+    }
+
     asset::asset(std::filesystem::path&& path)
         : path(std::move(path))
         , node()
@@ -17,6 +24,11 @@ namespace narechi::asset
     const std::filesystem::path& asset::get_path()
     {
         return path;
+    }
+
+    void asset::load(const std::string& data)
+    {
+        node = YAML::Load(data);
     }
 
     void asset::write()
