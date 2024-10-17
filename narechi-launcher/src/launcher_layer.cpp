@@ -53,10 +53,12 @@ namespace narechi::editor
                 std::string project_name = project_name_input->get_text();
                 std::filesystem::path folder_path(
                     project_directory_input->get_text());
+
                 project project(
                     folder_path / (project_name + project_file_extension),
                     { .name = project_name });
-                project.serialize();
+                project.serialize_and_write();
+
                 exit_callback();
             } });
         select_directory_button
