@@ -30,12 +30,30 @@ namespace narechi::editor
             gui::button_element::create({ .label = "Select Project",
                 .on_click = [=, this]()
                 {
-                    auto file = nfd_ctx.open_file_dialog();
-                    if (!file.has_value())
+                    auto folder_path = nfd_ctx.pick_folder();
+                    if (!folder_path.has_value())
                     {
                         return;
                     }
-                    exit_callback();
+
+                    std::filesystem::path path {};
+                    for (const auto& it : std::filesystem::directory_iterator(
+                             folder_path.value()))
+                    {
+                        if (it.is_regular_file()
+                            && it.path().extension() == project_file_extension)
+                        {
+                            path = it.path();
+                        }
+                    }
+
+                    if (path.empty())
+                    {
+                        NRC_CORE_LOG("No project file found in project folder");
+                        return;
+                    }
+
+                    exit_callback(project::load(path));
                 } }));
 
         float input_width = 850.0f;
