@@ -1,5 +1,6 @@
 #include "launcher_layer.hpp"
 
+#include "gui/button_element.hpp"
 #include "narechi.hpp"
 #include "project.hpp"
 #include "file_extensions.hpp"
@@ -24,7 +25,7 @@ namespace narechi::editor
 
         main_window->add_element(
             gui::button_element::create({ .label = "Create Project",
-                .on_click = [&]()
+                .on_click = [this]()
                 {
                     render_form = true;
                 } }));
@@ -105,6 +106,13 @@ namespace narechi::editor
         form_window->add_element(project_directory_input);
         form_window->add_element(select_directory_button);
         form_window->add_element(create_project_button);
+        form_window->add_element(
+            gui::button_element::create({ .same_line = true,
+                .label = "Back",
+                .on_click = [this]()
+                {
+                    render_form = false;
+                } }));
     }
 
     void launcher_layer::on_attach() {}
