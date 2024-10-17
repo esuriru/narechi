@@ -20,6 +20,7 @@ namespace narechi::editor
 
         void serialize_and_write();
 
+        const project_properties& get_props();
     private:
         project_properties props;
         project_asset asset;

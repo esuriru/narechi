@@ -20,4 +20,9 @@ namespace narechi::editor
         asset.serialize();    
         asset.write();
     }
+
+    const project_properties& project::get_props()
+    {
+        return props;
+    }
 }
