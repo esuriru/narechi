@@ -75,7 +75,7 @@ namespace narechi::editor
                     project_directory_input->get_text());
 
                 project_properties props {};
-                props.name = project_name; 
+                props.name = project_name;
 
                 uptr<project> new_project = make_uptr<project>(
                     folder_path / (project_name + project_file_extension),
