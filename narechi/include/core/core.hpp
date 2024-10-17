@@ -1,8 +1,10 @@
 #pragma once
 
-#ifdef NRC_DEBUG
-
-#endif
+#define NRC_FORWARD_DECL_CLASS(ns, class_name) \
+    namespace ns                               \
+    {                                          \
+        class class_name;                      \
+    }
 
 #ifdef NRC_PLATFORM_WINDOWS
     #ifdef NRC_BUILD_DLL
