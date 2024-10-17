@@ -3,6 +3,7 @@
 #include "core/layer.hpp"
 
 #include "narechi.hpp"
+#include "project.hpp"
 
 #include <functional>
 
@@ -11,7 +12,8 @@ namespace narechi::editor
     class launcher_layer final : public layer
     {
     public:
-        explicit launcher_layer(std::function<void()> exit_callback);
+        explicit launcher_layer(
+            std::function<void(uptr<project>)> exit_callback);
 
         void on_attach() override;
         void on_detach() override;

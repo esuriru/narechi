@@ -7,10 +7,12 @@
 #include "yaml-cpp/emitter.h"
 
 #include <filesystem>
+#include <fstream>
 
 namespace narechi::editor
 {
-    launcher_layer::launcher_layer(std::function<void()> exit_callback)
+    launcher_layer::launcher_layer(
+        std::function<void(uptr<project>)> exit_callback)
         : layer("ProjectCreationLayer"),
           main_window(gui::window::create({ .name = "Main" })),
           current_window(*main_window), render_form(false)
@@ -28,7 +30,7 @@ namespace narechi::editor
                 } }));
         main_window->add_element(
             gui::button_element::create({ .label = "Select Project",
-                .on_click = [=, this]()
+                .on_click = [exit_callback, this]()
                 {
                     auto folder_path = nfd_ctx.pick_folder();
                     if (!folder_path.has_value())
@@ -66,18 +68,21 @@ namespace narechi::editor
                 .label_on_left = true,
                 .label = "Directory" });
         create_project_button = gui::button_element::create({ .label = "Create",
-            .on_click = [=, this]()
+            .on_click = [exit_callback, this]()
             {
                 std::string project_name = project_name_input->get_text();
                 std::filesystem::path folder_path(
                     project_directory_input->get_text());
 
-                project project(
-                    folder_path / (project_name + project_file_extension),
-                    { .name = project_name });
-                project.serialize_and_write();
+                project_properties props {};
+                props.name = project_name; 
 
-                exit_callback();
+                uptr<project> new_project = make_uptr<project>(
+                    folder_path / (project_name + project_file_extension),
+                    props);
+                new_project->serialize_and_write();
+
+                exit_callback(std::move(new_project));
             } });
         select_directory_button
             = gui::button_element::create({ .same_line = true,

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/layer.hpp"
+#include "project.hpp"
 
 #include "panels/editor_panel.hpp"
 
@@ -20,7 +21,10 @@ namespace narechi::editor
 
         void on_event(event& event) override;
 
+        void set_project(uptr<project> project);
+
     private:
+        uptr<project> current_project;
         std::vector<editor_panel*> panels;
     };
 }

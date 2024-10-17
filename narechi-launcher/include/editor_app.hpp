@@ -2,6 +2,7 @@
 
 #include "launcher_layer.hpp"
 #include "editor_layer.hpp"
+#include "project.hpp"
 #include "narechi.hpp"
 
 namespace narechi::editor
@@ -11,19 +12,18 @@ namespace narechi::editor
     public:
         editor_app()
         {
-            exit_project_creation_callback = [&]()
-            {
-                pop_layer(pc_layer);
-                create_and_push_layer<editor_layer>();
-            };
-
+            // Pass in callback to change to the editor layer with the project
+            // from the launcher layer
             pc_layer = create_and_push_layer<launcher_layer>(
-                exit_project_creation_callback);
+                [&](uptr<project> project)
+                {
+                    pop_layer(pc_layer);
+                    auto editor = create_and_push_layer<editor_layer>();
+                    editor->set_project(std::move(project));
+                });
         }
 
     private:
-        std::function<void()> exit_project_creation_callback;
-
         sptr<launcher_layer> pc_layer;
     };
 }

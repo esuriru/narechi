@@ -43,4 +43,10 @@ namespace narechi::editor
             panel->on_event(event);
         }
     }
+
+    void editor_layer::set_project(uptr<project> project)
+    {
+        current_project = std::move(project);
+        NRC_CORE_LOG(current_project->get_props().name);
+    }
 }
