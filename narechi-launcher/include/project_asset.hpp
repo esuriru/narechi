@@ -13,13 +13,11 @@ namespace narechi::editor
     class project_asset : public asset::asset
     {
     public:
-        project_asset(std::filesystem::path&& path, 
-            project_properties& props);
+        project_asset(std::filesystem::path&& path, project_properties& props);
 
-        void serialize();
-    
+        void serialize() override;
+
     private:
-        std::string data;
         project_properties& props;
     };
 }

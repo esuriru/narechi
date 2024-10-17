@@ -1,6 +1,6 @@
 #include "project.hpp"
 
-#include "yaml-cpp/emitter.h"
+#include "yaml-cpp/yaml.h" 
 
 #include "core/assert.hpp"
 
@@ -15,8 +15,9 @@ namespace narechi::editor
 
     }
 
-    void project::serialize() 
+    void project::serialize_and_write() 
     {
         asset.serialize();    
+        asset.write();
     }
 }

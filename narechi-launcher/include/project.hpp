@@ -18,7 +18,7 @@ namespace narechi::editor
         project(std::filesystem::path&& output_path,
             const project_properties& props);
 
-        void serialize();
+        void serialize_and_write();
 
     private:
         project_properties props;

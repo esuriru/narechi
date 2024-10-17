@@ -1,9 +1,37 @@
 #include "project_asset.hpp"
 #include "project.hpp"
 
-#include "yaml-cpp/emitter.h"
+#include "yaml-cpp/yaml.h"
 
 #include <fstream>
+
+namespace YAML
+{
+    using narechi::editor::project_properties;
+
+    template<>
+    struct convert<project_properties>
+    {
+        static Node encode(const project_properties& props)
+        {
+            Node node(NodeType::Map);
+            node.force_insert("Name", props.name);
+
+            return node;
+        }
+
+        static bool decode(const Node& node, project_properties& props)
+        {
+            if (!node.IsMap())
+            {
+                return false;
+            }
+
+            props.name = node["Name"].as<std::string>();
+            return true;
+        }
+    };
+}
 
 namespace narechi::editor
 {
@@ -16,16 +44,7 @@ namespace narechi::editor
 
     void project_asset::serialize() 
     {
-        YAML::Emitter emitter;
-        emitter << YAML::BeginMap;
-        emitter << YAML::Key << "Project Name" << YAML::Value
-            << props.name; 
-        emitter << YAML::EndMap;
-
-        std::ofstream file_out(path); 
-        NRC_ASSERT(
-            file_out.is_open(), "Project directory is not valid");
-        file_out << emitter.c_str();
+        node = props;
     }
 }
         
