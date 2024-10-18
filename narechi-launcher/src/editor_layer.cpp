@@ -8,16 +8,11 @@ namespace narechi::editor
 
     void editor_layer::on_attach()
     {
-        panels.push_back(new content_browser_panel());
+        panels.push_back(make_uptr<content_browser_panel>());
     }
 
     void editor_layer::on_detach()
     {
-        for (auto& panel : panels)
-        {
-            delete panel;
-        }
-
         panels.clear();
     }
 
