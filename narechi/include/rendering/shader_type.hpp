@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/assert.hpp"
+#include "core/logger.hpp"
 
 #include <cstdint>
 

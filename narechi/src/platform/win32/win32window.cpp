@@ -1,7 +1,5 @@
 #include "platform/win32/win32window.hpp"
 
-#include "platform/opengl/opengl_context.hpp"
-
 #include "GLFW/glfw3.h"
 
 #include "core/logger.hpp"

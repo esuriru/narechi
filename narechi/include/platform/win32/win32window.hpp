@@ -1,7 +1,5 @@
 #pragma once
 
-#include "rendering/graphics_context.hpp"
-
 #include "core/window.hpp"
 #include "core/events/event.hpp"
 
