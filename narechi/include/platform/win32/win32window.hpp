@@ -37,10 +37,9 @@ namespace narechi
             return data.height;
         }
 
-    private:
-        void init(const window_properties& properties);
-        void cleanup();
+        void set_title(const std::string& title) override;
 
+    private:
         struct window_data
         {
             std::string title;
@@ -48,6 +47,9 @@ namespace narechi
             uint32_t width, height;
             event_callback_fn event_callback;
         };
+
+        void init(const window_properties& properties);
+        void cleanup();
 
         window_data data;
         GLFWwindow* window;

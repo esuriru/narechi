@@ -27,6 +27,12 @@ namespace narechi
         glfwPollEvents();
     }
 
+    void win32window::set_title(const std::string& title)
+    {
+        data.title = title;
+        glfwSetWindowTitle(window, data.title.c_str());
+    }
+
     void win32window::init(const window_properties& properties)
     {
         data.title = properties.title;

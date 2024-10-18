@@ -42,6 +42,6 @@ namespace narechi::editor
     void editor_layer::set_project(uptr<project> project)
     {
         current_project = std::move(project);
-        NRC_CORE_LOG(current_project->get_props().name);
+        app::get().get_window().set_title(current_project->get_props().name);
     }
 }

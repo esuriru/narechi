@@ -27,6 +27,7 @@ namespace narechi
         virtual void update() = 0;
 
         virtual void set_event_callback(event_callback_fn func) = 0;
+        virtual void set_title(const std::string& title) = 0;
 
         virtual void* get_native_internal() const = 0;
 
