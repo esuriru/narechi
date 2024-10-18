@@ -15,7 +15,6 @@ set(NARECHI_SOURCES
     "src/gui/button_element.cpp"
 
     "src/imgui/imgui_context.cpp"
-    "src/imgui/imgui_layer.cpp"
     "src/imgui/imgui_window.cpp"
     "src/imgui/imgui_text_element.cpp"
     "src/imgui/imgui_space_element.cpp"
