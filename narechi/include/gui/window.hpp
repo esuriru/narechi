@@ -41,15 +41,8 @@ namespace narechi::gui
 
         void set_width_height(uint32_t width, uint32_t height);
 
-        uint32_t get_width()
-        {
-            return props.width;
-        }
-
-        uint32_t get_height()
-        {
-            return props.height;
-        }
+        uint32_t get_width();
+        uint32_t get_height();
 
     protected:
         window(const window_properties& props);
