@@ -36,7 +36,7 @@ namespace narechi::editor
         asset.write();
     }
 
-    const project_properties& project::get_props()
+    const project_properties& project::get_props() const
     {
         return props;
     }
