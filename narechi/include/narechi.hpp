@@ -7,6 +7,8 @@
 
 #include "asset/asset.hpp"
 
+#include "scene/scene.hpp"
+
 #include "gui/window.hpp"
 #include "gui/text_element.hpp"
 #include "gui/text_input_element.hpp"
