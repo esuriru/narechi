@@ -80,7 +80,7 @@ add_subdirectory("deps/yaml-cpp")
 target_link_libraries(narechi-engine PUBLIC yaml-cpp::yaml-cpp)
 
 add_subdirectory("deps/flecs")
-target_link_libraries(narechi-engine PUBLIC flecs)
+target_link_libraries(narechi-engine PUBLIC flecs::flecs_static)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
