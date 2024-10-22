@@ -26,6 +26,8 @@ set(NARECHI_SOURCES
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
 
+    "src/scene/scene.cpp"
+
     "src/platform/win32/win32window.cpp"
 
     "src/utils/time_utils.cpp"

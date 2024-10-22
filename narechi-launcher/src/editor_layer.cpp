@@ -9,6 +9,7 @@ namespace narechi::editor
     void editor_layer::on_attach()
     {
         panels.push_back(make_uptr<content_browser_panel>());
+        current_scene.awake();
     }
 
     void editor_layer::on_detach()
@@ -24,7 +25,10 @@ namespace narechi::editor
         }
     }
 
-    void editor_layer::on_update(float dt) {}
+    void editor_layer::on_update(float dt) 
+    {
+        current_scene.update(dt);
+    }
 
     void editor_layer::on_event(event& event)
     {

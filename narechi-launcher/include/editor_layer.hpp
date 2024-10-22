@@ -26,5 +26,7 @@ namespace narechi::editor
     private:
         uptr<project> current_project;
         std::vector<uptr<editor_panel>> panels;
+
+        scene::scene current_scene;
     };
 }
