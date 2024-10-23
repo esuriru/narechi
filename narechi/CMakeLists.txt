@@ -5,6 +5,7 @@ set(NARECHI_SOURCES
     "src/core/layer_stack.cpp"
 
     "src/asset/asset.cpp"
+    "src/asset/scene_asset.cpp"
 
     "src/file/nfd_context.cpp"
 

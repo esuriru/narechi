@@ -6,6 +6,8 @@
 
 #include "flecs.h"
 
+NRC_FORWARD_DECL_CLASS(narechi::asset, scene_asset);
+
 namespace narechi::scene
 {
     class NRC_API scene
@@ -19,5 +21,7 @@ namespace narechi::scene
 
     private:
         flecs::world world;
+
+        friend class asset::scene_asset;
     };
 }
