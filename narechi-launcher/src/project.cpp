@@ -11,7 +11,6 @@ namespace narechi::editor
     project::project(const std::filesystem::path& path)
         : asset(path, props)
     {
-        
     }
 
     uptr<project> project::load(const std::filesystem::path& path)

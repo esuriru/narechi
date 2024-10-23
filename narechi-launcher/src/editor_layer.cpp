@@ -4,7 +4,10 @@
 
 namespace narechi::editor
 {
-    editor_layer::editor_layer() : layer("EditorLayer") {}
+    editor_layer::editor_layer()
+        : layer("EditorLayer")
+    {
+    }
 
     void editor_layer::on_attach()
     {
@@ -25,7 +28,7 @@ namespace narechi::editor
         }
     }
 
-    void editor_layer::on_update(float dt) 
+    void editor_layer::on_update(float dt)
     {
         current_scene.update(dt);
     }

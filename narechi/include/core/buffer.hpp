@@ -13,7 +13,9 @@ namespace narechi
         buffer() = default;
         buffer(const buffer&) = default;
 
-        buffer(uint64_t size) {}
+        buffer(uint64_t size)
+        {
+        }
 
         static buffer clone(const buffer& other)
         {

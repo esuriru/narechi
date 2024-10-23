@@ -7,7 +7,8 @@
 namespace narechi
 {
     logger::logger(std::string_view name)
-        : output_format("[{}] {}:"), name(name)
+        : output_format("[{}] {}:")
+        , name(name)
     {
         // Reset the text color to the 'original' color
         set_text_color(log_level::none);

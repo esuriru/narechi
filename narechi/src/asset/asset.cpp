@@ -33,9 +33,8 @@ namespace narechi::asset
     {
         serialize();
 
-        std::ofstream file_out(path); 
-        NRC_ASSERT(
-            file_out.is_open(), "Asset directory is not valid");
-        file_out << data; 
+        std::ofstream file_out(path);
+        NRC_ASSERT(file_out.is_open(), "Asset directory is not valid");
+        file_out << data;
     }
 }

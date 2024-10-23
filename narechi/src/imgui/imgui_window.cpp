@@ -9,8 +9,8 @@
 namespace narechi
 {
     imgui_window::imgui_window(const gui::window_properties& props)
-        : window(props),
-          position(ImVec2(props.start_position_x, props.start_position_y))
+        : window(props)
+        , position(ImVec2(props.start_position_x, props.start_position_y))
     {
         if (!props.no_init)
         {

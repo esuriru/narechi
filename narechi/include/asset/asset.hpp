@@ -21,7 +21,7 @@ namespace narechi::asset
     protected:
         std::string data;
         std::filesystem::path path;
-    
+
     private:
         virtual void serialize() = 0;
         virtual void deserialize() = 0;

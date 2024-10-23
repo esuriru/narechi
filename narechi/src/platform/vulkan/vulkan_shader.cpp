@@ -14,11 +14,17 @@ namespace narechi
     {
     }
 
-    void vulkan_shader::bind() {}
+    void vulkan_shader::bind()
+    {
+    }
 
-    void vulkan_shader::unbind() {}
+    void vulkan_shader::unbind()
+    {
+    }
 
-    void vulkan_shader::set_int(const std::string& name, int value) {}
+    void vulkan_shader::set_int(const std::string& name, int value)
+    {
+    }
 
     const std::string& vulkan_shader::get_name()
     {

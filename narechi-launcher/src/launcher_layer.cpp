@@ -14,9 +14,10 @@ namespace narechi::editor
 {
     launcher_layer::launcher_layer(
         std::function<void(uptr<project>)> exit_callback)
-        : layer("ProjectCreationLayer"),
-          main_window(gui::window::create({ .name = "Main" })),
-          current_window(*main_window), render_form(false)
+        : layer("ProjectCreationLayer")
+        , main_window(gui::window::create({ .name = "Main" }))
+        , current_window(*main_window)
+        , render_form(false)
     {
         static auto nfd_ctx = app::get().get_nfd_context();
 
@@ -111,9 +112,13 @@ namespace narechi::editor
                 } }));
     }
 
-    void launcher_layer::on_attach() {}
+    void launcher_layer::on_attach()
+    {
+    }
 
-    void launcher_layer::on_detach() {}
+    void launcher_layer::on_detach()
+    {
+    }
 
     void launcher_layer::on_gui_update()
     {
@@ -127,5 +132,7 @@ namespace narechi::editor
         }
     }
 
-    void launcher_layer::on_update(float dt) {}
+    void launcher_layer::on_update(float dt)
+    {
+    }
 }

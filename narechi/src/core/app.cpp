@@ -15,7 +15,9 @@ namespace narechi
     app* app::app_instance = nullptr;
 
     app::app()
-        : is_running(true), last_frame_time(0.0f), in_layer_loop_scope(false)
+        : is_running(true)
+        , last_frame_time(0.0f)
+        , in_layer_loop_scope(false)
     {
         NRC_ASSERT(app_instance == nullptr,
             "An instance of app has already been created");

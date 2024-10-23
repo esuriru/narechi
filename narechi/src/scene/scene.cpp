@@ -5,7 +5,6 @@ namespace narechi::scene
     scene::scene()
         : world()
     {
-        
     }
 
     scene::~scene()

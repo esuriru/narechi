@@ -38,7 +38,9 @@ namespace narechi::editor
 {
     project_asset::project_asset(
         const std::filesystem::path& path, project_properties& props)
-        : asset::asset(path), props(props), node()
+        : asset::asset(path)
+        , props(props)
+        , node()
     {
     }
 

@@ -14,7 +14,10 @@
 
 namespace narechi
 {
-    imgui_context::imgui_context() : has_init(false) {}
+    imgui_context::imgui_context()
+        : has_init(false)
+    {
+    }
 
     void imgui_context::init()
     {

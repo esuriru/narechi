@@ -24,7 +24,9 @@ namespace narechi
             renderer_api->clear_color(color);
         }
 
-        static void draw() {}
+        static void draw()
+        {
+        }
 
     private:
         static uptr<renderer_api> renderer_api;

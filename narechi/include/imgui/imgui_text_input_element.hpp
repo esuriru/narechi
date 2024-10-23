@@ -13,6 +13,5 @@ namespace narechi
 
     private:
         float label_length;
-
     };
 }

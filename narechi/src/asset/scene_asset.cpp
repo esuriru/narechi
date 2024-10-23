@@ -8,7 +8,8 @@ namespace narechi::asset
 {
     scene_asset::scene_asset(
         const std::filesystem::path& path, scene::scene& scene)
-        : asset(path), scene(scene)
+        : asset(path)
+        , scene(scene)
     {
     }
 

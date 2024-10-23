@@ -9,11 +9,17 @@ namespace narechi
     {
     }
 
-    void vulkan_framebuffer::bind() {}
+    void vulkan_framebuffer::bind()
+    {
+    }
 
-    void vulkan_framebuffer::unbind() {}
+    void vulkan_framebuffer::unbind()
+    {
+    }
 
-    void vulkan_framebuffer::resize(uint32_t width, uint32_t height) {}
+    void vulkan_framebuffer::resize(uint32_t width, uint32_t height)
+    {
+    }
 
     const framebuffer_specification& vulkan_framebuffer::get_specification()
         const

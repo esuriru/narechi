@@ -13,8 +13,8 @@ namespace narechi::editor
     class project_asset : public asset::asset
     {
     public:
-        project_asset(const std::filesystem::path& path,
-            project_properties& props);
+        project_asset(
+            const std::filesystem::path& path, project_properties& props);
 
     private:
         YAML::Node node;

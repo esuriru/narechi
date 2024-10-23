@@ -40,5 +40,8 @@ namespace narechi::gui
         return props.height;
     }
 
-    window::window(const window_properties& props) : props(props) {}
+    window::window(const window_properties& props)
+        : props(props)
+    {
+    }
 }

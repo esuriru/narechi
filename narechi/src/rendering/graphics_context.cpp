@@ -16,7 +16,9 @@ struct GLFWwindow;
 
 namespace narechi
 {
-    graphics_context::~graphics_context() {}
+    graphics_context::~graphics_context()
+    {
+    }
 
     uptr<graphics_context> graphics_context::create(app* app)
     {

@@ -75,7 +75,10 @@ public:                                             \
     class event_handler final
     {
     public:
-        event_handler(event& event) : event(event) {}
+        event_handler(event& event)
+            : event(event)
+        {
+        }
 
         template<typename T, typename F>
         bool handle(const F& callback)

@@ -8,7 +8,8 @@
 namespace narechi
 {
     opengl_context::opengl_context(GLFWwindow* window)
-        : graphics_context(), window(window)
+        : graphics_context()
+        , window(window)
     {
         NRC_ASSERT(window,
             "OpenGL Context could not be created because "
@@ -17,7 +18,6 @@ namespace narechi
 
     opengl_context::~opengl_context()
     {
-        
     }
 
     void opengl_context::init()

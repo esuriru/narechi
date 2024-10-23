@@ -15,7 +15,11 @@ namespace narechi::utils
         singleton(const singleton&) = delete;
 
     protected:
-        singleton() {}
-        virtual ~singleton() {}
+        singleton()
+        {
+        }
+        virtual ~singleton()
+        {
+        }
     };
 }
