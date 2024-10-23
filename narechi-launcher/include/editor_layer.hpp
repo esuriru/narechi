@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/layer.hpp"
+#include "narechi.hpp"
 #include "project.hpp"
 
 #include "panels/editor_panel.hpp"
@@ -28,5 +28,7 @@ namespace narechi::editor
         std::vector<uptr<editor_panel>> panels;
 
         scene::scene current_scene;
+
+        sptr<gui::menu_bar> menu_bar;
     };
 }

@@ -7,6 +7,16 @@ namespace narechi::editor
     editor_layer::editor_layer()
         : layer("EditorLayer")
     {
+        menu_bar = gui::menu_bar::create({
+            .menu_items = { {
+                .title = "File",
+                .sub_menu_items = { { .title = "Open File",
+                    .callback =
+                        []()
+                    {
+                    } } },
+            } },
+        });
     }
 
     void editor_layer::on_attach()
@@ -22,6 +32,7 @@ namespace narechi::editor
 
     void editor_layer::on_gui_update()
     {
+        menu_bar->render();
         for (auto& panel : panels)
         {
             panel->render();
