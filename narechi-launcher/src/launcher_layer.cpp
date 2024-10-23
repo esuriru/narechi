@@ -7,7 +7,6 @@
 
 
 #include <filesystem>
-#include <fstream>
 
 namespace narechi::editor
 {
@@ -20,56 +19,66 @@ namespace narechi::editor
     {
         static auto nfd_ctx = app::get().get_nfd_context();
 
-        form_window = gui::window::create({ .name = "Project Creation",
-            .flags = gui::window_flags::align_text_elements });
+        form_window = gui::window::create({
+            .name = "Project Creation",
+            .flags = gui::window_flags::align_text_elements,
+        });
 
-        main_window->add_element(
-            gui::button_element::create({ .label = "Create Project",
-                .on_click = [this]()
+        main_window->add_element(gui::button_element::create({
+            .label = "Create Project",
+            .on_click =
+                [this]()
+            {
+                render_form = true;
+            },
+        }));
+        main_window->add_element(gui::button_element::create({
+            .label = "Select Project",
+            .on_click =
+                [exit_callback, this]()
+            {
+                auto folder_path = nfd_ctx.pick_folder();
+                if (!folder_path.has_value())
                 {
-                    render_form = true;
-                } }));
-        main_window->add_element(
-            gui::button_element::create({ .label = "Select Project",
-                .on_click = [exit_callback, this]()
+                    return;
+                }
+
+                std::filesystem::path path {};
+                for (const auto& it :
+                    std::filesystem::directory_iterator(folder_path.value()))
                 {
-                    auto folder_path = nfd_ctx.pick_folder();
-                    if (!folder_path.has_value())
+                    if (it.is_regular_file()
+                        && it.path().extension() == project_file_extension)
                     {
-                        return;
+                        path = it.path();
                     }
+                }
 
-                    std::filesystem::path path {};
-                    for (const auto& it : std::filesystem::directory_iterator(
-                             folder_path.value()))
-                    {
-                        if (it.is_regular_file()
-                            && it.path().extension() == project_file_extension)
-                        {
-                            path = it.path();
-                        }
-                    }
+                if (path.empty())
+                {
+                    NRC_CORE_LOG("No project file found in project folder");
+                    return;
+                }
 
-                    if (path.empty())
-                    {
-                        NRC_CORE_LOG("No project file found in project folder");
-                        return;
-                    }
-
-                    exit_callback(project::load(path));
-                } }));
+                exit_callback(project::load(path));
+            },
+        }));
 
         float input_width = 850.0f;
-        project_name_input
-            = gui::text_input_element::create({ .width = input_width,
-                .label_on_left = true,
-                .label = "Project Name" });
-        project_directory_input
-            = gui::text_input_element::create({ .width = input_width,
-                .label_on_left = true,
-                .label = "Directory" });
-        create_project_button = gui::button_element::create({ .label = "Create",
-            .on_click = [exit_callback, this]()
+        project_name_input = gui::text_input_element::create({
+            .width = input_width,
+            .label_on_left = true,
+            .label = "Project Name",
+        });
+        project_directory_input = gui::text_input_element::create({
+            .width = input_width,
+            .label_on_left = true,
+            .label = "Directory",
+        });
+        create_project_button = gui::button_element::create({
+            .label = "Create",
+            .on_click =
+                [exit_callback, this]()
             {
                 std::string project_name = project_name_input->get_text();
                 std::filesystem::path folder_path(
@@ -80,35 +89,40 @@ namespace narechi::editor
                     { .name = project_name });
 
                 exit_callback(std::move(new_project));
-            } });
-        select_directory_button
-            = gui::button_element::create({ .same_line = true,
-                .label = "Dir",
-                .on_click = [this]()
+            },
+        });
+        select_directory_button = gui::button_element::create({
+            .same_line = true,
+            .label = "Dir",
+            .on_click =
+                [this]()
+            {
+                static auto nfd_ctx = app::get().get_nfd_context();
+                std::optional<std::string> folder_path = nfd_ctx.pick_folder();
+                if (folder_path.has_value())
                 {
-                    static auto nfd_ctx = app::get().get_nfd_context();
-                    std::optional<std::string> folder_path
-                        = nfd_ctx.pick_folder();
-                    if (folder_path.has_value())
-                    {
-                        project_directory_input->set_text(folder_path.value());
-                    }
-                } });
+                    project_directory_input->set_text(folder_path.value());
+                }
+            },
+        });
 
-        form_window->add_element(
-            gui::text_element::create({ .text = "Create Project" }));
+        form_window->add_element(gui::text_element::create({
+            .text = "Create Project",
+        }));
         form_window->add_element(gui::space_element::create({}));
         form_window->add_element(project_name_input);
         form_window->add_element(project_directory_input);
         form_window->add_element(select_directory_button);
         form_window->add_element(create_project_button);
-        form_window->add_element(
-            gui::button_element::create({ .same_line = true,
-                .label = "Back",
-                .on_click = [this]()
-                {
-                    render_form = false;
-                } }));
+        form_window->add_element(gui::button_element::create({
+            .same_line = true,
+            .label = "Back",
+            .on_click =
+                [this]()
+            {
+                render_form = false;
+            },
+        }));
     }
 
     void launcher_layer::on_attach()

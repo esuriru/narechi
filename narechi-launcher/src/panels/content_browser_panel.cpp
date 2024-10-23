@@ -6,9 +6,12 @@ namespace narechi::editor
         : editor_panel("Content Browser")
         , window(gui::window::create({ .name = "Content Browser" }))
     {
-        window->add_element(
-            gui::text_element::create({ .text = "Content Browser Text" }));
-        window->add_element(gui::text_element::create({ .text = "More Text" }));
+        window->add_element(gui::text_element::create({
+            .text = "Content Browser Text",
+        }));
+        window->add_element(gui::text_element::create({
+            .text = "More Text",
+        }));
     }
 
     void content_browser_panel::render()
