@@ -10,9 +10,8 @@ namespace narechi::asset
     class scene_asset : public asset
     {
     public:
-        scene_asset(const std::filesystem::path& path,
-            scene::scene& scene);
-    
+        scene_asset(const std::filesystem::path& path, scene::scene& scene);
+
     private:
         void serialize() override;
         void deserialize() override;
