@@ -1,6 +1,7 @@
 #include "project_asset.hpp"
 #include "project.hpp"
 
+#include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
 
 #include <fstream>
@@ -37,17 +38,22 @@ namespace narechi::editor
 {
     project_asset::project_asset(
         const std::filesystem::path& path, project_properties& props)
-        : asset::asset(path), props(props)
+        : asset::asset(path), props(props), node()
     {
     }
 
     void project_asset::serialize()
     {
         node = props;
+        YAML::Emitter emitter;
+        emitter << node;
+
+        data = emitter.c_str();
     }
 
     void project_asset::deserialize()
     {
+        node = YAML::Load(data);
         props = node.as<project_properties>();
     }
 }

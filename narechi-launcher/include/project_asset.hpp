@@ -17,6 +17,7 @@ namespace narechi::editor
             project_properties& props);
 
     private:
+        YAML::Node node;
         project_properties& props;
 
         void serialize() override;

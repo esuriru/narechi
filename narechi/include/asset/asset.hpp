@@ -19,7 +19,7 @@ namespace narechi::asset
         void write();
 
     protected:
-        YAML::Node node;
+        std::string data;
         std::filesystem::path path;
     
     private:

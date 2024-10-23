@@ -10,7 +10,6 @@ namespace narechi::asset
 {
     asset::asset(const std::filesystem::path& path)
         : path(path)
-        , node()
     {
     }
 
@@ -25,7 +24,7 @@ namespace narechi::asset
         std::ostringstream buffer;
         buffer << file_in.rdbuf();
 
-        node = YAML::Load(buffer.str());
+        data = buffer.str();
 
         deserialize();
     }
@@ -34,12 +33,9 @@ namespace narechi::asset
     {
         serialize();
 
-        YAML::Emitter emitter;
-        emitter << node; 
-
         std::ofstream file_out(path); 
         NRC_ASSERT(
             file_out.is_open(), "Asset directory is not valid");
-        file_out << emitter.c_str();
+        file_out << data; 
     }
 }
