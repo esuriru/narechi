@@ -5,7 +5,6 @@
 #include "project.hpp"
 #include "file_extensions.hpp"
 
-#include "yaml-cpp/emitter.h"
 
 #include <filesystem>
 #include <fstream>

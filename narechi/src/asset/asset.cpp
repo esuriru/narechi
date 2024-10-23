@@ -2,8 +2,6 @@
 
 #include "core/assert.hpp"
 
-#include "yaml-cpp/yaml.h"
-
 #include <fstream>
 
 namespace narechi::asset

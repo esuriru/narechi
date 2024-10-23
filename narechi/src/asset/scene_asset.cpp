@@ -2,8 +2,6 @@
 
 #include "scene/scene.hpp"
 
-#include "flecs.h"
-
 namespace narechi::asset
 {
     scene_asset::scene_asset(
