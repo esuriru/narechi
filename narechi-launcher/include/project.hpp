@@ -15,13 +15,11 @@ namespace narechi::editor
     class project
     {
     public:
-        project(std::filesystem::path&& output_path,
-            const project_properties& props);
-        project(const std::filesystem::path& path, const std::string& data);
+        project(const std::filesystem::path& path);
 
         static uptr<project> load(const std::filesystem::path& path);
-
-        void serialize_and_write();
+        static uptr<project> create(const std::filesystem::path& path,
+            project_properties&& props);
 
         const project_properties& get_props() const;
     private:

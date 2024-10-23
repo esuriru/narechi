@@ -1,6 +1,6 @@
 #include "project.hpp"
 
-#include "yaml-cpp/yaml.h" 
+#include "yaml-cpp/yaml.h"
 
 #include "core/assert.hpp"
 
@@ -8,32 +8,26 @@
 
 namespace narechi::editor
 {
-    project::project(std::filesystem::path&& path, const project_properties& props)
-        : props(props) 
-        , asset(std::move(path), this->props)
+    project::project(const std::filesystem::path& path)
+        : asset(path, props)
     {
-
-    }
-
-    project::project(const std::filesystem::path& path, const std::string& data)
-        : props{}
-        , asset(path, data, props)
-    {
+        
     }
 
     uptr<project> project::load(const std::filesystem::path& path)
     {
-        std::ifstream file_in(path);
-        std::ostringstream buffer;
-        buffer << file_in.rdbuf();
-
-        return make_uptr<project>(path, buffer.str());
+        uptr<project> existing_project = make_uptr<project>(path);
+        existing_project->asset.load();
+        return std::move(existing_project);
     }
 
-    void project::serialize_and_write() 
+    uptr<project> project::create(
+        const std::filesystem::path& path, project_properties&& props)
     {
-        asset.serialize();    
-        asset.write();
+        uptr<project> new_project = make_uptr<project>(path);
+        new_project->props = std::move(props);
+        new_project->asset.write();
+        return std::move(new_project);
     }
 
     const project_properties& project::get_props() const

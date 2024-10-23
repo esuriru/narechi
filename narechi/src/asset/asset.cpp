@@ -8,15 +8,8 @@
 
 namespace narechi::asset
 {
-    asset::asset(const std::filesystem::path& path, const std::string& data)
+    asset::asset(const std::filesystem::path& path)
         : path(path)
-        , node()
-    {
-        load(data);
-    }
-
-    asset::asset(std::filesystem::path&& path)
-        : path(std::move(path))
         , node()
     {
     }
@@ -26,13 +19,21 @@ namespace narechi::asset
         return path;
     }
 
-    void asset::load(const std::string& data)
+    void asset::load()
     {
-        node = YAML::Load(data);
+        std::ifstream file_in(path);
+        std::ostringstream buffer;
+        buffer << file_in.rdbuf();
+
+        node = YAML::Load(buffer.str());
+
+        deserialize();
     }
 
     void asset::write()
     {
+        serialize();
+
         YAML::Emitter emitter;
         emitter << node; 
 

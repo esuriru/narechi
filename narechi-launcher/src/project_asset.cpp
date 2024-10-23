@@ -35,22 +35,19 @@ namespace YAML
 
 namespace narechi::editor
 {
-    project_asset::project_asset(const std::filesystem::path& path,
-        const std::string& data, project_properties& props)
-        : asset(path, data)
-        , props(props)
-    {
-        props = node.as<project_properties>();
-    }
-
     project_asset::project_asset(
-        std::filesystem::path&& path, project_properties& props)
-        : asset::asset(std::move(path)), props(props)
+        const std::filesystem::path& path, project_properties& props)
+        : asset::asset(path), props(props)
     {
     }
 
     void project_asset::serialize()
     {
         node = props;
+    }
+
+    void project_asset::deserialize()
+    {
+        props = node.as<project_properties>();
     }
 }

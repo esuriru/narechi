@@ -75,13 +75,9 @@ namespace narechi::editor
                 std::filesystem::path folder_path(
                     project_directory_input->get_text());
 
-                project_properties props {};
-                props.name = project_name;
-
-                uptr<project> new_project = make_uptr<project>(
+                uptr<project> new_project = project::create(
                     folder_path / (project_name + project_file_extension),
-                    props);
-                new_project->serialize_and_write();
+                    { .name = project_name });
 
                 exit_callback(std::move(new_project));
             } });
