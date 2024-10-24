@@ -11,6 +11,8 @@ namespace narechi::asset
     {
     }
 
+    scene_asset::~scene_asset() = default;
+
     void scene_asset::serialize()
     {
         data = scene.world.to_json();

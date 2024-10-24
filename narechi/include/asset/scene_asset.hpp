@@ -11,6 +11,7 @@ namespace narechi::asset
     {
     public:
         scene_asset(const std::filesystem::path& path, scene::scene& scene);
+        ~scene_asset();
 
     private:
         void serialize() override;
