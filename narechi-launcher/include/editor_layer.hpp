@@ -12,6 +12,7 @@ namespace narechi::editor
     {
     public:
         explicit editor_layer();
+        ~editor_layer();
 
         void on_attach() override;
         void on_detach() override;
@@ -27,7 +28,7 @@ namespace narechi::editor
         uptr<project> current_project;
         std::vector<uptr<editor_panel>> panels;
 
-        scene::scene current_scene;
+        scene::scene* current_scene;
 
         sptr<gui::menu_bar> menu_bar;
     };
