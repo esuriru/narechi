@@ -8,27 +8,30 @@
 
 namespace YAML
 {
-    using narechi::editor::project_properties;
+    using narechi::editor::project;
 
     template<>
-    struct convert<project_properties>
+    struct convert<project::project_data>
     {
-        static Node encode(const project_properties& props)
+        static Node encode(const project::project_data& data)
         {
             Node node(NodeType::Map);
-            node.force_insert("Name", props.name);
+            node.force_insert("Name", data.name);
+            node.force_insert("Startup Scene Name", data.startup_scene_name);
 
             return node;
         }
 
-        static bool decode(const Node& node, project_properties& props)
+        static bool decode(const Node& node, project::project_data& data)
         {
             if (!node.IsMap())
             {
                 return false;
             }
 
-            props.name = node["Name"].as<std::string>();
+            data.name = node["Name"].as<std::string>();
+            data.startup_scene_name
+                = node["Startup Scene Name"].as<std::string>();
             return true;
         }
     };
@@ -37,10 +40,14 @@ namespace YAML
 namespace narechi::editor
 {
     project_asset::project_asset(
-        const std::filesystem::path& path, project_properties& props)
+        const std::filesystem::path& path, project::project_data& props)
         : asset::asset(path)
         , props(props)
         , node()
+    {
+    }
+
+    project_asset::~project_asset()
     {
     }
 
@@ -56,6 +63,6 @@ namespace narechi::editor
     void project_asset::deserialize()
     {
         node = YAML::Load(data);
-        props = node.as<project_properties>();
+        props = node.as<project::project_data>();
     }
 }

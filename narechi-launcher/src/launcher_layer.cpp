@@ -5,7 +5,6 @@
 #include "project.hpp"
 #include "file_extensions.hpp"
 
-
 #include <filesystem>
 
 namespace narechi::editor
@@ -86,7 +85,7 @@ namespace narechi::editor
 
                 uptr<project> new_project = project::create(
                     folder_path / (project_name + project_file_extension),
-                    { .name = project_name });
+                    project_name);
 
                 exit_callback(std::move(new_project));
             },

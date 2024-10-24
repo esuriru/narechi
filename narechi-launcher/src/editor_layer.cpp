@@ -13,14 +13,14 @@ namespace narechi::editor
         menu_bar = gui::menu_bar::create({
             .menu_items = { 
                 {
-                .title = "File",
+                    .title = "File",
                     .sub_menu_items = 
                     { 
                         {
                             .title = "Open File",
-                    .callback =
-                        []()
-                    {
+                            .callback =
+                                []()
+                            {
                             },
                         },
                         {
@@ -134,6 +134,6 @@ namespace narechi::editor
     void editor_layer::set_project(uptr<project> project)
     {
         current_project = std::move(project);
-        app::get().get_window().set_title(current_project->get_props().name);
+        app::get().get_window().set_title(current_project->get_data().name);
     }
 }
