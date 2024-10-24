@@ -33,4 +33,9 @@ namespace narechi::editor
     {
         return props;
     }
+
+    const std::filesystem::path& project::get_path() const
+    {
+        return asset.get_path();
+    }
 }

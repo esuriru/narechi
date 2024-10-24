@@ -22,6 +22,7 @@ namespace narechi::editor
             const std::filesystem::path& path, project_properties&& props);
 
         const project_properties& get_props() const;
+        const std::filesystem::path& get_path() const;
 
     private:
         project_properties props;
