@@ -21,6 +21,7 @@ namespace narechi::scene
     void scene::awake()
     {
         flecs::entity test_entity = world.entity();
+        test_entity.add(flecs::Disabled);
     }
 
     void scene::update(float delta_time)
