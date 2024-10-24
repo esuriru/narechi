@@ -1,14 +1,18 @@
 #include "scene/scene.hpp"
 
+#include "asset/scene_asset.hpp"
+
 namespace narechi::scene
 {
-    scene::scene()
+    scene::scene(const std::filesystem::path& path)
         : world()
+        , asset(make_uptr<asset::scene_asset>(path, *this))
     {
     }
 
     scene::~scene()
     {
+        asset.reset();
         world.release();
     }
 

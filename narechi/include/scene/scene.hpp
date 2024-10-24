@@ -1,10 +1,10 @@
 #pragma once
 
-#pragma once
-
 #include "core/core.hpp"
 
 #include "flecs.h"
+
+#include <filesystem>
 
 NRC_FORWARD_DECL_CLASS(narechi::asset, scene_asset);
 
@@ -13,7 +13,7 @@ namespace narechi::scene
     class NRC_API scene
     {
     public:
-        scene();
+        scene(const std::filesystem::path& path);
         ~scene();
 
         void awake();
@@ -21,6 +21,7 @@ namespace narechi::scene
 
     private:
         flecs::world world;
+        uptr<asset::scene_asset> asset;
 
         friend class asset::scene_asset;
     };
