@@ -11,7 +11,7 @@ namespace narechi::asset
     {
     }
 
-    const std::filesystem::path& asset::get_path()
+    const std::filesystem::path& asset::get_path() const
     {
         return path;
     }

@@ -13,7 +13,7 @@ namespace narechi::asset
     public:
         asset(const std::filesystem::path& path);
 
-        const std::filesystem::path& get_path();
+        const std::filesystem::path& get_path() const;
 
         void load();
         void write();
