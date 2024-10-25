@@ -11,7 +11,7 @@
 namespace narechi::editor
 {
     project::project(const std::filesystem::path& path)
-        : asset(make_uptr<project_asset>(path, data))
+        : asset(make_uptr<project_asset>(path, &data))
     {
     }
 
@@ -31,8 +31,18 @@ namespace narechi::editor
     {
         uptr<project> new_project = make_uptr<project>(path);
         new_project->data.name = name;
-        new_project->asset->write();
+        new_project->save();
         return std::move(new_project);
+    }
+
+    void project::set_startup_scene_name(const std::string& scene_name)
+    {
+        data.startup_scene_name = scene_name;
+    }
+
+    void project::save()
+    {
+        asset->write();
     }
 
     const project::project_data& project::get_data() const

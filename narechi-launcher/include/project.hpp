@@ -25,6 +25,9 @@ namespace narechi::editor
         static uptr<project> create(
             const std::filesystem::path& path, const std::string& name);
 
+        void set_startup_scene_name(const std::string& scene_name);
+        void save();
+
         const project_data& get_data() const;
         const std::filesystem::path& get_path() const;
 
