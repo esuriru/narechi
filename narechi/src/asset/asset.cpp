@@ -17,13 +17,16 @@ namespace narechi::asset
         return path;
     }
 
-    void asset::load()
+    void asset::load(bool deserialize_only)
     {
-        std::ifstream file_in(path);
-        std::ostringstream buffer;
-        buffer << file_in.rdbuf();
+        if (!deserialize_only)
+        {
+            std::ifstream file_in(path);
+            std::ostringstream buffer;
+            buffer << file_in.rdbuf();
 
-        data = buffer.str();
+            data = buffer.str();
+        }
 
         deserialize();
     }

@@ -15,7 +15,7 @@ namespace narechi::asset
 
         const std::filesystem::path& get_path() const;
 
-        void load();
+        void load(bool deserialize_only = false);
         void write();
 
     protected:
