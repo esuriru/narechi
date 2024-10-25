@@ -23,12 +23,14 @@ namespace narechi::editor
         void on_event(event& event) override;
 
         void set_project(uptr<project> project);
+        void load_scene_from_project();
 
     private:
+        std::filesystem::path asset_directory;
         uptr<project> current_project;
         std::vector<uptr<editor_panel>> panels;
 
-        scene::scene* current_scene;
+        sptr<scene::scene> current_scene;
 
         sptr<gui::menu_bar> menu_bar;
     };
