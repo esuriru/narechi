@@ -14,12 +14,12 @@ namespace narechi::editor
     {
     public:
         project_asset(
-            const std::filesystem::path& path, project::project_data& data);
+            const std::filesystem::path& path, project::project_data* data);
         ~project_asset();
 
     private:
         YAML::Node node;
-        project::project_data& props;
+        project::project_data* project_data;
 
         void serialize() override;
         void deserialize() override;

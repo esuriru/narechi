@@ -40,9 +40,9 @@ namespace YAML
 namespace narechi::editor
 {
     project_asset::project_asset(
-        const std::filesystem::path& path, project::project_data& props)
+                       const std::filesystem::path& path, project::project_data* data)
         : asset::asset(path)
-        , props(props)
+        , project_data(data)
         , node()
     {
     }
@@ -53,7 +53,7 @@ namespace narechi::editor
 
     void project_asset::serialize()
     {
-        node = props;
+        node = *project_data;
         YAML::Emitter emitter;
         emitter << node;
 
@@ -63,6 +63,6 @@ namespace narechi::editor
     void project_asset::deserialize()
     {
         node = YAML::Load(data);
-        props = node.as<project::project_data>();
+        *project_data = node.as<project::project_data>();
     }
 }
