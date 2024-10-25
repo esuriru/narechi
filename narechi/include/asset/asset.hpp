@@ -21,6 +21,7 @@ namespace narechi::asset
     protected:
         std::string data;
         std::filesystem::path path;
+        bool is_owning;
 
     private:
         virtual void serialize() = 0;

@@ -8,6 +8,7 @@ namespace narechi::asset
 {
     asset::asset(const std::filesystem::path& path)
         : path(path)
+        , is_owning(false)
     {
     }
 
