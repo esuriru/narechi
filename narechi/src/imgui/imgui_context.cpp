@@ -42,7 +42,7 @@ namespace narechi
 #elif defined(NRC_RENDERER_API_VULKAN)
         // TODO - ImGui Vulkan init
 #endif
-        ImGui::GetStyle().ScaleAllSizes(3.0f);
+        ImGui::GetStyle().ScaleAllSizes(2.0f);
 
         has_init = true;
     }
