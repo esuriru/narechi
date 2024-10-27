@@ -13,7 +13,15 @@ namespace narechi
     public:
         imgui_window(const gui::window_properties& props);
 
+        void begin();
+        void end();
+
         void render() override;
+        void render(
+            const std::function<void()>& render_pipeline_callback) override;
+        
+        void render_elements();
+
         void add_element(sptr<gui::element> element) override;
         void add_element(sptr<gui::text_input_element> element) override;
         void set_width_height_impl(uint32_t width, uint32_t height) override;
@@ -27,5 +35,7 @@ namespace narechi
 
         std::vector<sptr<gui::text_input_element>> text_input_elements;
         std::vector<sptr<gui::element>> elements;
+
+        std::function<void()> default_render_elements_callback;
     };
 }

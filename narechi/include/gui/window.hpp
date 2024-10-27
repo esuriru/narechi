@@ -6,6 +6,7 @@
 #include "utils/enum_flag_utils.hpp"
 
 #include <string>
+#include <functional>
 
 namespace narechi::gui
 {
@@ -32,6 +33,8 @@ namespace narechi::gui
     {
     public:
         virtual void render() = 0;
+        virtual void render(
+            const std::function<void()>& render_pipeline_callback);
 
         static uptr<window> create(const window_properties& props);
 

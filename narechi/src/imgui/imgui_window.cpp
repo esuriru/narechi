@@ -16,9 +16,12 @@ namespace narechi
         {
             set_width_height(props.width, props.height);
         }
+
+        default_render_elements_callback
+            = NRC_BIND_FN(imgui_window::render_elements);
     }
 
-    void imgui_window::render()
+    void imgui_window::begin()
     {
         if (!props.no_init && has_rendered)
         {
@@ -29,12 +32,10 @@ namespace narechi
 
         ImGui::Begin(props.name.c_str(), 0, ImGuiWindowFlags_NoResize);
         size = ImGui::GetWindowSize();
+    }
 
-        for (auto& elem : elements)
-        {
-            elem->render();
-        }
-
+    void imgui_window::end()
+    {
         if (is_dirty)
         {
             is_dirty = false;
@@ -45,6 +46,27 @@ namespace narechi
         }
 
         ImGui::End();
+    }
+
+    void imgui_window::render()
+    {
+        render(default_render_elements_callback);
+    }
+
+    void imgui_window::render_elements()
+    {
+        for (auto& elem : elements)
+        {
+            elem->render();
+        }
+    }
+
+    void imgui_window::render(
+        const std::function<void()>& render_pipeline_callback)
+    {
+        begin();
+        render_pipeline_callback();
+        end();
     }
 
     void imgui_window::add_element(sptr<gui::element> element)

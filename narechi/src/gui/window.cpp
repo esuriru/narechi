@@ -14,6 +14,11 @@ namespace narechi::gui
         return true;
     }
 
+    void window::render(const std::function<void()>& render_pipeline_callback)
+    {
+        render();
+    }
+
     uptr<window> window::create(const window_properties& props)
     {
         NRC_VERIFY(window_properties::verify(props),
