@@ -26,6 +26,7 @@ set(NARECHI_SOURCES
 
     "src/rendering/graphics_context.cpp"
     "src/rendering/renderer_api.cpp"
+    "src/rendering/image.cpp"
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
 
