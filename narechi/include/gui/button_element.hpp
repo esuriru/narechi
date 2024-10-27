@@ -24,6 +24,8 @@ namespace narechi::gui
         void set_label(const std::string& label);
         void set_on_click_callback(const std::function<void()> callback);
 
+        virtual bool is_pressed() const = 0;
+
     protected:
         button_element(const button_element_properties& props);
 

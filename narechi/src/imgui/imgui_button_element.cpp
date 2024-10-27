@@ -19,10 +19,20 @@ namespace narechi
 
         if (ImGui::Button(props.label.c_str()))
         {
+            is_pressed_flag = true;
             if (props.on_click)
             {
                 props.on_click();
             }
         }
+        else
+        {
+            is_pressed_flag = false;
+        }
+    }
+
+    bool imgui_button_element::is_pressed() const
+    {
+        return is_pressed_flag;
     }
 }

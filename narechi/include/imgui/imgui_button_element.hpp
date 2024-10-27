@@ -8,5 +8,10 @@ namespace narechi
         imgui_button_element(const gui::button_element_properties& props);
 
         void render() override;
+        
+        bool is_pressed() const override;
+    
+    protected:
+        bool is_pressed_flag;
     };
 }
