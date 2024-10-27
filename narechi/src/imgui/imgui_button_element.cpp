@@ -10,6 +10,11 @@ namespace narechi
     {
     }
 
+    bool imgui_button_element::imgui_button_call()
+    {
+        return ImGui::Button(props.label.c_str());
+    }
+
     void imgui_button_element::render()
     {
         if (props.same_line)
@@ -17,7 +22,7 @@ namespace narechi
             ImGui::SameLine();
         }
 
-        if (ImGui::Button(props.label.c_str()))
+        if (imgui_button_call())
         {
             is_pressed_flag = true;
             if (props.on_click)

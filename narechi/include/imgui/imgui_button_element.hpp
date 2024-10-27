@@ -7,6 +7,7 @@ namespace narechi
     public:
         imgui_button_element(const gui::button_element_properties& props);
 
+        virtual bool imgui_button_call();
         void render() override;
         
         bool is_pressed() const override;
