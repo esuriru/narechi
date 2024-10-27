@@ -8,6 +8,7 @@ set(NARECHI_LAUNCHER_SOURCES
     "src/launcher_layer.cpp"
 
     "src/panels/content_browser_panel.cpp"
+    "src/panels/editor_panel.cpp"
 )
 
 add_executable(narechi-launcher ${NARECHI_LAUNCHER_SOURCES})
