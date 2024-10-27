@@ -4,8 +4,6 @@
 #include "panels/content_browser_panel.hpp"
 #include "project.hpp"
 
-#include "panels/editor_panel.hpp"
-
 // TODO - Will there be a need to separate the editor from the editor_layer?
 namespace narechi::editor
 {
