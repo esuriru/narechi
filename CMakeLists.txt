@@ -82,6 +82,9 @@ target_link_libraries(narechi-engine PUBLIC yaml-cpp::yaml-cpp)
 add_subdirectory("deps/flecs")
 target_link_libraries(narechi-engine PUBLIC flecs::flecs_static)
 
+add_subdirectory("deps/stb")
+target_link_libraries(narechi-engine PUBLIC stb)
+
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
     find_package(Vulkan)
