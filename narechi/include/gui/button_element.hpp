@@ -21,6 +21,9 @@ namespace narechi::gui
         static sptr<button_element> create(
             const button_element_properties& props);
 
+        void set_label(const std::string& label);
+        void set_on_click_callback(const std::function<void()> callback);
+
     protected:
         button_element(const button_element_properties& props);
 

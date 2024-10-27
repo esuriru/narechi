@@ -11,6 +11,17 @@ namespace narechi::gui
         return make_sptr<imgui_button_element>(props);
     }
 
+    void button_element::set_label(const std::string& label)
+    {
+        props.label = label;
+    }
+
+    void button_element::set_on_click_callback(
+        const std::function<void()> callback)
+    {
+        props.on_click = callback;
+    }
+
     button_element::button_element(const button_element_properties& props)
     {
         // TODO - Verify props
