@@ -3,7 +3,7 @@
 #include "file_extensions.hpp"
 #include "panels/content_browser_panel.hpp"
 #include "scene/scene.hpp"
-#include <exception>
+
 #include <filesystem>
 
 namespace narechi::editor
@@ -51,7 +51,7 @@ namespace narechi::editor
                             {
                                 std::string scene_name = "New Scene";
                                 std::filesystem::path scene_path = 
-                                    asset_directory / 
+                                    asset_dir / 
                                     (scene_name + scene_file_extension);
                                 
                                 if (scene_path.has_parent_path())
@@ -92,7 +92,10 @@ namespace narechi::editor
 
     void editor_layer::on_attach()
     {
-        panels.push_back(make_uptr<content_browser_panel>());
+        NRC_ASSERT(!asset_dir.empty(), "Editor loaded without a project");
+
+        content_browser_panel = make_uptr<editor::content_browser_panel>();
+        content_browser_panel->set_editor_asset_dir(asset_dir, true);
 
         if (current_scene)
         {
@@ -102,16 +105,12 @@ namespace narechi::editor
 
     void editor_layer::on_detach()
     {
-        panels.clear();
     }
 
     void editor_layer::on_gui_update()
     {
         menu_bar->render();
-        for (auto& panel : panels)
-        {
-            panel->render();
-        }
+        content_browser_panel->render();
     }
 
     void editor_layer::on_update(float dt)
@@ -124,6 +123,10 @@ namespace narechi::editor
 
     void editor_layer::on_event(event& event)
     {
+        static std::vector<editor_panel*> panels {
+            content_browser_panel.get()
+        };
+
         for (auto& panel : panels)
         {
             if (event.handled)
@@ -139,26 +142,24 @@ namespace narechi::editor
     {
         current_project = std::move(project);
         app::get().get_window().set_title(current_project->get_data().name);
-        asset_directory = current_project->get_path().parent_path() / "assets";
+        asset_dir = current_project->get_path().parent_path() / "assets";
 
         load_scene_from_project();
     }
 
     void editor_layer::load_scene_from_project()
-    
     {
         if (current_project->get_data().startup_scene_name.empty())
         {
             return;
         }
 
-        if (!std::filesystem::exists(asset_directory))
+        if (!std::filesystem::exists(asset_dir))
         {
             return;
         }
 
-        for (const auto& it :
-            std::filesystem::directory_iterator(asset_directory))
+        for (const auto& it : std::filesystem::directory_iterator(asset_dir))
         {
             if (it.is_regular_file()
                 && it.path().extension() == scene_file_extension)

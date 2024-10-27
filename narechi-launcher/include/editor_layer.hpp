@@ -1,6 +1,7 @@
 #pragma once
 
 #include "narechi.hpp"
+#include "panels/content_browser_panel.hpp"
 #include "project.hpp"
 
 #include "panels/editor_panel.hpp"
@@ -26,12 +27,12 @@ namespace narechi::editor
         void load_scene_from_project();
 
     private:
-        std::filesystem::path asset_directory;
+        std::filesystem::path asset_dir;
         uptr<project> current_project;
-        std::vector<uptr<editor_panel>> panels;
 
         sptr<scene::scene> current_scene;
 
         sptr<gui::menu_bar> menu_bar;
+        uptr<content_browser_panel> content_browser_panel;
     };
 }
