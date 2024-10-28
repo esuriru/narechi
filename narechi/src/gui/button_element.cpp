@@ -1,6 +1,7 @@
 #include "gui/button_element.hpp"
 
 #include "imgui/imgui_button_element.hpp"
+#include "imgui/imgui_image_button_element.hpp"
 
 namespace narechi::gui
 {
@@ -8,7 +9,8 @@ namespace narechi::gui
         const button_element_properties& props)
     {
         // For now there is only ImGui
-        return make_sptr<imgui_button_element>(props);
+        return props.texture ? make_sptr<imgui_image_button_element>(props) :
+                               make_sptr<imgui_button_element>(props);
     }
 
     void button_element::set_label(const std::string& label)

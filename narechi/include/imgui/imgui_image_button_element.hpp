@@ -1,8 +1,10 @@
+#pragma once
+
 #include "imgui/imgui_button_element.hpp"
 
 namespace narechi
 {
-    class imgui_image_button_element : public imgui_button_element
+    class NRC_API imgui_image_button_element : public imgui_button_element
     {
     public:
         imgui_image_button_element(const gui::button_element_properties& props);

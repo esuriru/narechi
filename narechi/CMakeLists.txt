@@ -22,6 +22,7 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_space_element.cpp"
     "src/imgui/imgui_text_input_element.cpp"
     "src/imgui/imgui_button_element.cpp"
+    "src/imgui/imgui_image_button_element.cpp"
     "src/imgui/imgui_menu_bar.cpp"
 
     "src/rendering/graphics_context.cpp"

@@ -2,6 +2,7 @@
 
 #include "core/core.hpp"
 #include "element.hpp"
+#include "rendering/texture2d.hpp"
 
 #include <string>
 #include <functional>
@@ -10,6 +11,7 @@ namespace narechi::gui
 {
     struct button_element_properties
     {
+        sptr<rendering::texture2d> texture = nullptr;
         bool same_line = false;
         std::string label;
         std::function<void()> on_click = nullptr;
