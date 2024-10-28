@@ -1,5 +1,6 @@
 #include "panels/content_browser_panel.hpp"
 #include "gui/button_element.hpp"
+#include "rendering/image.hpp"
 #include "rendering/texture2d.hpp"
 
 namespace narechi::editor
@@ -41,6 +42,9 @@ namespace narechi::editor
 
                     browser_element->set_label(it.path().filename().string());
 
+                    browser_element->set_texture(
+                        is_directory ? folder_icon_texture : file_icon_texture);
+
                     browser_element->render();
 
                     if (is_directory && browser_element->is_pressed())
@@ -60,12 +64,19 @@ namespace narechi::editor
             current_dir = path;
         }
 
-        file_icon_texture
-            = rendering::texture2d::load(editor_asset_dir / "file-icon.png");
-        browser_element = gui::button_element::create({
-            .texture = file_icon_texture,
-            .same_line = true,
-            .label = "Browser Element",
-        });
+        // NOTE - Temporary code to move after packing assets
+        rendering::image_load_options options { .flip_vertically = false };
+        file_icon_texture = rendering::texture2d::load(
+            editor_asset_dir / "file-icon.png", options);
+        folder_icon_texture = rendering::texture2d::load(
+            editor_asset_dir / "folder-icon.png", options);
+        browser_element = gui::image_button_element::create(
+            {
+                .same_line = true,
+                .label = "Browser Element",
+                .width = browser_element_size,
+                .height = browser_element_size,
+            },
+            file_icon_texture);
     }
 }

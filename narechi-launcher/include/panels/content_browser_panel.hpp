@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gui/button_element.hpp"
 #include "narechi.hpp"
 
 #include "panels/editor_panel.hpp"
@@ -24,9 +23,10 @@ namespace narechi::editor
 
         sptr<narechi::gui::window> window;
         sptr<narechi::gui::button_element> back_button;
-        sptr<narechi::gui::button_element> browser_element;
+        sptr<narechi::gui::image_button_element> browser_element;
 
         sptr<rendering::texture2d> file_icon_texture;
+        sptr<rendering::texture2d> folder_icon_texture;
 
         std::filesystem::path editor_asset_dir;
         std::filesystem::path current_dir;
