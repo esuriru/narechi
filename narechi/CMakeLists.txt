@@ -29,6 +29,7 @@ set(NARECHI_SOURCES
     "src/rendering/image.cpp"
     "src/rendering/render_command.cpp"
     "src/rendering/framebuffer.cpp"
+    "src/rendering/texture2d.cpp"
 
     "src/scene/scene.cpp"
 
