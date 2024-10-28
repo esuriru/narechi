@@ -1,5 +1,6 @@
 #include "panels/content_browser_panel.hpp"
 #include "gui/button_element.hpp"
+#include "rendering/texture2d.hpp"
 
 namespace narechi::editor
 {
@@ -14,10 +15,6 @@ namespace narechi::editor
                     "Back button pressed when editor asset directory is empty");
                 current_dir = current_dir.parent_path();
             } });
-
-        browser_element = gui::button_element::create({
-            .label = "Browser Element",
-        });
 
         current_dir = editor_asset_dir;
     }
@@ -56,5 +53,13 @@ namespace narechi::editor
         {
             current_dir = path;
         }
+
+        file_icon_texture
+            = rendering::texture2d::load(editor_asset_dir / "file-icon.png");
+        browser_element = gui::button_element::create({
+            .texture = file_icon_texture,
+            .same_line = true,
+            .label = "Browser Element",
+        });
     }
 }
