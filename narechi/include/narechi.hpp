@@ -22,4 +22,7 @@
 #include "gui/button_element.hpp"
 #include "gui/menu_bar.hpp"
 
+// Rendering
+#include "rendering/texture2d.hpp"
+
 // IWYU pragma: end_keep
