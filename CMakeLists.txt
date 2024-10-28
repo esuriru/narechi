@@ -62,6 +62,13 @@ FetchContent_Declare(
         SHA256=AE67CD00BCB5D7665451CF440A87DAE92981765DB683204396622DF10123C018
 )
 
+FetchContent_Declare(
+    stduuid
+    URL https://github.com/mariusbancila/stduuid/archive/refs/tags/v1.2.3.zip
+    URL_HASH
+        SHA256=0F867768CE55F2D8FA361BE82F87F0EA5E51438BC47CA30CD92C9FD8B014E84E
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
@@ -84,6 +91,9 @@ target_link_libraries(narechi-engine PUBLIC flecs::flecs_static)
 
 add_subdirectory("deps/stb")
 target_link_libraries(narechi-engine PUBLIC stb)
+
+add_subdirectory("deps/stduuid")
+target_link_libraries(narechi-engine PUBLIC stduuid)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
