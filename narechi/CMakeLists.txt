@@ -42,6 +42,7 @@ if(${NRC_RENDERER_API} STREQUAL "opengl")
     set(RENDERER_API_SOURCES
         "src/platform/opengl/opengl_context.cpp"
         "src/platform/opengl/opengl_renderer_api.cpp"
+        "src/platform/opengl/opengl_texture2d.cpp"
     )
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
     set(RENDERER_API_SOURCES
