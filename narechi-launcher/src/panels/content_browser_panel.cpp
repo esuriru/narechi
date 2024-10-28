@@ -29,9 +29,12 @@ namespace narechi::editor
                     back_button->render();
                 }
 
+                int i = 0;
                 for (const auto& it :
                     std::filesystem::directory_iterator(current_dir))
                 {
+                    browser_element->set_custom_uid(std::to_string(i++));
+
                     bool is_directory = it.is_directory();
                     browser_element->set_label(it.path().filename().string());
 
