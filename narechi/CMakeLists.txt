@@ -10,6 +10,7 @@ set(NARECHI_SOURCES
     "src/file/nfd_context.cpp"
 
     "src/gui/window.cpp"
+    "src/gui/element.cpp"
     "src/gui/text_element.cpp"
     "src/gui/space_element.cpp"
     "src/gui/text_input_element.cpp"
