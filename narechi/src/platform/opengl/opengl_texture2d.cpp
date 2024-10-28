@@ -6,10 +6,11 @@
 
 namespace narechi
 {
-    opengl_texture2d::opengl_texture2d(const std::filesystem::path& path)
+    opengl_texture2d::opengl_texture2d(const std::filesystem::path& path,
+        const rendering::image_load_options& options)
         : texture2d()
     {
-        load_image(path);
+        load_image(path, options);
         create_texture();
     }
 
@@ -28,9 +29,10 @@ namespace narechi
         return gfx_ctx_id;
     }
 
-    void opengl_texture2d::load_image(const std::filesystem::path& path)
+    void opengl_texture2d::load_image(const std::filesystem::path& path,
+        const rendering::image_load_options& options)
     {
-        image = rendering::image::load_owned(path);
+        image = rendering::image::load_owned(path, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
     }
 

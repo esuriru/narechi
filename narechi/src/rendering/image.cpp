@@ -1,6 +1,7 @@
 #include "rendering/image.hpp"
 
 #include "stb_image.h"
+#include "core/assert.hpp"
 
 namespace narechi::rendering
 {
@@ -15,20 +16,20 @@ namespace narechi::rendering
     }
 
     sptr<image> image::load(
-        const std::filesystem::path& path, bool flip_vertically)
+        const std::filesystem::path& path, const image_load_options& options)
     {
         sptr<image> loading_image = make_sptr<image>();
-        stbi_set_flip_vertically_on_load(flip_vertically);
+        stbi_set_flip_vertically_on_load(options.flip_vertically);
         load(loading_image.get(), path);
 
         return loading_image;
     }
 
     uptr<image> image::load_owned(
-        const std::filesystem::path& path, bool flip_vertically)
+        const std::filesystem::path& path, const image_load_options& options)
     {
         uptr<image> loading_image = make_uptr<image>();
-        stbi_set_flip_vertically_on_load(flip_vertically);
+        stbi_set_flip_vertically_on_load(options.flip_vertically);
         load(loading_image.get(), path);
 
         return std::move(loading_image);
@@ -59,6 +60,7 @@ namespace narechi::rendering
         int width, height, channels;
         image->data
             = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+        NRC_ASSERT(image->data, "Image not loaded at path: ", path.string());
         image->width = width;
         image->height = height;
         image->channel_count = channels;

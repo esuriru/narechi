@@ -6,6 +6,11 @@
 
 namespace narechi::rendering
 {
+    struct image_load_options
+    {
+        bool flip_vertically = true;
+    };
+
     // TODO - Store formats inside of image
     class image
     {
@@ -13,10 +18,10 @@ namespace narechi::rendering
         image();
         ~image();
 
-        static sptr<image> load(
-            const std::filesystem::path& path, bool flip_vertically = true);
-        static uptr<image> load_owned(
-            const std::filesystem::path& path, bool flip_vertically = true);
+        static sptr<image> load(const std::filesystem::path& path,
+            const image_load_options& image_load_options);
+        static uptr<image> load_owned(const std::filesystem::path& path,
+            const image_load_options& image_load_options);
 
         uint8_t* get_data() const;
         uint32_t get_width() const;

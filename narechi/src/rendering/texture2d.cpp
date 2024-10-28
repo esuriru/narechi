@@ -6,19 +6,20 @@
 
 namespace narechi::rendering
 {
-    sptr<texture2d> texture2d::load(const std::filesystem::path& path)
+    sptr<texture2d> texture2d::load(const std::filesystem::path& path,
+        const rendering::image_load_options& options)
     {
         switch (renderer_api::get_api())
         {
         case renderer_api::api::vulkan:
 #ifdef NRC_RENDERER_API_VULKAN
-            return make_sptr<vulkan_texture2d>(path);
+            return make_sptr<vulkan_texture2d>(path, options);
 #else
             NRC_CORE_FATAL("Vulkan is not compiled, but selected");
 #endif
         case renderer_api::api::opengl:
 #ifdef NRC_RENDERER_API_OPENGL
-            return make_sptr<opengl_texture2d>(path);
+            return make_sptr<opengl_texture2d>(path, options);
 #else
             NRC_CORE_FATAL("OpenGL is not compiled, but selected");
 #endif
