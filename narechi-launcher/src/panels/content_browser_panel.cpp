@@ -36,6 +36,9 @@ namespace narechi::editor
                     browser_element->set_custom_uid(std::to_string(i++));
 
                     bool is_directory = it.is_directory();
+                    browser_element->set_width(browser_element_size);
+                    browser_element->set_height(browser_element_size);
+
                     browser_element->set_label(it.path().filename().string());
 
                     browser_element->render();

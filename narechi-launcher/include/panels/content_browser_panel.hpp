@@ -20,6 +20,8 @@ namespace narechi::editor
             const std::filesystem::path& path, bool set_current_dir);
 
     private:
+        float browser_element_size = 96.0f;
+
         sptr<narechi::gui::window> window;
         sptr<narechi::gui::button_element> back_button;
         sptr<narechi::gui::button_element> browser_element;
