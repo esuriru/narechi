@@ -2,7 +2,6 @@
 
 #include "core/core.hpp"
 #include "element.hpp"
-#include "rendering/texture2d.hpp"
 
 #include <string>
 #include <functional>
@@ -11,10 +10,13 @@ namespace narechi::gui
 {
     struct button_element_properties
     {
-        sptr<rendering::texture2d> texture = nullptr;
+        static constexpr float null_size = 0;
+
         bool same_line = false;
         std::string label;
         std::function<void()> on_click = nullptr;
+        float width = null_size;
+        float height = null_size;
     };
 
     class NRC_API button_element : public element
@@ -25,11 +27,14 @@ namespace narechi::gui
 
         void set_label(const std::string& label);
         void set_on_click_callback(const std::function<void()> callback);
+        void set_width(float width);
+        void set_height(float height);
 
         virtual bool is_pressed() const = 0;
 
     protected:
         button_element(const button_element_properties& props);
+        button_element() = default;
 
         button_element_properties props;
     };

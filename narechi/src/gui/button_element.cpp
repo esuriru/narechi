@@ -24,6 +24,16 @@ namespace narechi::gui
         props.on_click = callback;
     }
 
+    void button_element::set_width(float width)
+    {
+        props.width = width;
+    }
+
+    void button_element::set_height(float height)
+    {
+        props.height = height;
+    }
+
     button_element::button_element(const button_element_properties& props)
     {
         // TODO - Verify props
