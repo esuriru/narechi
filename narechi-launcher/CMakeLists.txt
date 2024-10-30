@@ -1,3 +1,5 @@
+include(${CMAKE_SOURCE_DIR}/cmake/EmbedAsset.cmake)
+
 set(NARECHI_LAUNCHER_SOURCES
     "src/main.cpp"
 
@@ -42,3 +44,6 @@ add_custom_command(TARGET narechi-launcher POST_BUILD
         $<TARGET_FILE_DIR:narechi-launcher>
     COMMAND_EXPAND_LISTS
 )
+
+embed_binary_to_byte_array(narechi-launcher "${CMAKE_SOURCE_DIR}/assets/file_icon.png")
+embed_binary_to_byte_array(narechi-launcher "${CMAKE_SOURCE_DIR}/assets/folder_icon.png")
