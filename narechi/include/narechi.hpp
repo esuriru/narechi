@@ -1,4 +1,4 @@
-// IWYU pragma: begin_keep
+// IWYU pragma: begin_exports
 
 // Core
 #include "core/app.hpp"
@@ -26,4 +26,4 @@
 // Rendering
 #include "rendering/texture2d.hpp"
 
-// IWYU pragma: end_keep
+// IWYU pragma: end_exports
