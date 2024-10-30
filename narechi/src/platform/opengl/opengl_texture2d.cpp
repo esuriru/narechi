@@ -14,6 +14,15 @@ namespace narechi
         create_texture();
     }
 
+    opengl_texture2d::opengl_texture2d(const uint8_t* data, uint32_t size,
+        const rendering::image_load_options& options)
+        : texture2d()
+    {
+        image = rendering::image::load_owned_from_memory(data, size, options);
+        NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
+        create_texture();
+    }
+
     uint32_t opengl_texture2d::get_width() const
     {
         return image->get_width();

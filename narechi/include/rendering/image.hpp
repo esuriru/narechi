@@ -19,9 +19,14 @@ namespace narechi::rendering
         ~image();
 
         static sptr<image> load(const std::filesystem::path& path,
-            const image_load_options& image_load_options);
+            const image_load_options& options);
+        static sptr<image> load_from_memory(const uint8_t* data, uint32_t size,
+            const image_load_options& options);
+
         static uptr<image> load_owned(const std::filesystem::path& path,
-            const image_load_options& image_load_options);
+            const image_load_options& options);
+        static uptr<image> load_owned_from_memory(const uint8_t* data,
+            uint32_t size, const image_load_options& options);
 
         uint8_t* get_data() const;
         uint32_t get_width() const;

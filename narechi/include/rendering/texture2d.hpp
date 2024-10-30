@@ -12,5 +12,7 @@ namespace narechi::rendering
     public:
         static sptr<texture2d> load(const std::filesystem::path& path,
             const rendering::image_load_options& options);
+        static sptr<texture2d> load_from_memory(const uint8_t* data,
+            uint32_t size, const rendering::image_load_options& options);
     };
 }
