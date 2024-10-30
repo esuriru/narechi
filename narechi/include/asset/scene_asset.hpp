@@ -5,6 +5,8 @@
 
 #include "scene/scene.hpp"
 
+#include "yaml-cpp/yaml.h" // IWYU pragma: keep
+
 namespace narechi::asset
 {
     class NRC_API scene_asset : public asset
