@@ -2,8 +2,6 @@
 
 #include "core/core.hpp"
 
-#include "yaml-cpp/node/node.h"
-
 #include <filesystem>
 
 namespace narechi::asset
