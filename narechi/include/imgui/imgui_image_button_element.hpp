@@ -16,6 +16,7 @@ namespace narechi
             sptr<rendering::texture2d> texture);
 
         bool imgui_button_call() override;
+
     private:
         const ImVec2 get_image_size();
     };

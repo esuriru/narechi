@@ -66,7 +66,7 @@ target_include_directories(narechi-engine PUBLIC "include")
 # TODO - Build static or shared setting
 target_compile_definitions(narechi-engine PRIVATE
     "NOMINMAX")
-target_compile_definitions(narechi-engine INTERFACE 
+target_compile_definitions(narechi-engine INTERFACE
     "IMGUI_DISABLE_OBSOLETE_FUNCTIONS")
 
 if(WIN32)
@@ -76,14 +76,13 @@ if(WIN32)
         "NRC_BUILD_DLL"
     )
 else()
-
 endif()
 
 if(${NRC_RENDERER_API} STREQUAL "opengl")
-    target_compile_definitions(narechi-engine PRIVATE 
+    target_compile_definitions(narechi-engine PRIVATE
         "NRC_RENDERER_API_OPENGL")
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
-    target_compile_definitions(narechi-engine PRIVATE 
+    target_compile_definitions(narechi-engine PRIVATE
         "NRC_RENDERER_API_VULKAN")
 else()
     error("Unsupported Renderer API: " ${NRC_RENDERER_API})

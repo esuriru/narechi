@@ -19,7 +19,7 @@ namespace narechi
         void render() override;
         void render(
             const std::function<void()>& render_pipeline_callback) override;
-        
+
         void render_elements();
 
         void add_element(sptr<gui::element> element) override;

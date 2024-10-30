@@ -40,7 +40,7 @@ namespace YAML
 namespace narechi::editor
 {
     project_asset::project_asset(
-                       const std::filesystem::path& path, project::project_data* data)
+        const std::filesystem::path& path, project::project_data* data)
         : asset::asset(path)
         , project_data(data)
         , node()
