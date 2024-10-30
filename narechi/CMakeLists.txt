@@ -1,3 +1,5 @@
+include(${CMAKE_SOURCE_DIR}/cmake/EmbedAsset.cmake)
+
 set(NARECHI_SOURCES
     "src/core/logger.cpp"
     "src/core/app.cpp"
@@ -88,3 +90,6 @@ elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
 else()
     error("Unsupported Renderer API: " ${NRC_RENDERER_API})
 endif()
+
+embed_binary_to_byte_array(narechi-engine "${CMAKE_SOURCE_DIR}/assets/file_icon.png")
+embed_binary_to_byte_array(narechi-engine "${CMAKE_SOURCE_DIR}/assets/folder_icon.png")
