@@ -3,6 +3,11 @@
 #include "rendering/image.hpp"
 #include "rendering/texture2d.hpp"
 
+#include "asset/embed.hpp"
+
+NRC_DECL_EMBED_BYTE_ARRAY(file_icon)
+NRC_DECL_EMBED_BYTE_ARRAY(folder_icon)
+
 namespace narechi::editor
 {
     content_browser_panel::content_browser_panel()
@@ -18,6 +23,22 @@ namespace narechi::editor
             } });
 
         current_dir = editor_asset_dir;
+
+        rendering::image_load_options options { .flip_vertically = false };
+
+        file_icon_texture = rendering::texture2d::load_from_memory(
+            embed::file_icon, embed::file_icon_length, options);
+        folder_icon_texture = rendering::texture2d::load_from_memory(
+            embed::folder_icon, embed::folder_icon_length, options);
+
+        browser_element = gui::image_button_element::create(
+            {
+                .same_line = true,
+                .label = "Browser Element",
+                .width = browser_element_size,
+                .height = browser_element_size,
+            },
+            file_icon_texture);
     }
 
     void content_browser_panel::render()
@@ -63,20 +84,5 @@ namespace narechi::editor
         {
             current_dir = path;
         }
-
-        // NOTE - Temporary code to move after packing assets
-        rendering::image_load_options options { .flip_vertically = false };
-        file_icon_texture = rendering::texture2d::load(
-            editor_asset_dir / "file-icon.png", options);
-        folder_icon_texture = rendering::texture2d::load(
-            editor_asset_dir / "folder-icon.png", options);
-        browser_element = gui::image_button_element::create(
-            {
-                .same_line = true,
-                .label = "Browser Element",
-                .width = browser_element_size,
-                .height = browser_element_size,
-            },
-            file_icon_texture);
     }
 }
