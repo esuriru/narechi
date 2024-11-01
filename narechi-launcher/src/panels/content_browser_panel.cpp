@@ -1,5 +1,6 @@
 #include "panels/content_browser_panel.hpp"
 #include "gui/button_element.hpp"
+#include "gui/scope/table_scope.hpp"
 #include "rendering/image.hpp"
 #include "rendering/texture2d.hpp"
 
@@ -33,16 +34,25 @@ namespace narechi::editor
 
         browser_element = gui::image_button_element::create(
             {
-                .same_line = true,
+                .same_line = false,
                 .label = "Browser Element",
                 .width = browser_element_size,
                 .height = browser_element_size,
             },
             file_icon_texture);
+        browser_text_element = gui::text_element::create({
+            .text = "filename",
+        });
+
+        browser_table_props.label = "Content Browser Table";
+        browser_table_props.flags
+            = gui::scope::table_scope_flags::fit_columns_to_width;
     }
 
     void content_browser_panel::render()
     {
+        using namespace gui::scope;
+
         window->render(
             [this]()
             {
@@ -51,26 +61,44 @@ namespace narechi::editor
                     back_button->render();
                 }
 
-                int i = 0;
-                for (const auto& it :
-                    std::filesystem::directory_iterator(current_dir))
+                float total_cell_size
+                    = browser_element_padding + browser_element_size;
+                browser_table_props.element_size = total_cell_size;
+                browser_table_props.padding_x = browser_table_props.padding_y
+                    = browser_element_padding;
+                browser_text_element->set_truncate_width(
+                    browser_element_size + browser_element_padding / 2);
+
                 {
-                    browser_element->set_custom_uid(std::to_string(i++));
+                    auto scope = table_scope::create(browser_table_props);
 
-                    bool is_directory = it.is_directory();
-                    browser_element->set_width(browser_element_size);
-                    browser_element->set_height(browser_element_size);
-
-                    browser_element->set_label(it.path().filename().string());
-
-                    browser_element->set_texture(
-                        is_directory ? folder_icon_texture : file_icon_texture);
-
-                    browser_element->render();
-
-                    if (is_directory && browser_element->is_pressed())
+                    int i = 0;
+                    for (const auto& it :
+                        std::filesystem::directory_iterator(current_dir))
                     {
-                        current_dir /= it.path().filename();
+                        scope->next_column();
+                        browser_element->set_custom_uid(std::to_string(i++));
+
+                        bool is_directory = it.is_directory();
+                        browser_element->set_width(browser_element_size);
+                        browser_element->set_height(browser_element_size);
+
+                        browser_element->set_label(
+                            it.path().filename().string());
+
+                        browser_element->set_texture(is_directory ?
+                                folder_icon_texture :
+                                file_icon_texture);
+
+                        browser_element->render();
+                        browser_text_element->render();
+                        browser_text_element->set_text(
+                            it.path().stem().string());
+
+                        if (is_directory && browser_element->is_pressed())
+                        {
+                            current_dir /= it.path().filename();
+                        }
                     }
                 }
             });
