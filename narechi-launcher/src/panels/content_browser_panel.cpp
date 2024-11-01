@@ -6,6 +6,8 @@
 
 #include "asset/embed.hpp"
 
+#include <deque>
+
 NRC_DECL_EMBED_BYTE_ARRAY(file_icon)
 NRC_DECL_EMBED_BYTE_ARRAY(folder_icon)
 
@@ -73,8 +75,23 @@ namespace narechi::editor
                     auto scope = table_scope::create(browser_table_props);
 
                     int i = 0;
+
+                    std::deque<std::filesystem::directory_entry> entries {};
+
                     for (const auto& it :
                         std::filesystem::directory_iterator(current_dir))
+                    {
+                        if (it.is_directory())
+                        {
+                            entries.push_front(it);
+                        }
+                        else
+                        {
+                            entries.push_back(it);
+                        }
+                    }
+
+                    for (const auto& it : entries)
                     {
                         scope->next_column();
                         browser_element->set_custom_uid(std::to_string(i++));
