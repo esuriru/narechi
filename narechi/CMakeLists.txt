@@ -17,6 +17,7 @@ set(NARECHI_SOURCES
     "src/gui/button_element.cpp"
     "src/gui/image_button_element.cpp"
     "src/gui/menu_bar.cpp"
+    "src/gui/scope/table_scope.cpp"
 
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_window.cpp"
