@@ -28,7 +28,7 @@ namespace narechi
 
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.FontGlobalScale = 2.0f;
+        io.FontGlobalScale = 1.25f;
 
         NRC_CORE_DEBUG("ImGui Context initialized");
 
