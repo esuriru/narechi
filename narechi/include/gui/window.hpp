@@ -15,7 +15,7 @@ namespace narechi::gui
         align_text_elements = 1 << 0,
     };
 
-    ENUM_FLAG_OPERATORS(window_flags);
+    NRC_ENUM_FLAG_OPERATORS(window_flags);
 
     struct window_properties
     {
