@@ -14,6 +14,9 @@
 // Scene
 #include "scene/scene.hpp"
 
+// GUI Scopes
+#include "gui/scope/table_scope.hpp"
+
 // GUI
 #include "gui/window.hpp"
 #include "gui/text_element.hpp"
