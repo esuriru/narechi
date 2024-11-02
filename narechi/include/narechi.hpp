@@ -29,4 +29,7 @@
 // Rendering
 #include "rendering/texture2d.hpp"
 
+// Utils
+#include "utils/file_utils.hpp"
+
 // IWYU pragma: end_exports

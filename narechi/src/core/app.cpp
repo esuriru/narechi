@@ -9,6 +9,10 @@
 
 #include "utils/time_utils.hpp"
 
+extern narechi::file::nfd_context* get_nfd_ctx()
+{
+    return &(narechi::app::get().get_nfd_context());
+}
 
 namespace narechi
 {

@@ -43,6 +43,7 @@ set(NARECHI_SOURCES
     "src/platform/win32/win32window.cpp"
 
     "src/utils/time_utils.cpp"
+    "src/utils/file_utils.cpp"
 )
 
 if(${NRC_RENDERER_API} STREQUAL "opengl")
