@@ -19,7 +19,6 @@ namespace narechi::editor
         void on_detach() override;
 
         void on_gui_update() override;
-        void on_update(float dt) override;
 
     private:
         uptr<gui::window> main_window;

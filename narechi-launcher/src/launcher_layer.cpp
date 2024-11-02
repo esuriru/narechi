@@ -16,7 +16,7 @@ namespace narechi::editor
         , current_window(*main_window)
         , render_form(false)
     {
-        static auto nfd_ctx = app::get().get_nfd_context();
+        // static auto nfd_ctx = app::get().get_nfd_context();
 
         form_window = gui::window::create({
             .name = "Project Creation",
@@ -36,7 +36,7 @@ namespace narechi::editor
             .on_click =
                 [exit_callback, this]()
             {
-                auto folder_path = nfd_ctx.pick_folder();
+                auto folder_path = utils::file::pick_folder();
                 if (!folder_path.has_value())
                 {
                     return;
@@ -96,8 +96,8 @@ namespace narechi::editor
             .on_click =
                 [this]()
             {
-                static auto nfd_ctx = app::get().get_nfd_context();
-                std::optional<std::string> folder_path = nfd_ctx.pick_folder();
+                // static auto nfd_ctx = app::get().get_nfd_context();
+                auto folder_path = utils::file::pick_folder();
                 if (folder_path.has_value())
                 {
                     project_directory_input->set_text(folder_path.value());
@@ -142,9 +142,5 @@ namespace narechi::editor
         {
             main_window->render();
         }
-    }
-
-    void launcher_layer::on_update(float dt)
-    {
     }
 }
