@@ -3,8 +3,6 @@
 #include <GLFW/glfw3.h>
 
 #include <chrono>
-#include <sstream>
-#include <iomanip>
 #include <format>
 
 namespace narechi
