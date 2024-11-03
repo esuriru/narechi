@@ -94,23 +94,22 @@ namespace narechi::editor
                     for (const auto& it : entries)
                     {
                         scope->next_column();
-                        browser_element->set_custom_uid(std::to_string(i++));
 
                         bool is_directory = it.is_directory();
                         browser_element->set_width(browser_element_size);
                         browser_element->set_height(browser_element_size);
 
-                        browser_element->set_label(
+                        browser_element->set_custom_uid(
                             it.path().filename().string());
 
                         browser_element->set_texture(is_directory ?
                                 folder_icon_texture :
                                 file_icon_texture);
+                        browser_text_element->set_text(
+                            it.path().stem().string());
 
                         browser_element->render();
                         browser_text_element->render();
-                        browser_text_element->set_text(
-                            it.path().stem().string());
 
                         if (is_directory && browser_element->is_pressed())
                         {
