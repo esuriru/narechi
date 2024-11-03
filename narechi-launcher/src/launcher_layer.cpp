@@ -16,8 +16,6 @@ namespace narechi::editor
         , current_window(*main_window)
         , render_form(false)
     {
-        // static auto nfd_ctx = app::get().get_nfd_context();
-
         form_window = gui::window::create({
             .name = "Project Creation",
             .flags = gui::window_flags::align_text_elements,
@@ -96,7 +94,6 @@ namespace narechi::editor
             .on_click =
                 [this]()
             {
-                // static auto nfd_ctx = app::get().get_nfd_context();
                 auto folder_path = utils::file::pick_folder();
                 if (folder_path.has_value())
                 {
