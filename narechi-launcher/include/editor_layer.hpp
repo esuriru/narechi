@@ -1,8 +1,10 @@
 #pragma once
 
 #include "narechi.hpp"
-#include "panels/content_browser_panel.hpp"
 #include "project.hpp"
+
+#include "panels/content_browser_panel.hpp"
+#include "panels/sprite_import_panel.hpp"
 
 // TODO - Will there be a need to separate the editor from the editor_layer?
 namespace narechi::editor
@@ -32,5 +34,8 @@ namespace narechi::editor
 
         sptr<gui::menu_bar> menu_bar;
         uptr<content_browser_panel> content_browser_panel;
+        uptr<sprite_import_panel> sprite_import_panel; 
+
+        bool render_sprite_import_panel;
     };
 }

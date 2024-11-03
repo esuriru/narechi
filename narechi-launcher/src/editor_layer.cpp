@@ -2,6 +2,7 @@
 
 #include "file_extensions.hpp"
 #include "panels/content_browser_panel.hpp"
+#include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
 
 #include <filesystem>
@@ -13,6 +14,7 @@ namespace narechi::editor
     editor_layer::editor_layer()
         : layer("EditorLayer")
         , current_scene(nullptr)
+        , render_sprite_import_panel(false)
     {
         menu_bar = gui::menu_bar::create({
             .menu_items = { 
@@ -36,6 +38,20 @@ namespace narechi::editor
                                 {
                                     current_scene->save();
                                 }
+                            },
+                        },
+                    },
+                },
+                {
+                    .title = "Asset",
+                    .sub_menu_items = 
+                    { 
+                        {
+                            .title = "Import Sprite",
+                            .callback =
+                                [this]()
+                            {
+                                render_sprite_import_panel = true;
                             },
                         },
                     },
@@ -97,6 +113,8 @@ namespace narechi::editor
         content_browser_panel = make_uptr<editor::content_browser_panel>();
         content_browser_panel->set_editor_asset_dir(asset_dir, true);
 
+        sprite_import_panel = make_uptr<editor::sprite_import_panel>();
+
         if (current_scene)
         {
             current_scene->awake();
@@ -111,6 +129,10 @@ namespace narechi::editor
     {
         menu_bar->render();
         content_browser_panel->render();
+        if (render_sprite_import_panel)
+        {
+            sprite_import_panel->render();
+        }
     }
 
     void editor_layer::on_update(float dt)
