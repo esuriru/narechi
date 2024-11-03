@@ -30,7 +30,7 @@ namespace narechi
             has_rendered = false;
         }
 
-        ImGui::Begin(props.name.c_str(), 0, ImGuiWindowFlags_NoResize);
+        ImGui::Begin(props.name.c_str(), 0, 0);
         size = ImGui::GetWindowSize();
     }
 
