@@ -41,6 +41,7 @@ namespace narechi::editor
             { .text = "Image must be in assets directory" }));
         window->add_element(image_directory_input);
         window->add_element(image_select_directory_button);
+        window->add_element(import_button);
     }
 
     void sprite_import_panel::render()
