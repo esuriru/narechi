@@ -2,7 +2,7 @@
 
 #include "core/core.hpp"
 
-namespace narechi::rendering
+namespace narechi::graphics
 {
     class NRC_API texture
     {

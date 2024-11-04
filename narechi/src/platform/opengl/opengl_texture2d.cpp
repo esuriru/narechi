@@ -7,7 +7,7 @@
 namespace narechi
 {
     opengl_texture2d::opengl_texture2d(const std::filesystem::path& path,
-        const rendering::image_load_options& options)
+        const graphics::image_load_options& options)
         : texture2d()
     {
         load_image(path, options);
@@ -15,10 +15,10 @@ namespace narechi
     }
 
     opengl_texture2d::opengl_texture2d(const uint8_t* data, uint32_t size,
-        const rendering::image_load_options& options)
+        const graphics::image_load_options& options)
         : texture2d()
     {
-        image = rendering::image::load_owned_from_memory(data, size, options);
+        image = graphics::image::load_owned_from_memory(data, size, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
         create_texture();
     }
@@ -39,9 +39,9 @@ namespace narechi
     }
 
     void opengl_texture2d::load_image(const std::filesystem::path& path,
-        const rendering::image_load_options& options)
+        const graphics::image_load_options& options)
     {
-        image = rendering::image::load_owned(path, options);
+        image = graphics::image::load_owned(path, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
     }
 

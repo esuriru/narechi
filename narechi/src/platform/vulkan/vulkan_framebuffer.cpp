@@ -1,5 +1,5 @@
 #include "platform/vulkan/vulkan_framebuffer.hpp"
-#include "rendering/framebuffer.hpp"
+#include "graphics/framebuffer.hpp"
 
 namespace narechi
 {

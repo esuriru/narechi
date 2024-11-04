@@ -31,12 +31,12 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_menu_bar.cpp"
     "src/imgui/scope/imgui_table_scope.cpp"
 
-    "src/rendering/graphics_context.cpp"
-    "src/rendering/renderer_api.cpp"
-    "src/rendering/image.cpp"
-    "src/rendering/render_command.cpp"
-    "src/rendering/framebuffer.cpp"
-    "src/rendering/texture2d.cpp"
+    "src/graphics/graphics_context.cpp"
+    "src/graphics/renderer_api.cpp"
+    "src/graphics/image.cpp"
+    "src/graphics/render_command.cpp"
+    "src/graphics/framebuffer.cpp"
+    "src/graphics/texture2d.cpp"
 
     "src/scene/scene.cpp"
 

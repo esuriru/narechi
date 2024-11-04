@@ -1,4 +1,4 @@
-#include "rendering/renderer_api.hpp"
+#include "graphics/renderer_api.hpp"
 
 #include "core/assert.hpp"
 #include "core/logger.hpp"
@@ -11,7 +11,7 @@
     #error "Unsupported renderer API"
 #endif
 
-namespace narechi
+namespace narechi::graphics
 {
     // TODO - The renderer API classes should just be forward declared
 

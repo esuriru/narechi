@@ -1,9 +1,9 @@
 #pragma once
 
 #include "core/core.hpp"
-#include "rendering/renderer_api.hpp"
+#include "graphics/renderer_api.hpp"
 
-namespace narechi
+namespace narechi::graphics
 {
     class render_command final
     {

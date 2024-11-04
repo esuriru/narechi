@@ -1,5 +1,6 @@
-#include "rendering/framebuffer.hpp"
-#include "rendering/renderer_api.hpp"
+#include "graphics/framebuffer.hpp"
+#include "graphics/renderer_api.hpp"
+
 #include "core/core.hpp"
 #include "core/logger.hpp"
 
@@ -7,7 +8,7 @@
     #include "platform/vulkan/vulkan_framebuffer.hpp"
 #endif
 
-namespace narechi
+namespace narechi::graphics
 {
     sptr<framebuffer> framebuffer::create(const framebuffer_specification& spec)
     {

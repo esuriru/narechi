@@ -4,7 +4,7 @@
 
 #include <filesystem>
 
-namespace narechi::rendering
+namespace narechi::graphics
 {
     struct image_load_options
     {

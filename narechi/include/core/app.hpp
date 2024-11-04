@@ -4,7 +4,7 @@
 #include "core/window.hpp"
 #include "core/layer_stack.hpp"
 
-#include "rendering/graphics_context.hpp"
+#include "graphics/graphics_context.hpp"
 #include "imgui/imgui_context.hpp"
 #include "file/nfd_context.hpp"
 
@@ -26,7 +26,7 @@ namespace narechi
         void flush_layer_change_queue();
 
         window& get_window();
-        graphics_context& get_graphics_context();
+        graphics::graphics_context& get_graphics_context();
         imgui_context& get_imgui_context();
         file::nfd_context& get_nfd_context();
 
@@ -62,7 +62,7 @@ namespace narechi
             layer_change_queue;
 
         uptr<window> window;
-        uptr<graphics_context> gfx_ctx;
+        uptr<graphics::graphics_context> gfx_ctx;
         uptr<imgui_context> imgui_ctx;
         uptr<file::nfd_context> nfd_ctx;
 

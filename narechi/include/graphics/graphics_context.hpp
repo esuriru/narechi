@@ -2,10 +2,10 @@
 
 #include "core/core.hpp"
 
-namespace narechi
-{
-    class app;
+NRC_FORWARD_DECL_CLASS(narechi, app)
 
+namespace narechi::graphics
+{
     class graphics_context
     {
     public:

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
-#include "rendering/texture2d.hpp"
+#include "graphics/texture2d.hpp"
 
 namespace narechi::scene
 {
@@ -12,6 +12,6 @@ namespace narechi::scene
 
     struct sprite
     {
-        sptr<rendering::texture2d> texture;
+        sptr<graphics::texture2d> texture;
     };
 }

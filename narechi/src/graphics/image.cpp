@@ -1,9 +1,9 @@
-#include "rendering/image.hpp"
+#include "graphics/image.hpp"
 
 #include "stb_image.h"
 #include "core/assert.hpp"
 
-namespace narechi::rendering
+namespace narechi::graphics
 {
     image::image()
         : data(nullptr)

@@ -2,7 +2,7 @@
 
 #include "core/logger.hpp"
 #include "vulkan/vulkan_core.h"
-#include "rendering/renderer_api.hpp"
+#include "graphics/renderer_api.hpp"
 
 #define VK_USE_PLATFORM_WIN32_KHR
 #define GLFW_INCLUDE_VULKAN

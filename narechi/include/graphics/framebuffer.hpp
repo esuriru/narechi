@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-namespace narechi
+namespace narechi::graphics
 {
     struct framebuffer_specification
     {

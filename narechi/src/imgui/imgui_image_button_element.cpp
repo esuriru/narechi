@@ -8,7 +8,7 @@ namespace narechi
 {
     imgui_image_button_element::imgui_image_button_element(
         const gui::button_element_properties& props,
-        sptr<rendering::texture2d> texture)
+        sptr<graphics::texture2d> texture)
         : gui::image_button_element(texture)
         , gui::button_element(props)
     {

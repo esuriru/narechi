@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering/texture2d.hpp"
+#include "graphics/texture2d.hpp"
 #include "gui/button_element.hpp"
 
 namespace narechi::gui
@@ -10,14 +10,14 @@ namespace narechi::gui
     public:
         static sptr<image_button_element> create(
             const button_element_properties& props,
-            sptr<rendering::texture2d> texture = nullptr);
+            sptr<graphics::texture2d> texture = nullptr);
 
-        void set_texture(sptr<rendering::texture2d> texture);
+        void set_texture(sptr<graphics::texture2d> texture);
 
     protected:
-        sptr<rendering::texture2d> texture = nullptr;
+        sptr<graphics::texture2d> texture = nullptr;
 
         image_button_element() = default;
-        image_button_element(sptr<rendering::texture2d> texture);
+        image_button_element(sptr<graphics::texture2d> texture);
     };
 }

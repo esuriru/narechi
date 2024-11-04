@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace narechi
+namespace narechi::graphics
 {
     class shader
     {

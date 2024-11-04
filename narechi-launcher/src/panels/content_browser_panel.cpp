@@ -1,8 +1,8 @@
 #include "panels/content_browser_panel.hpp"
 #include "gui/button_element.hpp"
 #include "gui/scope/table_scope.hpp"
-#include "rendering/image.hpp"
-#include "rendering/texture2d.hpp"
+#include "graphics/image.hpp"
+#include "graphics/texture2d.hpp"
 
 #include "asset/embed.hpp"
 
@@ -27,11 +27,11 @@ namespace narechi::editor
 
         current_dir = editor_asset_dir;
 
-        rendering::image_load_options options { .flip_vertically = false };
+        graphics::image_load_options options { .flip_vertically = false };
 
-        file_icon_texture = rendering::texture2d::load_from_memory(
+        file_icon_texture = graphics::texture2d::load_from_memory(
             embed::file_icon, embed::file_icon_length, options);
-        folder_icon_texture = rendering::texture2d::load_from_memory(
+        folder_icon_texture = graphics::texture2d::load_from_memory(
             embed::folder_icon, embed::folder_icon_length, options);
 
         browser_element = gui::image_button_element::create(

@@ -3,7 +3,7 @@
 #include "narechi.hpp"
 
 #include "panels/editor_panel.hpp"
-#include "rendering/texture2d.hpp"
+#include "graphics/texture2d.hpp"
 #include "gui/scope/table_scope.hpp"
 
 #include <filesystem>
@@ -28,8 +28,8 @@ namespace narechi::editor
         sptr<narechi::gui::image_button_element> browser_element;
         sptr<narechi::gui::text_element> browser_text_element;
 
-        sptr<rendering::texture2d> file_icon_texture;
-        sptr<rendering::texture2d> folder_icon_texture;
+        sptr<graphics::texture2d> file_icon_texture;
+        sptr<graphics::texture2d> folder_icon_texture;
 
         std::filesystem::path editor_asset_dir;
         std::filesystem::path current_dir;

@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-namespace narechi
+namespace narechi::graphics
 {
     enum class shader_data_type
     {

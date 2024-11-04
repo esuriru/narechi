@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace narechi
+namespace narechi::graphics
 {
     struct buffer_element
     {

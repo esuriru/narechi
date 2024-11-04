@@ -1,10 +1,10 @@
 #pragma once
 
-#include "rendering/renderer_api.hpp"
+#include "graphics/renderer_api.hpp"
 
 namespace narechi
 {
-    class opengl_renderer_api final : public renderer_api
+    class opengl_renderer_api final : public graphics::renderer_api
     {
     public:
         virtual void init() override

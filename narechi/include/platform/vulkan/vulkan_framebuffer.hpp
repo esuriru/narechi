@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering/framebuffer.hpp"
+#include "graphics/framebuffer.hpp"
 
 namespace narechi
 {

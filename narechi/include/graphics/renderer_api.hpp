@@ -4,7 +4,7 @@
 
 #include "core/core.hpp"
 
-namespace narechi
+namespace narechi::graphics
 {
     class renderer_api
     {

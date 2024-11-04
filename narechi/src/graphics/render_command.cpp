@@ -1,6 +1,6 @@
-#include "rendering/render_command.hpp"
+#include "graphics/render_command.hpp"
 
-namespace narechi
+namespace narechi::graphics
 {
     uptr<renderer_api> render_command::renderer_api = renderer_api::create();
 }

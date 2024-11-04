@@ -13,7 +13,7 @@ namespace narechi
     {
     public:
         imgui_image_button_element(const gui::button_element_properties& props,
-            sptr<rendering::texture2d> texture);
+            sptr<graphics::texture2d> texture);
 
         bool imgui_button_call() override;
 

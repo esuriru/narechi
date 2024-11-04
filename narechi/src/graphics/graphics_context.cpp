@@ -1,5 +1,5 @@
-#include "rendering/graphics_context.hpp"
-#include "rendering/renderer_api.hpp"
+#include "graphics/graphics_context.hpp"
+#include "graphics/renderer_api.hpp"
 
 #include "core/logger.hpp"
 #include "core/app.hpp"
@@ -14,7 +14,7 @@
 
 struct GLFWwindow;
 
-namespace narechi
+namespace narechi::graphics
 {
     graphics_context::~graphics_context()
     {

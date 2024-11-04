@@ -5,7 +5,7 @@
 #include "core/logger.hpp"
 
 #include "file/nfd_context.hpp"
-#include "rendering/render_command.hpp"
+#include "graphics/render_command.hpp"
 
 #include "utils/time_utils.hpp"
 
@@ -34,13 +34,13 @@ namespace narechi
 
         // layer_stack.push_overlay(new imgui_layer(get_imgui_context()));
 
-        render_command::init();
+        graphics::render_command::init();
     }
 
     void app::init_contexts()
     {
         // The app should own the graphics context
-        gfx_ctx = graphics_context::create(this);
+        gfx_ctx = graphics::graphics_context::create(this);
         gfx_ctx->init();
 
         imgui_ctx = make_uptr<imgui_context>();
@@ -52,6 +52,8 @@ namespace narechi
 
     void app::run()
     {
+        using graphics::render_command;
+
         while (is_running)
         {
             float current_time = utils::get_time();
@@ -133,7 +135,7 @@ namespace narechi
         return *window;
     }
 
-    graphics_context& app::get_graphics_context()
+    graphics::graphics_context& app::get_graphics_context()
     {
         NRC_ASSERT(window, "graphics context is not created yet");
         return *gfx_ctx;

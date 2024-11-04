@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering/shader.hpp"
+#include "graphics/shader.hpp"
 
 #include <vulkan/vulkan.h>
 

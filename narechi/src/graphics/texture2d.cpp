@@ -1,13 +1,15 @@
-#include "rendering/texture2d.hpp"
-#include "rendering/renderer_api.hpp"
+#include "graphics/texture2d.hpp"
+#include "graphics/renderer_api.hpp"
+
 #include "core/logger.hpp"
 
+// TODO - Macro for vulkan
 #include "platform/opengl/opengl_texture2d.hpp"
 
-namespace narechi::rendering
+namespace narechi::graphics
 {
     sptr<texture2d> texture2d::load(const std::filesystem::path& path,
-        const rendering::image_load_options& options)
+        const graphics::image_load_options& options)
     {
         switch (renderer_api::get_api())
         {
@@ -32,7 +34,7 @@ namespace narechi::rendering
     }
 
     sptr<texture2d> texture2d::load_from_memory(const uint8_t* data,
-        uint32_t size, const rendering::image_load_options& options)
+        uint32_t size, const graphics::image_load_options& options)
     {
         switch (renderer_api::get_api())
         {
