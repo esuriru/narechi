@@ -58,6 +58,11 @@ namespace narechi::editor
         window->render(
             [this]()
             {
+                if (!std::filesystem::exists(editor_asset_dir))
+                {
+                    return;
+                }
+
                 if (current_dir != editor_asset_dir)
                 {
                     back_button->render();
