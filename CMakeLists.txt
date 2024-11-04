@@ -1,5 +1,3 @@
-# TODO - Use this video as a reference: 
-# https://www.youtube.com/watch?v=ZuHK_5cJ6B8
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 20)
