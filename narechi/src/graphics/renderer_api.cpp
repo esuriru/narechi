@@ -46,4 +46,9 @@ namespace narechi::graphics
 
         return nullptr;
     }
+
+    renderer_api::api renderer_api::get_api()
+    {
+        return api_type;
+    }
 }
