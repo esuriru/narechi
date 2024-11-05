@@ -7,6 +7,38 @@
 
 namespace narechi::graphics
 {
+    vertex_buffer::buffer_layout::buffer_layout(
+        std::initializer_list<graphics::buffer_element> elements)
+        : elements(elements)
+        , stride(0)
+    {
+        invalidate();
+    }
+
+    uint32_t vertex_buffer::buffer_layout::get_stride() const
+    {
+        return stride;
+    }
+
+    const std::vector<graphics::buffer_element>&
+    vertex_buffer::buffer_layout::get_elements() const
+    {
+        return elements;
+    }
+
+    void vertex_buffer::buffer_layout::invalidate()
+    {
+        uint32_t offset = 0;
+        stride = 0;
+
+        for (auto& element : elements)
+        {
+            element.offset = offset;
+            offset += element.size;
+            stride += element.size;
+        }
+    }
+
     sptr<vertex_buffer> vertex_buffer::create(
         const float* vertices, const uint32_t size)
     {
@@ -29,5 +61,10 @@ namespace narechi::graphics
     const vertex_buffer::buffer_layout& vertex_buffer::get_layout() const
     {
         return this->layout;
+    }
+
+    void vertex_buffer::set_layout(const buffer_layout& layout)
+    {
+        this->layout = layout;
     }
 }
