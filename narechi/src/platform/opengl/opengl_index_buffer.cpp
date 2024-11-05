@@ -6,6 +6,7 @@ namespace narechi
 {
     opengl_index_buffer::opengl_index_buffer(
         const uint32_t* indices, const uint32_t count)
+        : index_buffer(count)
     {
         glCreateBuffers(1, &id);
         glNamedBufferData(id,

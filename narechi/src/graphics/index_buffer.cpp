@@ -9,6 +9,16 @@
 
 namespace narechi::graphics
 {
+    index_buffer::index_buffer(const uint32_t count)
+        : count(count)
+    {
+    }
+
+    uint32_t index_buffer::get_count() const
+    {
+        return count;
+    }
+
     sptr<index_buffer> index_buffer::create(
         const uint32_t* indices, const uint32_t count)
     {
