@@ -16,5 +16,10 @@ namespace narechi::graphics
 
         buffer_element(shader_data_type type, const std::string& name,
             const bool normalized = false);
+
+        constexpr uint32_t get_component_count() const
+        {
+            return shader_data_type_component_count(type);
+        }
     };
 }
