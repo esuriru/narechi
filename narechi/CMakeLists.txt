@@ -39,6 +39,7 @@ set(NARECHI_SOURCES
     "src/graphics/texture2d.cpp"
     "src/graphics/vertex_buffer.cpp"
     "src/graphics/vertex_array.cpp"
+    "src/graphics/index_buffer.cpp"
 
     "src/scene/scene.cpp"
 
@@ -55,6 +56,7 @@ if(${NRC_RENDERER_API} STREQUAL "opengl")
         "src/platform/opengl/opengl_texture2d.cpp"
         "src/platform/opengl/opengl_vertex_buffer.cpp"
         "src/platform/opengl/opengl_vertex_array.cpp"
+        "src/platform/opengl/opengl_index_buffer.cpp"
     )
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
     set(RENDERER_API_SOURCES
