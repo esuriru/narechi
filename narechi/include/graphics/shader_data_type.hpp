@@ -27,6 +27,8 @@ namespace narechi::graphics
     {
         switch (type)
         {
+        case shader_data_type::none:
+            return "none";
         case shader_data_type::float1:
             return "float1";
         case shader_data_type::int1:
@@ -96,6 +98,8 @@ namespace narechi::graphics
 
         switch (type)
         {
+        case shader_data_type::none:
+            break;
         case shader_data_type::bool1:
             // One byte
             return 1;
