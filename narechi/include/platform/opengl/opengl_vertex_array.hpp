@@ -12,8 +12,18 @@ namespace narechi
 
         void bind() override;
         void unbind() override;
-    
+
+        void add_vertex_buffer(
+            sptr<graphics::vertex_buffer> vertex_buffer) override;
+        void set_index_buffer(
+            sptr<graphics::index_buffer> index_buffer) override;
+
+        sptr<graphics::index_buffer> get_index_buffer() const override;
+        const std::vector<sptr<graphics::vertex_buffer>>& get_vertex_buffers()
+            const override;
+
     private:
-        uint32_t id;
+        sptr<graphics::index_buffer> index_buffer;
+        std::vector<sptr<graphics::vertex_buffer>> vertex_buffers;
     };
 }
