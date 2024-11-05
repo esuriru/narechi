@@ -9,4 +9,18 @@ namespace narechi
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(color.r, color.g, color.b, color.a);
     }
+
+    void opengl_renderer_api::draw_indexed(
+        std::shared_ptr<graphics::vertex_array> vertex_array,
+        uint32_t index_count)
+    {
+        vertex_array->bind();
+        uint32_t count = index_count == 0 ?
+            vertex_array->get_index_buffer()->get_count() :
+            index_count;
+        glDrawElements(GL_TRIANGLES,
+            static_cast<GLint>(index_count),
+            GL_UNSIGNED_INT,
+            nullptr);
+    }
 }
