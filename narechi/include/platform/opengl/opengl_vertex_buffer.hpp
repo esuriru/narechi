@@ -13,8 +13,5 @@ namespace narechi
 
         void bind() override;
         void unbind() override;
-
-    private:
-        uint32_t id;
     };
 }

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "core/core.hpp"
+#include "graphics/handle.hpp"
 
 namespace narechi::graphics
 {
-    class index_buffer
+    class index_buffer : public handle
     {
     public:
         virtual ~index_buffer() = default;

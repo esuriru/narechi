@@ -1,10 +1,11 @@
 #pragma once
 
 #include "core/core.hpp"
+#include "graphics/handle.hpp"
 
 namespace narechi::graphics
 {
-    class vertex_buffer
+    class vertex_buffer : public handle
     {
     public:
         virtual ~vertex_buffer() = default;
