@@ -40,6 +40,7 @@ set(NARECHI_SOURCES
     "src/graphics/vertex_buffer.cpp"
     "src/graphics/vertex_array.cpp"
     "src/graphics/index_buffer.cpp"
+    "src/graphics/render2d.cpp"
     "src/graphics/handle.cpp"
     "src/graphics/buffer_element.cpp"
 
