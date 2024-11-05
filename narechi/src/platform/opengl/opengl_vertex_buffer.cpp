@@ -8,11 +8,8 @@ namespace narechi
         const float* vertices, const uint32_t size)
     {
         glCreateBuffers(1, &id);
-        glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferData(GL_ARRAY_BUFFER,
-            static_cast<GLint>(size),
-            vertices,
-            GL_STATIC_DRAW);
+        glNamedBufferData(
+            id, static_cast<GLint>(size), vertices, GL_STATIC_DRAW);
     }
 
     opengl_vertex_buffer::~opengl_vertex_buffer()

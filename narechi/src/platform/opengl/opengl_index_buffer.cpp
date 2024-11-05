@@ -8,8 +8,7 @@ namespace narechi
         const uint32_t* indices, const uint32_t count)
     {
         glCreateBuffers(1, &id);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        glNamedBufferData(id,
             static_cast<GLint>(count * sizeof(uint32_t)),
             indices,
             GL_STATIC_DRAW);
