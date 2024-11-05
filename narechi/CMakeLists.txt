@@ -60,6 +60,7 @@ if(${NRC_RENDERER_API} STREQUAL "opengl")
         "src/platform/opengl/opengl_vertex_buffer.cpp"
         "src/platform/opengl/opengl_vertex_array.cpp"
         "src/platform/opengl/opengl_index_buffer.cpp"
+        "src/platform/opengl/opengl_shader.cpp"
     )
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
     set(RENDERER_API_SOURCES
