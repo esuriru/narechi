@@ -11,6 +11,4 @@ namespace narechi::graphics
         , normalized(normalized)
     {
     }
-
-
 }
