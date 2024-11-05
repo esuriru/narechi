@@ -84,8 +84,6 @@ namespace narechi
 
             in_layer_loop_scope = false;
 
-            render_command::draw();
-
             window->update();
             gfx_ctx->swap_buffers();
 
