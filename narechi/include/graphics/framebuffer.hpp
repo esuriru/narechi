@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/core.hpp"
+#include "graphics/handle.hpp"
 
 #include <cstdint>
 
@@ -15,7 +16,7 @@ namespace narechi::graphics
         bool swap_chain_target = false;
     };
 
-    class framebuffer
+    class framebuffer : public handle
     {
     public:
         virtual ~framebuffer() = default;
