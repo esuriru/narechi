@@ -97,8 +97,9 @@ namespace narechi
 
     GLuint opengl_shader::compile_shader(const GLenum type, const char* src)
     {
-        GLuint shader_handle = glCreateShader(GL_VERTEX_SHADER);
+        GLuint shader_handle = glCreateShader(type);
         glShaderSource(shader_handle, 1, &src, nullptr);
+        glCompileShader(shader_handle);
 
         // Query compilation status
         GLint is_compiled = GL_FALSE;
