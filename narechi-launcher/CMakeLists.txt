@@ -11,6 +11,7 @@ set(NARECHI_LAUNCHER_SOURCES
 
     "src/panels/content_browser_panel.cpp"
     "src/panels/sprite_import_panel.cpp"
+    "src/panels/scene_view_panel.cpp"
     "src/panels/editor_panel.cpp"
 )
 

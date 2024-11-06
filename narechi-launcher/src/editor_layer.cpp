@@ -106,6 +106,11 @@ namespace narechi::editor
             .width = 600,
             .height = 400,
         });
+
+        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+        scene_view_panel
+            = make_uptr<editor::scene_view_panel>(scene_framebuffer);
     }
 
     editor_layer::~editor_layer()
@@ -135,6 +140,7 @@ namespace narechi::editor
     {
         menu_bar->render();
         content_browser_panel->render();
+        scene_view_panel->render();
         if (render_sprite_import_panel)
         {
             sprite_import_panel->render();
