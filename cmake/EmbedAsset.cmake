@@ -15,7 +15,7 @@ function(embed_binary_to_byte_array target binary_file)
 
     # Generate source file
     file(WRITE ${output_file}
-"
+        "
 #include <cstdint>
 
 namespace narechi::embed
@@ -33,24 +33,24 @@ endfunction()
 
 function(embed_text_to_std_string target text_file)
     get_filename_component(text_file_name ${text_file} NAME_WLE)
-    set(output_file ${CMAKE_CURRENT_text_DIR}/${text_file_name}.cpp)
+    set(output_file ${CMAKE_CURRENT_BINARY_DIR}/${text_file_name}.cpp)
 
-    message(STATUS "Packing ${text_file_name}")
+    message(STATUS "Packing ${text_file_name} as `std::string`")
 
     file(READ ${text_file} file_data)
 
     # Replace single backslashes with double backslashes
     string(REPLACE "\n" "\\n" file_data "${file_data}")
-    string(REPLACE "\"" "\\\"" file_data "${file_data}") 
+    string(REPLACE "\"" "\\\"" file_data "${file_data}")
 
     # Generate source file
     file(WRITE ${output_file}
-"
+        "
 #include <string>
 
 namespace narechi::embed
 {
-    extern const std::string ${text_file_name} = \"${file_data\";
+    extern const std::string ${text_file_name} = \"${file_data}\";
 }
 "
     )
