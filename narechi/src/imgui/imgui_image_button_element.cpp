@@ -18,7 +18,7 @@ namespace narechi
     {
         return ImGui::ImageButton(uid.c_str(),
             reinterpret_cast<ImTextureID>(
-                static_cast<intptr_t>(texture->get_gfx_ctx_id())),
+                static_cast<intptr_t>(texture->get_id())),
             get_image_size(),
             ImVec2(0.0f, 0.0f),
             ImVec2(1.0f, 1.0f));

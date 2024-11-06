@@ -15,11 +15,9 @@ namespace narechi
 
         uint32_t get_width() const override;
         uint32_t get_height() const override;
-        uint32_t get_gfx_ctx_id() const override;
 
     private:
         uptr<graphics::image> image;
-        uint32_t gfx_ctx_id;
 
         void load_image(const std::filesystem::path& path,
             const graphics::image_load_options& options);
