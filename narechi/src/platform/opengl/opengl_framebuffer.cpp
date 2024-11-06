@@ -33,6 +33,11 @@ namespace narechi
         invalidate();
     }
 
+    void opengl_framebuffer::clear_color(const glm::vec4& color)
+    {
+        glClearNamedFramebufferfv(id, GL_COLOR, 0, glm::value_ptr(color));
+    }
+
     sptr<graphics::texture> opengl_framebuffer::get_color_attachment()
     {
         return color_attachment;

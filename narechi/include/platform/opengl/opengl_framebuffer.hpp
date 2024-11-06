@@ -16,6 +16,8 @@ namespace narechi
 
         void resize(uint32_t width, uint32_t height) override;
 
+        void clear_color(const glm::vec4& color) override;
+
         sptr<graphics::texture> get_color_attachment() override;
         sptr<graphics::texture> get_depth_attachment() override;
 

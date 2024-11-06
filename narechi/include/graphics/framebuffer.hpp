@@ -4,6 +4,8 @@
 #include "graphics/handle.hpp"
 #include "graphics/texture.hpp"
 
+#include "glm/glm.hpp"
+
 #include <cstdint>
 
 namespace narechi::graphics
@@ -27,6 +29,8 @@ namespace narechi::graphics
 
         virtual void resize(uint32_t width, uint32_t height) = 0;
         virtual const framebuffer_specification& get_specification() const;
+
+        virtual void clear_color(const glm::vec4& color) = 0;
 
         virtual sptr<texture> get_color_attachment() = 0;
         virtual sptr<texture> get_depth_attachment() = 0;
