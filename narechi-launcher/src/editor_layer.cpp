@@ -1,6 +1,7 @@
 #include "editor_layer.hpp"
 
 #include "file_extensions.hpp"
+#include "graphics/framebuffer.hpp"
 #include "panels/content_browser_panel.hpp"
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
@@ -99,6 +100,11 @@ namespace narechi::editor
                     } 
                 }, 
             },
+        });
+
+        scene_framebuffer = graphics::framebuffer::create({
+            .width = 600,
+            .height = 400,
         });
     }
 

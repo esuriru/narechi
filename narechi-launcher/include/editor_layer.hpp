@@ -1,5 +1,6 @@
 #pragma once
 
+#include "graphics/framebuffer.hpp"
 #include "narechi.hpp"
 #include "project.hpp"
 
@@ -31,10 +32,11 @@ namespace narechi::editor
         uptr<project> current_project;
 
         sptr<scene::scene> current_scene;
+        sptr<graphics::framebuffer> scene_framebuffer;
 
         sptr<gui::menu_bar> menu_bar;
         uptr<content_browser_panel> content_browser_panel;
-        uptr<sprite_import_panel> sprite_import_panel; 
+        uptr<sprite_import_panel> sprite_import_panel;
 
         bool render_sprite_import_panel;
     };
