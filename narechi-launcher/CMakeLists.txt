@@ -1,4 +1,4 @@
-include(${CMAKE_SOURCE_DIR}/cmake/EmbedAsset.cmake)
+include(${NRC_CMAKE_DIR}/EmbedAsset.cmake)
 
 set(NARECHI_LAUNCHER_SOURCES
     "src/main.cpp"
@@ -46,5 +46,5 @@ add_custom_command(TARGET narechi-launcher POST_BUILD
     COMMAND_EXPAND_LISTS
 )
 
-embed_binary_to_byte_array(narechi-launcher "${CMAKE_SOURCE_DIR}/assets/file_icon.png")
-embed_binary_to_byte_array(narechi-launcher "${CMAKE_SOURCE_DIR}/assets/folder_icon.png")
+embed_binary_to_byte_array(narechi-launcher "${NRC_ASSET_DIR}/file_icon.png")
+embed_binary_to_byte_array(narechi-launcher "${NRC_ASSET_DIR}/folder_icon.png")
