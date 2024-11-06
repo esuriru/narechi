@@ -3,6 +3,8 @@
 #include "core/assert.hpp"
 #include "glad/gl.h"
 
+#include "glm/gtc/type_ptr.hpp"
+
 namespace narechi
 {
     opengl_framebuffer::opengl_framebuffer(
