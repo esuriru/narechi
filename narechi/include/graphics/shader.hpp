@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
+#include "graphics/handle.hpp"
 
 namespace narechi::graphics
 {
-    class shader
+    class shader : public handle
     {
     public:
         virtual ~shader() = default;
