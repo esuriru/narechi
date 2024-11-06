@@ -21,10 +21,12 @@ namespace narechi
 
     void opengl_framebuffer::bind()
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, id);
     }
 
     void opengl_framebuffer::unbind()
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void opengl_framebuffer::resize(uint32_t width, uint32_t height)
