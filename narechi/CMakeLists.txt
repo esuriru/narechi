@@ -1,3 +1,5 @@
+include(${NRC_CMAKE_DIR}/EmbedAsset.cmake)
+
 set(NARECHI_SOURCES
     "src/core/logger.cpp"
     "src/core/app.cpp"
@@ -43,6 +45,7 @@ set(NARECHI_SOURCES
     "src/graphics/render2d.cpp"
     "src/graphics/handle.cpp"
     "src/graphics/buffer_element.cpp"
+    "src/graphics/shader.cpp"
 
     "src/scene/scene.cpp"
 
@@ -102,3 +105,6 @@ elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
 else()
     error("Unsupported Renderer API: " ${NRC_RENDERER_API})
 endif()
+
+embed_text_to_std_string(narechi-engine "${NRC_ASSET_DIR}/shaders/texture_v.glsl")
+embed_text_to_std_string(narechi-engine "${NRC_ASSET_DIR}/shaders/texture_f.glsl")
