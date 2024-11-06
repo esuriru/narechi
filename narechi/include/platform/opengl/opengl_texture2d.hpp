@@ -17,10 +17,9 @@ namespace narechi
         uint32_t get_height() const override;
 
     private:
-        uptr<graphics::image> image;
+        uint32_t width;
+        uint32_t height;
 
-        void load_image(const std::filesystem::path& path,
-            const graphics::image_load_options& options);
-        void create_texture();
+        void create_texture_from_image(sptr<graphics::image> image);
     };
 }

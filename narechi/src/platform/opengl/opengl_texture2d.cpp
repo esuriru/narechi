@@ -10,37 +10,33 @@ namespace narechi
         const graphics::image_load_options& options)
         : texture2d()
     {
-        load_image(path, options);
-        create_texture();
+        sptr<graphics::image> image = graphics::image::load(path, options);
+        NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
+        create_texture_from_image(image);
     }
 
     opengl_texture2d::opengl_texture2d(const uint8_t* data, uint32_t size,
         const graphics::image_load_options& options)
         : texture2d()
     {
-        image = graphics::image::load_owned_from_memory(data, size, options);
+        sptr<graphics::image> image
+            = graphics::image::load_from_memory(data, size, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
-        create_texture();
+        create_texture_from_image(image);
     }
 
     uint32_t opengl_texture2d::get_width() const
     {
-        return image->get_width();
+        return width;
     }
 
     uint32_t opengl_texture2d::get_height() const
     {
-        return image->get_height();
+        return height;
     }
 
-    void opengl_texture2d::load_image(const std::filesystem::path& path,
-        const graphics::image_load_options& options)
-    {
-        image = graphics::image::load_owned(path, options);
-        NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
-    }
-
-    void opengl_texture2d::create_texture()
+    void opengl_texture2d::create_texture_from_image(
+        sptr<graphics::image> image)
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &id);
         GLenum internal_format, data_format;
@@ -78,6 +74,9 @@ namespace narechi
             image->get_data());
 
         glGenerateTextureMipmap(id);
+
+        width = image->get_width();
+        height = image->get_height();
     }
 
 }
