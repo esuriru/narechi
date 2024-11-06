@@ -1,0 +1,77 @@
+#include "platform/opengl/opengl_framebuffer.hpp"
+
+#include "core/assert.hpp"
+#include "glad/gl.h"
+
+namespace narechi
+{
+    opengl_framebuffer::opengl_framebuffer(
+        const graphics::framebuffer_specification& spec)
+        : graphics::framebuffer(spec)
+    {
+        invalidate();
+    }
+
+    opengl_framebuffer::~opengl_framebuffer()
+    {
+        glDeleteFramebuffers(1, &id);
+    }
+
+    void opengl_framebuffer::bind()
+    {
+    }
+
+    void opengl_framebuffer::unbind()
+    {
+    }
+
+    void opengl_framebuffer::resize(uint32_t width, uint32_t height)
+    {
+        spec.width = width;
+        spec.height = height;
+
+        invalidate();
+    }
+
+    sptr<graphics::texture> opengl_framebuffer::get_color_attachment()
+    {
+        return color_attachment;
+    }
+
+    sptr<graphics::texture> opengl_framebuffer::get_depth_attachment()
+    {
+        return depth_attachment;
+    }
+
+    void opengl_framebuffer::invalidate()
+    {
+        using namespace graphics;
+
+        // If there is an existing framebuffer object, clean it up
+        if (id > 0)
+        {
+            glDeleteFramebuffers(1, &id);
+            color_attachment.reset();
+            depth_attachment.reset();
+        }
+
+        glCreateFramebuffers(1, &id);
+
+        color_attachment = make_sptr<opengl_texture2d>(
+            spec.width, spec.height, format::rgba8);
+        color_attachment->set_mag_filter(texture::filter_mode::linear);
+        color_attachment->set_min_filter(texture::filter_mode::linear);
+
+        depth_attachment = make_sptr<opengl_texture2d>(
+            spec.width, spec.height, format::d24_s8);
+
+        glNamedFramebufferTexture(
+            id, GL_COLOR_ATTACHMENT0, color_attachment->get_id(), 0);
+        glNamedFramebufferTexture(
+            id, GL_DEPTH_ATTACHMENT, depth_attachment->get_id(), 0);
+
+        NRC_ASSERT(glCheckNamedFramebufferStatus(id, GL_FRAMEBUFFER)
+                == GL_FRAMEBUFFER_COMPLETE,
+            "Could not create opengl framebuffer");
+    }
+}

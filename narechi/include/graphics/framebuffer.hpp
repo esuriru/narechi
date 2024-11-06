@@ -2,12 +2,13 @@
 
 #include "core/core.hpp"
 #include "graphics/handle.hpp"
+#include "graphics/texture.hpp"
 
 #include <cstdint>
 
 namespace narechi::graphics
 {
-    struct framebuffer_specification
+    struct NRC_API framebuffer_specification
     {
         uint32_t width = 0;
         uint32_t height = 0;
@@ -16,7 +17,7 @@ namespace narechi::graphics
         bool swap_chain_target = false;
     };
 
-    class framebuffer : public handle
+    class NRC_API framebuffer : public handle
     {
     public:
         virtual ~framebuffer() = default;
@@ -25,8 +26,16 @@ namespace narechi::graphics
         virtual void unbind() = 0;
 
         virtual void resize(uint32_t width, uint32_t height) = 0;
-        virtual const framebuffer_specification& get_specification() const = 0;
+        virtual const framebuffer_specification& get_specification() const;
+
+        virtual sptr<texture> get_color_attachment() = 0;
+        virtual sptr<texture> get_depth_attachment() = 0;
 
         static sptr<framebuffer> create(const framebuffer_specification& spec);
+
+    protected:
+        framebuffer(const framebuffer_specification& spec);
+
+        framebuffer_specification spec;
     };
 }
