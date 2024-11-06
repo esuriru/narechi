@@ -1,5 +1,6 @@
 #include "graphics/render_command.hpp"
 #include "graphics/renderer_api.hpp"
+#include "graphics/render2d.hpp"
 
 namespace narechi::graphics
 {
@@ -8,6 +9,7 @@ namespace narechi::graphics
     void render_command::init()
     {
         renderer_api->init();
+        render2d::init();
     }
 
     void render_command::cleanup()
