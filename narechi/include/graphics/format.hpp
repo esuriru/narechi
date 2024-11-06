@@ -8,5 +8,7 @@ namespace narechi::graphics
         rgb8,
         rgba8,
         rgba32f,
+
+        d24_s8,
     };
 }

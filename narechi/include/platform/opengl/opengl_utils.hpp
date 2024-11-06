@@ -19,6 +19,8 @@ namespace narechi::utils
             return GL_RGBA8;
         case graphics::format::rgba32f:
             return GL_RGBA32F;
+        case graphics::format::d24_s8:
+            return GL_DEPTH24_STENCIL8;
         default:
             break;
         }
