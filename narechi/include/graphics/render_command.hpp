@@ -6,7 +6,7 @@
 
 namespace narechi::graphics
 {
-    class render_command final
+    class NRC_API render_command final
     {
     public:
         static void init();
