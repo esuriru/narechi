@@ -26,7 +26,7 @@
 #include "gui/image_button_element.hpp"
 #include "gui/menu_bar.hpp"
 
-// graphics
+// Graphics
 #include "graphics/texture2d.hpp"
 #include "graphics/render_command.hpp"
 
