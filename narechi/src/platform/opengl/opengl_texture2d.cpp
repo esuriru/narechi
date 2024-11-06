@@ -65,6 +65,8 @@ namespace narechi
 
     opengl_texture2d::opengl_texture2d(const uint32_t width,
         const uint32_t height, const graphics::format format)
+        : width(width)
+        , height(height)
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &id);
         glTextureStorage2D(id,
