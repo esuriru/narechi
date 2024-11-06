@@ -15,6 +15,11 @@ namespace narechi
         enum enum_name a, enum enum_name b)                             \
     {                                                                   \
         return static_cast<enum_name>(to_integral(a) | to_integral(b)); \
+    }                                                                   \
+                                                                        \
+    friend constexpr bool operator&(enum enum_name a, enum enum_name b) \
+    {                                                                   \
+        return static_cast<bool>(to_integral(a) & to_integral(b));      \
     }
 
 #define NRC_ENUM_FLAG_OPERATORS(enum_name)                                 \
