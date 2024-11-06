@@ -6,6 +6,7 @@ namespace narechi
 {
     opengl_shader::opengl_shader(const std::string& name,
         const char* vertex_src, const char* fragment_src)
+        : shader(name)
     {
         NRC_ASSERT(vertex_src, "Vertex shader source is empty");
         NRC_ASSERT(fragment_src, "Fragment shader source is empty");

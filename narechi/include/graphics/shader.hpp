@@ -1,13 +1,16 @@
 #pragma once
 
-#include <string>
+#include "core/core.hpp"
 #include "graphics/handle.hpp"
+
+#include <string>
 
 namespace narechi::graphics
 {
     class shader : public handle
     {
     public:
+        shader(const std::string& name);
         virtual ~shader() = default;
 
         virtual void bind() = 0;
@@ -15,6 +18,12 @@ namespace narechi::graphics
 
         virtual void set_int(const std::string& name, int value) = 0;
 
-        virtual const std::string& get_name() = 0;
+        virtual const std::string& get_name();
+
+        static sptr<shader> create(const std::string& name,
+            const char* vertex_src, const char* fragment_src);
+
+    protected:
+        std::string name;
     };
 }
