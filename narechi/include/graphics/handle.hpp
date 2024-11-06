@@ -1,10 +1,12 @@
 #pragma once
 
+#include "core/core.hpp"
+
 #include <cstdint>
 
 namespace narechi::graphics
 {
-    class handle
+    class NRC_API handle
     {
     public:
         virtual ~handle() = default;
