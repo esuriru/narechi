@@ -20,6 +20,7 @@ set(NARECHI_SOURCES
     "src/gui/button_element.cpp"
     "src/gui/image_button_element.cpp"
     "src/gui/menu_bar.cpp"
+    "src/gui/image_element.cpp"
     "src/gui/scope/table_scope.cpp"
 
     "src/imgui/imgui_context.cpp"
@@ -31,6 +32,7 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_button_element.cpp"
     "src/imgui/imgui_image_button_element.cpp"
     "src/imgui/imgui_menu_bar.cpp"
+    "src/imgui/imgui_image_element.cpp"
     "src/imgui/scope/imgui_table_scope.cpp"
 
     "src/graphics/graphics_context.cpp"
