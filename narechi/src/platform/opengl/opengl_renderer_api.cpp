@@ -4,6 +4,12 @@
 
 namespace narechi
 {
+    void opengl_renderer_api::init()
+    {
+        // Enable depth
+        glEnable(GL_DEPTH_TEST);
+    }
+
     void opengl_renderer_api::clear_color(const glm::vec4& color)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

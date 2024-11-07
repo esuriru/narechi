@@ -23,6 +23,7 @@ namespace
         case shader_data_type::int2:
         case shader_data_type::int3:
         case shader_data_type::int4:
+            return GL_INT;
         case shader_data_type::bool1:
             return GL_BOOL;
         case shader_data_type::none:

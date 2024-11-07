@@ -8,9 +8,7 @@ namespace narechi
     class opengl_renderer_api final : public graphics::renderer_api
     {
     public:
-        void init() override
-        {
-        }
+        void init() override;
         void cleanup() override
         {
         }

@@ -30,6 +30,7 @@
 // Graphics
 #include "graphics/texture2d.hpp"
 #include "graphics/render_command.hpp"
+#include "graphics/render2d.hpp"
 
 // Utils
 #include "utils/file_utils.hpp"

@@ -1,7 +1,11 @@
 #include "scene/scene.hpp"
 
+#include "flecs.h"
+
+#include "glm/ext/matrix_transform.hpp"
+#include "graphics/render2d.hpp"
+#include "scene/component.hpp"
 #include "asset/scene_asset.hpp"
-#include "flecs/addons/cpp/world.hpp"
 
 namespace narechi::scene
 {
@@ -50,8 +54,30 @@ namespace narechi::scene
 
     void scene::awake()
     {
-        flecs::entity test_entity = data->world.entity();
-        test_entity.add(flecs::Disabled);
+        auto& world = data->world;
+
+        flecs::query<const position, scene_camera> camera_query
+            = world.query<const position, scene_camera>();
+        if (camera_query.count() == 0)
+        {
+            world.entity().add<position>().add<scene_camera>();
+        }
+
+        flecs::system sprite_render_system
+            = data->world.system<const position, const sprite>("SpriteRender")
+                  .each(
+                      [](const position& pos, const sprite& sprite)
+                      {
+                          graphics::render2d::submit_quad(
+                              pos.value, sprite.texture);
+                      });
+
+        camera_query.each(
+            [](const position& position, scene_camera)
+            {
+                graphics::render2d::set_view_matrix(glm::inverse(glm::translate(
+                    glm::mat4(1.0f), glm::vec3(position.value, 0))));
+            });
     }
 
     void scene::update(float delta_time)
@@ -61,7 +87,7 @@ namespace narechi::scene
 
     void scene::add_entity()
     {
-        data->world.entity();
+        data->world.entity().add<position>().add<sprite>();
     }
 
     void scene::save()

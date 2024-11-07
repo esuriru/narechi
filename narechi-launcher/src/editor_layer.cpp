@@ -1,6 +1,7 @@
 #include "editor_layer.hpp"
 
 #include "file_extensions.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/framebuffer.hpp"
 #include "panels/content_browser_panel.hpp"
 #include "panels/sprite_import_panel.hpp"
@@ -106,11 +107,12 @@ namespace narechi::editor
             .width = 600,
             .height = 400,
         });
-
-        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
+        graphics::render2d::set_proj_matrix(
+            glm::ortho(-300.0f, 300.0f, -200.0f, 200.0f, -10.0f, 10.0f));
     }
 
     editor_layer::~editor_layer()
@@ -149,10 +151,13 @@ namespace narechi::editor
 
     void editor_layer::on_update(float dt)
     {
+        scene_framebuffer->bind();
+
         if (current_scene)
         {
             current_scene->update(dt);
         }
+        scene_framebuffer->unbind();
     }
 
     void editor_layer::on_event(event& event)

@@ -1,5 +1,13 @@
 #include "graphics/render2d.hpp"
 
+#include "glm/gtc/matrix_transform.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
+
+#include "graphics/vertex_array.hpp"
+#include "graphics/render_command.hpp"
+
 #include "core/core.hpp"
 #include "graphics/shader.hpp"
 #include "asset/embed.hpp"
@@ -10,7 +18,16 @@ NRC_DECL_EMBED_STD_STRING(texture_f);
 namespace
 {
     using narechi::sptr;
+    using namespace narechi::graphics;
+
     sptr<narechi::graphics::shader> texture_shader;
+
+    glm::mat4 view_matrix;
+    glm::mat4 proj_matrix;
+
+    sptr<vertex_array> quad_vertex_array;
+    sptr<vertex_buffer> quad_vertex_buffer;
+    sptr<index_buffer> quad_index_buffer;
 }
 
 namespace narechi::graphics::render2d
@@ -21,5 +38,61 @@ namespace narechi::graphics::render2d
 
         texture_shader
             = shader::create("texture", texture_v.c_str(), texture_f.c_str());
+
+        // clang-format off
+        std::vector<float> vertices = 
+        {
+            {
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.5f, 0.5f, 0.0f,
+                -0.5f, 0.5f, 0.0f,
+            }
+        };
+
+        std::vector<uint32_t> indices = 
+        {
+            {
+                0, 1, 2, 
+                2, 3, 0
+            }
+        };
+        // clang-format on
+
+        quad_vertex_buffer = vertex_buffer::create(
+            vertices.data(), vertices.size() * sizeof(float));
+        quad_vertex_buffer->set_layout(
+            { { shader_data_type::float3, "vertex_pos" } });
+
+        quad_index_buffer
+            = index_buffer::create(indices.data(), indices.size());
+
+        quad_vertex_array = vertex_array::create();
+        quad_vertex_array->add_vertex_buffer(quad_vertex_buffer);
+        quad_vertex_array->set_index_buffer(quad_index_buffer);
+    }
+
+    void set_view_matrix(const glm::mat4& mat)
+    {
+        view_matrix = mat;
+    }
+
+    void set_proj_matrix(const glm::mat4& mat)
+    {
+        proj_matrix = mat;
+    }
+
+    void submit_quad(
+        const glm::vec2& world_pos, sptr<graphics::texture2d> texture)
+    {
+        glm::mat4 model_matrix = glm::translate(glm::identity<glm::mat4>(),
+                                     glm::vec3(world_pos, 0.0f))
+            * glm::scale(
+                glm::identity<glm::mat4>(), glm::vec3(40.0f, 40.0f, 1.0f));
+
+        // NRC_CORE_LOG(glm::to_string(model_matrix));
+        glm::mat4 MVP = proj_matrix * view_matrix * model_matrix;
+        texture_shader->set_mat4("MVP", MVP);
+        render_command::draw_indexed(quad_vertex_array);
     }
 }
