@@ -1,6 +1,7 @@
 #include "platform/opengl/opengl_shader.hpp"
 
 #include "core/assert.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace narechi
 {
@@ -33,6 +34,12 @@ namespace narechi
     {
         const auto& location = glGetUniformLocation(id, name.c_str());
         glUniform1i(location, value);
+    }
+
+    void opengl_shader::set_mat4(const std::string& name, const glm::mat4& value)
+    {
+        const auto& location = glGetUniformLocation(id, name.c_str());
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
     }
 
     void opengl_shader::compile(
