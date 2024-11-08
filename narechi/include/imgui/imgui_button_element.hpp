@@ -12,10 +12,13 @@ namespace narechi
         virtual bool imgui_button_call();
         void render() override;
 
-        bool is_pressed() const override;
+        bool is_pressed() override;
+        bool is_double_clicked() override;
 
     protected:
         imgui_button_element() = default;
+
         bool is_pressed_flag = false;
+        bool is_double_clicked_flag = false;
     };
 }

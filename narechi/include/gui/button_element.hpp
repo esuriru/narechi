@@ -30,7 +30,8 @@ namespace narechi::gui
         void set_width(float width);
         void set_height(float height);
 
-        virtual bool is_pressed() const = 0;
+        virtual bool is_pressed() = 0;
+        virtual bool is_double_clicked() = 0;
 
     protected:
         button_element(const button_element_properties& props);

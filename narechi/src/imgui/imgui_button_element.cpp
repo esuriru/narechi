@@ -26,20 +26,24 @@ namespace narechi
 
         if (imgui_button_call())
         {
-            is_pressed_flag = true;
+            is_pressed_flag |= true;
             if (props.on_click)
             {
                 props.on_click();
             }
         }
-        else
-        {
-            is_pressed_flag = false;
-        }
+
+        is_double_clicked_flag |= ImGui::IsItemHovered()
+            && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left);
     }
 
-    bool imgui_button_element::is_pressed() const
+    bool imgui_button_element::is_pressed()
     {
-        return is_pressed_flag;
+        return is_pressed_flag && !(is_pressed_flag = false);
+    }
+
+    bool imgui_button_element::is_double_clicked()
+    {
+        return is_double_clicked_flag && !(is_double_clicked_flag = false);
     }
 }
