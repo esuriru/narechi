@@ -18,5 +18,7 @@ namespace narechi::editor
         sptr<narechi::gui::window> window;
         sptr<gui::image_element> scene_image;
         sptr<graphics::framebuffer> scene_framebuffer;
+
+        void invalidate_proj_matrix();
     };
 }
