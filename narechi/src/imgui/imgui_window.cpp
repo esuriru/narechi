@@ -32,6 +32,8 @@ namespace narechi
 
         ImGui::Begin(props.name.c_str(), 0, 0);
         size = ImGui::GetWindowSize();
+        props.width = size.x;
+        props.height = size.y;
     }
 
     void imgui_window::end()
