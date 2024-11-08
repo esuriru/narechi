@@ -15,6 +15,7 @@ namespace narechi::gui
         uint32_t texture_gfx_ctx_id = 0;
         float width = null_size;
         float height = null_size;
+        bool flip_vertically = false;
     };
 
     class NRC_API image_element : public element

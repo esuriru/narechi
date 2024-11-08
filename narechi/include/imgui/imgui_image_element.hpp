@@ -15,5 +15,9 @@ namespace narechi
 
     private:
         const ImVec2 get_image_size();
+
+        // TODO - Move out to a header
+        const ImVec2 calc_uv0();
+        const ImVec2 calc_uv1();
     };
 }
