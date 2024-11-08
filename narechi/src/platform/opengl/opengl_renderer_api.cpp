@@ -24,9 +24,7 @@ namespace narechi
         uint32_t count = index_count == 0 ?
             vertex_array->get_index_buffer()->get_count() :
             index_count;
-        glDrawElements(GL_TRIANGLES,
-            static_cast<GLint>(index_count),
-            GL_UNSIGNED_INT,
-            nullptr);
+        glDrawElements(
+            GL_TRIANGLES, static_cast<GLint>(count), GL_UNSIGNED_INT, nullptr);
     }
 }
