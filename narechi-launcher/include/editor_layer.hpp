@@ -41,5 +41,7 @@ namespace narechi::editor
         uptr<scene_view_panel> scene_view_panel;
 
         bool render_sprite_import_panel;
+
+        void invalidate_proj_matrix();
     };
 }

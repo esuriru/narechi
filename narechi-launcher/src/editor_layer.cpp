@@ -104,15 +104,27 @@ namespace narechi::editor
         });
 
         scene_framebuffer = graphics::framebuffer::create({
-            .width = 600,
-            .height = 400,
+            .width = 1280 / 2,
+            .height = 720 / 2,
         });
-        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
-        graphics::render2d::set_proj_matrix(
-            glm::ortho(-300.0f, 300.0f, -200.0f, 200.0f, -10.0f, 10.0f));
+
+        // float aspect_ratio
+        //     =
+        //     static_cast<float>(scene_framebuffer->get_specification().width)
+        //     /
+        //     static_cast<float>(scene_framebuffer->get_specification().height);
+        // float pixel_scale = 10.0f;
+        // graphics::render2d::set_proj_matrix(
+        //     glm::ortho(-aspect_ratio * pixel_scale,
+        //         aspect_ratio * pixel_scale,
+        //         -pixel_scale,
+        //         pixel_scale,
+        //         -1.0f,
+        //         1.0f));
+        invalidate_proj_matrix();
     }
 
     editor_layer::~editor_layer()
@@ -152,11 +164,14 @@ namespace narechi::editor
     void editor_layer::on_update(float dt)
     {
         scene_framebuffer->bind();
+        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+        scene_framebuffer->clear_depth();
 
         if (current_scene)
         {
             current_scene->update(dt);
         }
+
         scene_framebuffer->unbind();
     }
 
@@ -214,5 +229,20 @@ namespace narechi::editor
                 }
             }
         }
+    }
+
+    void editor_layer::invalidate_proj_matrix()
+    {
+        float scale = 0.05f;
+        float width
+            = (static_cast<float>(scene_framebuffer->get_specification().width)
+                  * scale)
+            / 2;
+        float height
+            = (static_cast<float>(scene_framebuffer->get_specification().height)
+                  * scale)
+            / 2;
+        graphics::render2d::set_proj_matrix(
+            glm::ortho(-width, width, -height, height, -10.0f, 10.0f));
     }
 }
