@@ -22,6 +22,7 @@ namespace narechi
     void opengl_framebuffer::bind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, id);
+        glViewport(0, 0, spec.width, spec.height);
     }
 
     void opengl_framebuffer::unbind()
@@ -78,6 +79,8 @@ namespace narechi
 
         depth_attachment = make_sptr<opengl_texture2d>(
             spec.width, spec.height, format::d24_s8);
+        depth_attachment->set_mag_filter(texture::filter_mode::linear);
+        depth_attachment->set_min_filter(texture::filter_mode::linear);
 
         glNamedFramebufferTexture(
             id, GL_COLOR_ATTACHMENT0, color_attachment->get_id(), 0);
@@ -86,6 +89,7 @@ namespace narechi
 
         NRC_ASSERT(glCheckNamedFramebufferStatus(id, GL_FRAMEBUFFER)
                 == GL_FRAMEBUFFER_COMPLETE,
-            "Could not create opengl framebuffer");
+            "Could not create opengl framebuffer, status: ",
+            glCheckNamedFramebufferStatus(id, GL_FRAMEBUFFER));
     }
 }
