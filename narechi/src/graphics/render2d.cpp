@@ -82,13 +82,15 @@ namespace narechi::graphics::render2d
         proj_matrix = mat;
     }
 
-    void submit_quad(
-        const glm::vec2& world_pos, sptr<graphics::texture2d> texture)
+    void submit_quad(const glm::vec2& world_pos, const glm::vec2& size,
+        sptr<graphics::texture2d> texture)
     {
         texture_shader->bind();
 
-        glm::mat4 model_matrix = glm::translate(
-            glm::identity<glm::mat4>(), glm::vec3(world_pos, 0.0f));
+        glm::mat4 model_matrix = glm::translate(glm::identity<glm::mat4>(),
+                                     glm::vec3(world_pos, 0.0f))
+            * glm::scale(glm::identity<glm::mat4>(), glm::vec3(size, 0.0f));
+
         glm::mat4 MVP = proj_matrix * view_matrix * model_matrix;
 
         texture_shader->set_mat4("MVP", MVP);
