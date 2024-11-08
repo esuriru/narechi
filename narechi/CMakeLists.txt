@@ -81,6 +81,7 @@ endif()
 add_library(narechi-engine SHARED ${NARECHI_SOURCES} ${RENDERER_API_SOURCES})
 
 target_link_libraries(narechi-engine PRIVATE glfw)
+target_link_options(narechi-engine PUBLIC -static-libstdc++)
 
 target_include_directories(narechi-engine PUBLIC "include")
 
