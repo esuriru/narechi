@@ -28,10 +28,14 @@ namespace narechi::graphics
             std::shared_ptr<graphics::vertex_array> vertex_array,
             uint32_t index_count = 0)
             = 0;
+        virtual void set_viewport(const uint32_t x, const uint32_t y,
+            const uint32_t width, const uint32_t height)
+            = 0;
 
         static uptr<renderer_api> create();
 
         static api get_api();
+
     private:
         static api api_type;
     };

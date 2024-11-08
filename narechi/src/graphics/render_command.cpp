@@ -28,4 +28,10 @@ namespace narechi::graphics
     {
         renderer_api->draw_indexed(vertex_array, index_count);
     }
+
+    void render_command::set_viewport(const uint32_t x, const uint32_t y,
+        const uint32_t width, const uint32_t height)
+    {
+        renderer_api->set_viewport(x, y, width, height);
+    }
 }

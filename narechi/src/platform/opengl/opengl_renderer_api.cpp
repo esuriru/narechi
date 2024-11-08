@@ -27,4 +27,10 @@ namespace narechi
         glDrawElements(
             GL_TRIANGLES, static_cast<GLint>(count), GL_UNSIGNED_INT, nullptr);
     }
+
+    void opengl_renderer_api::set_viewport(const uint32_t x, const uint32_t y,
+                             const uint32_t width, const uint32_t height)
+    {
+        glViewport(x, y, width, height);
+    }
 }
