@@ -31,6 +31,7 @@ namespace narechi::graphics
         virtual const framebuffer_specification& get_specification() const;
 
         virtual void clear_color(const glm::vec4& color) = 0;
+        virtual void clear_depth(const float depth = 1.0f) = 0;
 
         virtual sptr<texture> get_color_attachment() = 0;
         virtual sptr<texture> get_depth_attachment() = 0;

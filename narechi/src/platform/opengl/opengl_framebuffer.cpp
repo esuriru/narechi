@@ -42,6 +42,11 @@ namespace narechi
         glClearNamedFramebufferfv(id, GL_COLOR, 0, glm::value_ptr(color));
     }
 
+    void opengl_framebuffer::clear_depth(const float depth)
+    {
+        glClearNamedFramebufferfv(id, GL_DEPTH, 0, &depth);
+    }
+
     sptr<graphics::texture> opengl_framebuffer::get_color_attachment()
     {
         return color_attachment;
