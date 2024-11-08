@@ -28,6 +28,12 @@ namespace narechi
         glfwMakeContextCurrent(window);
 
         NRC_VERIFY(gladLoadGL(glfwGetProcAddress), "GLAD could not initialize");
+
+        glfwSetErrorCallback(
+            [](int error, const char* desc)
+            {
+                NRC_CORE_ERROR("GLFW Error ", error, ": ", desc);
+            });
     }
 
     void opengl_context::swap_buffers()
