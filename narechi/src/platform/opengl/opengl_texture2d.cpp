@@ -111,6 +111,16 @@ namespace narechi
         return height;
     }
 
+    void opengl_texture2d::bind(const uint32_t slot)
+    {
+        glBindTextureUnit(this->slot = slot, id);
+    }
+
+    void opengl_texture2d::unbind()
+    {
+        glBindTextureUnit(slot, 0);
+    }
+
     void opengl_texture2d::create_texture_from_image(
         sptr<graphics::image> image)
     {

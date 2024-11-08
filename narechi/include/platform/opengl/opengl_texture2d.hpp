@@ -25,10 +25,15 @@ namespace narechi
         uint32_t get_width() const override;
         uint32_t get_height() const override;
 
+        void bind(const uint32_t slot) override;
+        void unbind() override;
+
     private:
         uint32_t width;
         uint32_t height;
         graphics::format format;
+
+        uint32_t slot;
 
         void create_texture_from_image(sptr<graphics::image> image);
     };

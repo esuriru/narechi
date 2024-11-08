@@ -36,5 +36,8 @@ namespace narechi::graphics
 
         virtual uint32_t get_width() const = 0;
         virtual uint32_t get_height() const = 0;
+
+        virtual void bind(const uint32_t slot = 0) = 0;
+        virtual void unbind() = 0;
     };
 }
