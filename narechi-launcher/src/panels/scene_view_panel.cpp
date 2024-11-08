@@ -13,6 +13,7 @@ namespace narechi::editor
     {
         scene_image = gui::image_element::create({
             .texture_gfx_ctx_id = framebuffer->get_color_attachment()->get_id(),
+            .flip_vertically = true,
         });
 
         window->add_element(scene_image);
