@@ -67,6 +67,7 @@ namespace narechi
         const uint32_t height, const graphics::format format)
         : width(width)
         , height(height)
+        , format(format)
     {
         glCreateTextures(GL_TEXTURE_2D, 1, &id);
         glTextureStorage2D(id,
@@ -119,11 +120,13 @@ namespace narechi
         {
             internal_format = GL_RGBA8;
             data_format = GL_RGBA;
+            format = graphics::format::rgba8;
         }
         else if (image->get_channel_count() == 3)
         {
             internal_format = GL_RGB8;
             data_format = GL_RGB;
+            format = graphics::format::rgb8;
         }
 
         glTextureStorage2D(id,

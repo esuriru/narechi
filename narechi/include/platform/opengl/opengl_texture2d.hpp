@@ -28,6 +28,7 @@ namespace narechi
     private:
         uint32_t width;
         uint32_t height;
+        graphics::format format;
 
         void create_texture_from_image(sptr<graphics::image> image);
     };
