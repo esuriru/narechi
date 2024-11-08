@@ -6,6 +6,12 @@ namespace narechi
 {
     void opengl_renderer_api::init()
     {
+        glBlendFuncSeparate(GL_SRC_ALPHA,
+            GL_ONE_MINUS_SRC_ALPHA,
+            GL_ONE,
+            GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+
         // Enable depth
         glEnable(GL_DEPTH_TEST);
     }
@@ -29,7 +35,7 @@ namespace narechi
     }
 
     void opengl_renderer_api::set_viewport(const uint32_t x, const uint32_t y,
-                             const uint32_t width, const uint32_t height)
+        const uint32_t width, const uint32_t height)
     {
         glViewport(x, y, width, height);
     }
