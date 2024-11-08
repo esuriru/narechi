@@ -70,7 +70,7 @@ namespace narechi::scene
                       [](const position& pos, const sprite& sprite)
                       {
                           graphics::render2d::submit_quad(
-                              pos.value, sprite.texture);
+                              pos.value, { 20, 20 }, sprite.texture);
                       });
 
         flecs::system camera_update_view_system
@@ -104,7 +104,10 @@ namespace narechi::scene
 
     void scene::add_entity()
     {
-        data->world.entity().add<position>().add<sprite>();
+        data->world.entity().add<position>().set<sprite>({ .texture
+            = graphics::texture2d::load("C:/Users/User/Downloads/narechi-test/"
+                                        "assets/rockett-young-pixel-lulu.png",
+                {}) });
     }
 
     void scene::save()
