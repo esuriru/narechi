@@ -43,10 +43,10 @@ namespace narechi::graphics::render2d
         std::vector<float> vertices = 
         {
             {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                -0.5f, 0.5f, 0.0f,
+                -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+                0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+                0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+                -0.5f, 0.5f, 0.0f, 0.0f, 1.0f
             }
         };
 
@@ -61,8 +61,10 @@ namespace narechi::graphics::render2d
 
         quad_vertex_buffer = vertex_buffer::create(
             vertices.data(), vertices.size() * sizeof(float));
-        quad_vertex_buffer->set_layout(
-            { { shader_data_type::float3, "vertex_pos" } });
+        quad_vertex_buffer->set_layout({
+            { shader_data_type::float3, "vertex_pos" },
+            { shader_data_type::float2, "vertex_uv" },
+        });
 
         quad_index_buffer
             = index_buffer::create(indices.data(), indices.size());
@@ -94,6 +96,13 @@ namespace narechi::graphics::render2d
         glm::mat4 MVP = proj_matrix * view_matrix * model_matrix;
 
         texture_shader->set_mat4("MVP", MVP);
+
+        if (texture)
+        {
+            texture->bind(1);
+            texture_shader->set_int("tex", 1);
+        }
+
         render_command::draw_indexed(quad_vertex_array);
     }
 }
