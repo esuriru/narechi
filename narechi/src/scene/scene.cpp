@@ -1,5 +1,6 @@
 #include "scene/scene.hpp"
 
+#include "core/logger.hpp"
 #include "flecs.h"
 
 #include "glm/ext/matrix_transform.hpp"
@@ -72,12 +73,28 @@ namespace narechi::scene
                               pos.value, sprite.texture);
                       });
 
-        camera_query.each(
-            [](const position& position, scene_camera)
-            {
-                graphics::render2d::set_view_matrix(glm::inverse(glm::translate(
-                    glm::mat4(1.0f), glm::vec3(position.value, 0))));
-            });
+        flecs::system camera_update_view_system
+            = data->world
+                  .system<const position, scene_camera>("UpdateViewMatrix")
+                  .each(
+                      [this](const position& position, scene_camera)
+                      {
+                          static glm::vec2 debug_pos {};
+                          static float elapsed_time;
+
+                          elapsed_time += data->world.delta_time();
+                          debug_pos.x = sinf(elapsed_time);
+
+                          //   const glm::vec3 world_position { debug_pos, 0.0f
+                          //   }; graphics::render2d::set_view_matrix(
+                          //       glm::lookAt(world_position,
+                          //           world_position + glm::vec3(0.0f, 0.0f,
+                          //           -1.0f), { 0.0f, 1.0f, 0.0f }));
+
+                          graphics::render2d::set_view_matrix(
+                              glm::inverse(glm::translate(glm::mat4(1.0f),
+                                  glm::vec3(debug_pos, 0.0f))));
+                      });
     }
 
     void scene::update(float delta_time)
