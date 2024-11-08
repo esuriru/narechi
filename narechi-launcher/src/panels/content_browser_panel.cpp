@@ -116,7 +116,8 @@ namespace narechi::editor
                         browser_element->render();
                         browser_text_element->render();
 
-                        if (is_directory && browser_element->is_pressed())
+                        if (is_directory
+                            && browser_element->is_double_clicked())
                         {
                             current_dir /= it.path().filename();
                         }
