@@ -210,7 +210,8 @@ namespace narechi
         handler.handle<window_resize_event>(
             [](auto& event)
             {
-                NRC_CORE_LOG(event.to_string());
+                graphics::render_command::set_viewport(
+                    0, 0, event.get_width(), event.get_height());
                 return false;
             });
 
