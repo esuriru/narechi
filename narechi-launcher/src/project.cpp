@@ -23,7 +23,7 @@ namespace narechi::editor
     {
         uptr<project> existing_project = make_uptr<project>(path);
         existing_project->asset->load();
-        return std::move(existing_project);
+        return existing_project;
     }
 
     uptr<project> project::create(
@@ -32,7 +32,7 @@ namespace narechi::editor
         uptr<project> new_project = make_uptr<project>(path);
         new_project->data.name = name;
         new_project->save();
-        return std::move(new_project);
+        return new_project;
     }
 
     void project::set_startup_scene_name(const std::string& scene_name)
