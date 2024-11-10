@@ -1,6 +1,8 @@
 #include "asset/asset.hpp"
 
 #include "core/assert.hpp"
+#include "YAML-cpp/yaml.h"
+#include "uuid.h"
 
 #include <fstream>
 
@@ -10,6 +12,8 @@ namespace narechi::asset
         : path(path)
         , is_owning(false)
     {
+        // TODO - Utils function
+        guid = uuids::to_string(uuids::uuid_system_generator {}());
     }
 
     const std::filesystem::path& asset::get_path() const
@@ -25,18 +29,38 @@ namespace narechi::asset
             std::ostringstream buffer;
             buffer << file_in.rdbuf();
 
-            data = buffer.str();
+            node = YAML::Load(buffer.str());
         }
 
+        deserialize_guid_yaml();
         deserialize();
     }
 
     void asset::write()
     {
+        serialize_guid_yaml();
         serialize();
+
+        YAML::Emitter emitter;
+        emitter << node;
 
         std::ofstream file_out(path);
         NRC_ASSERT(file_out.is_open(), "Asset directory is not valid");
-        file_out << data;
+        file_out << emitter.c_str();
+    }
+
+    void asset::serialize_guid_yaml()
+    {
+        node["ID"] = guid;
+    }
+
+    void asset::deserialize_guid_yaml()
+    {
+        guid = node["ID"].as<std::string>();
+    }
+
+    std::string asset::get_guid() const
+    {
+        return guid;
     }
 }

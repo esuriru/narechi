@@ -23,7 +23,6 @@ namespace narechi::asset
         void to_owned(uptr<scene::scene::scene_data>& scene_data);
 
     private:
-        YAML::Node node;
         scene::scene::scene_data* scene_data;
 
         void serialize() override;

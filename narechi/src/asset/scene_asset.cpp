@@ -10,7 +10,6 @@ namespace narechi::asset
         const std::filesystem::path& path, scene::scene::scene_data* scene_data)
         : asset(path)
         , scene_data(scene_data)
-        , node()
     {
     }
 
@@ -78,15 +77,15 @@ namespace narechi::asset
             //     });
         }
 
-        YAML::Emitter emitter;
-        emitter << node;
+        // YAML::Emitter emitter;
+        // emitter << node;
 
-        data = emitter.c_str();
+        // data = emitter.c_str();
     }
 
     void scene_asset::deserialize()
     {
-        node = YAML::Load(data);
+        // node = YAML::Load(data);
         if (is_owning)
         {
             // Don't load the world

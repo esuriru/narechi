@@ -18,7 +18,6 @@ namespace narechi::editor
         ~project_asset();
 
     private:
-        YAML::Node node;
         project::project_data* project_data;
 
         void serialize() override;
