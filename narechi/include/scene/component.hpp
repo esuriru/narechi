@@ -28,6 +28,7 @@ namespace narechi::scene
         struct sprite
         {
             sptr<graphics::texture2d> texture;
+            std::string texture_asset_guid;
         };
 
         component(flecs::world& world)
@@ -38,6 +39,7 @@ namespace narechi::scene
                 .member("y", &glm::vec2::y);
             world.component<position>().member<glm::vec2>("value");
             world.component<sprite>();
+
             world.component<scene_camera>();
             world.component<meta>();
 
