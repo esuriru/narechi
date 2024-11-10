@@ -39,11 +39,11 @@ namespace narechi
 
     bool imgui_button_element::is_pressed()
     {
-        return is_pressed_flag && !(is_pressed_flag = false);
+        return std::exchange(is_pressed_flag, false);
     }
 
     bool imgui_button_element::is_double_clicked()
     {
-        return is_double_clicked_flag && !(is_double_clicked_flag = false);
+        return std::exchange(is_double_clicked_flag, false);
     }
 }
