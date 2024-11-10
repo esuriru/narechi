@@ -111,19 +111,6 @@ namespace narechi::editor
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
 
-        // float aspect_ratio
-        //     =
-        //     static_cast<float>(scene_framebuffer->get_specification().width)
-        //     /
-        //     static_cast<float>(scene_framebuffer->get_specification().height);
-        // float pixel_scale = 10.0f;
-        // graphics::render2d::set_proj_matrix(
-        //     glm::ortho(-aspect_ratio * pixel_scale,
-        //         aspect_ratio * pixel_scale,
-        //         -pixel_scale,
-        //         pixel_scale,
-        //         -1.0f,
-        //         1.0f));
         invalidate_proj_matrix();
     }
 
