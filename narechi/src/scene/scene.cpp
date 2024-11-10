@@ -3,6 +3,7 @@
 #include "core/logger.hpp"
 #include "flecs.h"
 
+#include "flecs/addons/cpp/mixins/rest/decl.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "graphics/render2d.hpp"
 #include "scene/component.hpp"
@@ -50,51 +51,24 @@ namespace narechi::scene
         sptr<scene> existing_scene = make_sptr<scene>();
         existing_scene->asset = std::move(scene_asset);
         existing_scene->asset->to_owned(existing_scene->data);
+
+        // To load the world
+        existing_scene->data->world.import <component>();
+        existing_scene->data->world.set<flecs::Rest>({});
+        existing_scene->asset->load(true);
         return existing_scene;
     }
 
     void scene::awake()
     {
-        auto& world = data->world;
-
-        flecs::query<const position, scene_camera> camera_query
-            = world.query<const position, scene_camera>();
-        if (camera_query.count() == 0)
+        if (!data->world.lookup("SceneCamera"))
         {
-            world.entity().add<position>().add<scene_camera>();
+            NRC_CORE_INFO("Created SceneCamera because there is none");
+            data->world.entity("SceneCamera")
+                .add<component::meta>()
+                .add<component::position>()
+                .add<component::scene_camera>();
         }
-
-        flecs::system sprite_render_system
-            = data->world.system<const position, const sprite>("SpriteRender")
-                  .each(
-                      [](const position& pos, const sprite& sprite)
-                      {
-                          graphics::render2d::submit_quad(
-                              pos.value, { 20, 20 }, sprite.texture);
-                      });
-
-        flecs::system camera_update_view_system
-            = data->world
-                  .system<const position, scene_camera>("UpdateViewMatrix")
-                  .each(
-                      [this](const position& position, scene_camera)
-                      {
-                          static glm::vec2 debug_pos {};
-                          static float elapsed_time;
-
-                          elapsed_time += data->world.delta_time();
-                          debug_pos.x = sinf(elapsed_time);
-
-                          //   const glm::vec3 world_position { debug_pos, 0.0f
-                          //   }; graphics::render2d::set_view_matrix(
-                          //       glm::lookAt(world_position,
-                          //           world_position + glm::vec3(0.0f, 0.0f,
-                          //           -1.0f), { 0.0f, 1.0f, 0.0f }));
-
-                          graphics::render2d::set_view_matrix(
-                              glm::inverse(glm::translate(glm::mat4(1.0f),
-                                  glm::vec3(debug_pos, 0.0f))));
-                      });
     }
 
     void scene::update(float delta_time)
@@ -104,10 +78,15 @@ namespace narechi::scene
 
     void scene::add_entity()
     {
-        data->world.entity().add<position>().set<sprite>({ .texture
-            = graphics::texture2d::load("C:/Users/User/Downloads/narechi-test/"
-                                        "assets/rockett-young-pixel-lulu.png",
-                {}) });
+        data->world.entity()
+            .add<component::position>()
+            .add<component::meta>()
+            .set<component::sprite>({
+                .texture = graphics::texture2d::load(
+                    "C:/Users/User/Downloads/narechi-test/"
+                    "assets/rockett-young-pixel-lulu.png",
+                    {}),
+            });
     }
 
     void scene::save()
