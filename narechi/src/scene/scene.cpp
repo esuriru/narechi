@@ -21,6 +21,7 @@ namespace narechi::scene
         : data(make_uptr<scene::scene_data>())
         , asset(make_uptr<asset::scene_asset>(path, data.get()))
     {
+        data->world.import <component>();
         asset->write();
     }
 
