@@ -4,6 +4,8 @@
 #include "graphics/handle.hpp"
 #include "utils/enum_flag_utils.hpp"
 
+#include <filesystem>
+
 namespace narechi::graphics
 {
     class NRC_API texture : public handle
@@ -39,5 +41,14 @@ namespace narechi::graphics
 
         virtual void bind(const uint32_t slot = 0) = 0;
         virtual void unbind() = 0;
+
+        // TODO - Remove after asset system
+        std::filesystem::path get_path()
+        {
+            return path;
+        }
+
+    protected:
+        std::filesystem::path path {};
     };
 }

@@ -51,6 +51,9 @@ namespace narechi
         sptr<graphics::image> image = graphics::image::load(path, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
         create_texture_from_image(image);
+
+        // TODO - Remove after asset system
+        this->path = path;
     }
 
     opengl_texture2d::opengl_texture2d(const uint8_t* data, uint32_t size,
@@ -61,6 +64,9 @@ namespace narechi
             = graphics::image::load_from_memory(data, size, options);
         NRC_ASSERT(image, "Image not loaded when creating opengl_texture2d");
         create_texture_from_image(image);
+
+        // TODO - Remove after asset system
+        this->path = path;
     }
 
     opengl_texture2d::opengl_texture2d(const uint32_t width,
