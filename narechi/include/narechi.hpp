@@ -10,6 +10,7 @@
 // Assets
 #include "asset/asset.hpp"
 #include "asset/scene_asset.hpp"
+#include "asset/sprite_asset.hpp"
 
 // Scene
 #include "scene/scene.hpp"
