@@ -14,11 +14,12 @@ namespace narechi::asset
         database() = default;
 
         template<typename T>
-        void add_asset(sptr<T> asset)
+        std::string add_asset(sptr<T> asset)
         {
             NRC_ASSERT(
                 !asset->get_guid().empty(), "Asset GUID cannot be empty");
             asset_map[asset->get_guid()] = asset;
+            return asset->get_guid();
         }
 
         template<typename T>
