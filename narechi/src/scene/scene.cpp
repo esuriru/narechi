@@ -82,12 +82,8 @@ namespace narechi::scene
         data->world.entity()
             .add<component::position>()
             .add<component::meta>()
-            .set<component::sprite>({
-                .texture = graphics::texture2d::load(
-                    "C:/Users/User/Downloads/narechi-test/"
-                    "assets/rockett-young-pixel-lulu.png",
-                    {}),
-            });
+            .set<component::sprite>({ .texture_asset_guid
+                = "3df4409a-981f-41d5-9fc4-2b610f83ed33" });
     }
 
     void scene::save()
