@@ -26,7 +26,9 @@ namespace narechi::editor
         void on_event(event& event) override;
 
         void set_project(uptr<project> project);
+
         void load_scene_from_project();
+        void import_assets();
 
     private:
         std::filesystem::path asset_dir;

@@ -1,5 +1,6 @@
 #include "editor_layer.hpp"
 
+#include "asset/sprite_asset.hpp"
 #include "file_extensions.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/framebuffer.hpp"
@@ -185,6 +186,7 @@ namespace narechi::editor
         app::get().get_window().set_title(current_project->get_data().name);
         asset_dir = current_project->get_path().parent_path() / "assets";
 
+        import_assets();
         load_scene_from_project();
     }
 
@@ -215,6 +217,26 @@ namespace narechi::editor
                         "Startup scene loaded: ", current_scene->get_name());
                 }
             }
+        }
+    }
+
+    void editor_layer::import_assets()
+    {
+        if (!std::filesystem::exists(asset_dir))
+        {
+            return;
+        }
+
+        // TODO - Debug code to remove
+        if (!std::filesystem::exists(asset_dir / "nanachismug.nrcsprite"))
+        {
+            app::get().get_asset_database().add_asset(
+                asset::sprite_asset::create(asset_dir / "nanachismug.png"));
+        }
+        else
+        {
+            app::get().get_asset_database().add_asset(
+                asset::sprite_asset::load_data(asset_dir / "nanachismug.png"));
         }
     }
 
