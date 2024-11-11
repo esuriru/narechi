@@ -151,6 +151,11 @@ namespace narechi
         return *nfd_ctx;
     }
 
+    asset::database& app::get_asset_database()
+    {
+        return asset_database;
+    }
+
     void app::push_layer(sptr<layer> layer)
     {
         if (in_layer_loop_scope)
