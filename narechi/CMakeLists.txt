@@ -49,6 +49,7 @@ set(NARECHI_SOURCES
     "src/graphics/handle.cpp"
     "src/graphics/buffer_element.cpp"
     "src/graphics/shader.cpp"
+    "src/graphics/sprite.cpp"
 
     "src/scene/scene.cpp"
 
