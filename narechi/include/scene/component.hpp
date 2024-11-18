@@ -84,11 +84,11 @@ namespace narechi::scene
 
             flecs::system camera_update_view_system
                 = world
-                      .system<const component::position,
-                          component::scene_camera>("UpdateViewMatrix")
+                      .system<component::position, component::scene_camera>(
+                          "UpdateViewMatrix")
                       .kind(flecs::OnUpdate)
                       .each(
-                          [&](const component::position& position,
+                          [&](component::position& position,
                               component::scene_camera)
                           {
                               static glm::vec2 debug_pos {};
@@ -96,10 +96,11 @@ namespace narechi::scene
 
                               elapsed_time += world.delta_time();
                               debug_pos.x = sinf(elapsed_time);
+                              position.value = debug_pos;
 
                               graphics::render2d::set_view_matrix(
                                   glm::inverse(glm::translate(glm::mat4(1.0f),
-                                      glm::vec3(debug_pos, 0.0f))));
+                                      glm::vec3(position.value, 0.0f))));
                           });
         }
     };
