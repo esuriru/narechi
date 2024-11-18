@@ -1,7 +1,9 @@
 #pragma once
 
+#include "asset/sprite_asset.hpp"
 #include "core/core.hpp"
 #include "core/assert.hpp"
+#include "asset/asset_extensions.hpp"
 
 #include <unordered_map>
 #include <string>
@@ -12,6 +14,14 @@ namespace narechi::asset
     {
     public:
         database() = default;
+
+        template<typename T>
+        std::string import_asset(const std::filesystem::path& path)
+        {
+            auto asset = T::load_data(path);
+            asset_map[asset->get_guid()] = asset;
+            return asset->get_guid();
+        }
 
         template<typename T>
         std::string add_asset(sptr<T> asset)

@@ -7,6 +7,7 @@
 #include "panels/content_browser_panel.hpp"
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
+#include "asset/asset_extensions.hpp"
 
 #include <filesystem>
 
@@ -228,16 +229,18 @@ namespace narechi::editor
             return;
         }
 
-        // TODO - Debug code to remove
-        if (!std::filesystem::exists(asset_dir / "nanachismug.nrcsprite"))
+        // TODO - Dirty code to change
+        for (const auto& it :
+            std::filesystem::recursive_directory_iterator(asset_dir))
         {
-            app::get().get_asset_database().add_asset(
-                asset::sprite_asset::create(asset_dir / "nanachismug.png"));
-        }
-        else
-        {
-            app::get().get_asset_database().add_asset(
-                asset::sprite_asset::load_data(asset_dir / "nanachismug.png"));
+            if (it.is_regular_file()
+                && it.path().extension()
+                    == asset::extension<asset::sprite_asset>::value)
+            {
+                app::get().get_asset_database().add_asset(
+                    asset::sprite_asset::load_data(it.path().parent_path()
+                        / (it.path().stem().string() + ".png")));
+            }
         }
     }
 
