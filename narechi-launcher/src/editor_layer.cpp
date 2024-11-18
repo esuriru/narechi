@@ -127,6 +127,7 @@ namespace narechi::editor
         content_browser_panel->set_editor_asset_dir(asset_dir, true);
 
         sprite_import_panel = make_uptr<editor::sprite_import_panel>();
+        sprite_import_panel->set_editor_asset_dir(asset_dir);
 
         if (current_scene)
         {

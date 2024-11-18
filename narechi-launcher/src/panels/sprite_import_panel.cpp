@@ -32,9 +32,11 @@ namespace narechi::editor
         });
 
         import_button = gui::button_element::create({ .label = "Import",
-            .on_click = []()
+            .on_click = [this]()
             {
-
+                app::get().get_asset_database().add_asset(
+                    asset::sprite_asset::create(
+                        image_directory_input->get_text()));
             } });
 
         window->add_element(gui::text_element::create(
@@ -47,5 +49,11 @@ namespace narechi::editor
     void sprite_import_panel::render()
     {
         window->render();
+    }
+
+    void sprite_import_panel::set_editor_asset_dir(
+        const std::filesystem::path& dir)
+    {
+        asset_dir = dir;
     }
 }
