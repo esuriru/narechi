@@ -14,6 +14,7 @@ set(NRC_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
 
 add_subdirectory("narechi")
 add_subdirectory("narechi-launcher")
+add_subdirectory("narechi-player")
 
 include(FetchContent)
 
