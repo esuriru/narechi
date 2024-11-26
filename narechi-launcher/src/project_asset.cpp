@@ -18,11 +18,6 @@ namespace narechi::editor
     {
         node["Name"] = project_data->name;
         node["Startup Scene Name"] = project_data->startup_scene_name;
-        // node = *project_data;
-        // YAML::Emitter emitter;
-        // emitter << node;
-
-        // data = emitter.c_str();
     }
 
     void project_asset::deserialize()
