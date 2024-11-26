@@ -24,6 +24,7 @@ namespace narechi::graphics
         virtual void cleanup() = 0;
 
         virtual void clear_color(const glm::vec4& color) = 0;
+        virtual void clear_depth(const float depth) = 0;
         virtual void draw_indexed(
             std::shared_ptr<graphics::vertex_array> vertex_array,
             uint32_t index_count = 0)

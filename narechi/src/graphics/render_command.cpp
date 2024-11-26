@@ -22,6 +22,11 @@ namespace narechi::graphics
         renderer_api->clear_color(color);
     }
 
+    void render_command::clear_depth(const float depth)
+    {
+        renderer_api->clear_depth(depth);
+    }
+
     void render_command::draw_indexed(
         std::shared_ptr<graphics::vertex_array> vertex_array,
         uint32_t index_count)

@@ -14,6 +14,7 @@ namespace narechi::graphics
 
         // TODO -  Color class
         static void clear_color(const glm::vec4& color);
+        static void clear_depth(const float depth = 1.0f);
 
         static void draw_indexed(
             std::shared_ptr<graphics::vertex_array> vertex_array,

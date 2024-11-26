@@ -1,6 +1,7 @@
 #include "platform/opengl/opengl_renderer_api.hpp"
 
 #include "glad/gl.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace narechi
 {
@@ -18,8 +19,18 @@ namespace narechi
 
     void opengl_renderer_api::clear_color(const glm::vec4& color)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(color.r, color.g, color.b, color.a);
+        // glClearColor(color.r, color.g, color.b, color.a);
+        // glClear(GL_COLOR_BUFFER_BIT);
+        // 0 since there isn't any framebuffers with more than 1 color
+        // attachment
+        glClearBufferfv(GL_COLOR, 0, glm::value_ptr(color));
+    }
+
+    void opengl_renderer_api::clear_depth(const float depth)
+    {
+        // glClearDepth(depth);
+        // glClear(GL_DEPTH_BUFFER_BIT);
+        glClearBufferfv(GL_DEPTH, 0, &depth);
     }
 
     void opengl_renderer_api::draw_indexed(
