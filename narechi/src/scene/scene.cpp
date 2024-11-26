@@ -8,6 +8,8 @@
 #include "graphics/render2d.hpp"
 #include "scene/component.hpp"
 #include "asset/scene_asset.hpp"
+#include "asset/asset_extensions.hpp"
+#include <filesystem>
 
 namespace narechi::scene
 {
@@ -22,7 +24,6 @@ namespace narechi::scene
         , asset(make_uptr<asset::scene_asset>(path, data.get()))
     {
         data->world.import <component>();
-        asset->write();
     }
 
     scene::~scene()
