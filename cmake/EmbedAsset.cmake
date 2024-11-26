@@ -32,10 +32,26 @@ function(embed_chunk_binary_to_byte_array target binary_file chunk_count output_
             math(EXPR file_index "${file_index} + ${chunk_size}")
         endif()
 
-        set(output_file "${output_dir}/${binary_file_name}${chunk_id}.cpp")
+        if (${chunk_count} STREQUAL "1")
+            message(WARNING "Since there is one chunk, only one non-numbered output file will be made")
+            set(output_file "${output_dir}/${binary_file_name}.cpp")
+            # Generate source file
+            file(WRITE ${output_file}
+        "
+#include <cstdint>
 
-        # Generate source file
-        file(WRITE ${output_file}
+namespace narechi::embed
+{
+    extern const uint8_t ${binary_file_name}[] = {${chunk_data}};
+    extern const uint32_t ${binary_file_name}_length =
+        sizeof(${binary_file_name}) / sizeof(uint8_t);
+}
+"
+            )
+        else()
+            set(output_file "${output_dir}/${binary_file_name}${chunk_id}.cpp")
+            # Generate source file
+            file(WRITE ${output_file}
         "
 #include <cstdint>
 
@@ -46,7 +62,9 @@ namespace narechi::embed
         sizeof(${binary_file_name}${chunk_id}) / sizeof(uint8_t);
 }
 "
-        )
+            )
+        endif()
+
 
         list(APPEND output_files ${output_file})
         math(EXPR chunk_id "${chunk_id} + 1")

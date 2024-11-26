@@ -25,17 +25,27 @@ set(NRC_LAUNCHER_BIN_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 set(nrc_player_chunk_id 0)
 
-while(nrc_player_chunk_id LESS ${NRC_PLAYER_CHUNK_COUNT})
-    set(current_player_chunk_file "${CMAKE_CURRENT_BINARY_DIR}/narechi_player${nrc_player_chunk_id}.cpp")
+if(${NRC_PLAYER_CHUNK_COUNT} GREATER 1)
+    while(nrc_player_chunk_id LESS ${NRC_PLAYER_CHUNK_COUNT})
+        set(current_player_chunk_file "${CMAKE_CURRENT_BINARY_DIR}/narechi_player${nrc_player_chunk_id}.cpp")
+
+        if(NOT EXISTS ${current_player_chunk_file})
+            file(WRITE ${current_player_chunk_file} "")
+        endif()
+
+        target_sources(narechi-launcher PRIVATE ${current_player_chunk_file})
+
+        math(EXPR nrc_player_chunk_id "${nrc_player_chunk_id} + 1")
+    endwhile()
+else()
+    set(current_player_chunk_file "${CMAKE_CURRENT_BINARY_DIR}/narechi_player.cpp")
 
     if(NOT EXISTS ${current_player_chunk_file})
         file(WRITE ${current_player_chunk_file} "")
     endif()
 
     target_sources(narechi-launcher PRIVATE ${current_player_chunk_file})
-
-    math(EXPR nrc_player_chunk_id "${nrc_player_chunk_id} + 1")
-endwhile()
+endif()
 
 target_link_libraries(
     narechi-launcher
