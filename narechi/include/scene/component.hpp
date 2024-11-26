@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include "graphics/texture2d.hpp"
 #include "graphics/render2d.hpp"
+#include "graphics/render_command.hpp"
 
 #include "flecs.h"
 
@@ -21,6 +22,7 @@ namespace narechi::scene
 
         struct scene_camera
         {
+            glm::vec4 clear_color {};
         };
 
         struct meta
@@ -54,11 +56,16 @@ namespace narechi::scene
             world.component<glm::vec2>()
                 .member("x", &glm::vec2::x)
                 .member("y", &glm::vec2::y);
+            world.component<glm::vec4>()
+                .member("r", &glm::vec4::x)
+                .member("g", &glm::vec4::y)
+                .member("b", &glm::vec4::z)
+                .member("a", &glm::vec4::w);
 
             world.component<position>().member<glm::vec2>("value");
             world.component<sprite>().member<std::string>("texture_asset_guid");
 
-            world.component<scene_camera>();
+            world.component<scene_camera>().member<glm::vec4>("clear_color");
             world.component<meta>();
 
             flecs::system sprite_render_system
@@ -84,12 +91,12 @@ namespace narechi::scene
 
             flecs::system camera_update_view_system
                 = world
-                      .system<component::position, component::scene_camera>(
-                          "UpdateViewMatrix")
-                      .kind(flecs::OnUpdate)
+                      .system<component::position,
+                          const component::scene_camera>("UpdateViewMatrix")
+                      .kind(flecs::PreUpdate)
                       .each(
                           [&](component::position& position,
-                              component::scene_camera)
+                              const component::scene_camera& scene_camera)
                           {
                               static glm::vec2 debug_pos {};
                               static float elapsed_time;
@@ -97,6 +104,11 @@ namespace narechi::scene
                               elapsed_time += world.delta_time();
                               debug_pos.x = sinf(elapsed_time);
                               position.value = debug_pos;
+
+                              // Clear current framebuffer attachments
+                              graphics::render_command::clear_color(
+                                  scene_camera.clear_color);
+                              graphics::render_command::clear_depth();
 
                               graphics::render2d::set_view_matrix(
                                   glm::inverse(glm::translate(glm::mat4(1.0f),

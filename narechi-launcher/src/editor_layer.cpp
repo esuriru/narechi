@@ -170,8 +170,8 @@ namespace narechi::editor
     void editor_layer::on_update(float dt)
     {
         scene_framebuffer->bind();
-        scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
-        scene_framebuffer->clear_depth();
+        // scene_framebuffer->clear_color(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+        // scene_framebuffer->clear_depth();
 
         if (current_scene)
         {
