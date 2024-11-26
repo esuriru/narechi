@@ -43,7 +43,10 @@ namespace narechi::scene
     sptr<scene> scene::load(const std::filesystem::path& path)
     {
         sptr<scene> existing_scene = make_sptr<scene>(path);
+        existing_scene->data->world.import <component>();
+        existing_scene->data->world.set<flecs::Rest>({});
         existing_scene->asset->load();
+
         return existing_scene;
     }
 
@@ -89,6 +92,43 @@ namespace narechi::scene
     void scene::save()
     {
         asset->write();
+    }
+
+    void scene::export_to_dir(const std::filesystem::path& dir, bool save)
+    {
+        if (save)
+        {
+            this->save();
+        }
+
+        using namespace asset;
+        asset->write(dir / (get_name() + extension<scene_asset>::value));
+
+        // Export sprites
+        data->world.query<const component::sprite>().each(
+            [&](const component::sprite& sprite)
+            {
+                // Copy sprite asset
+                sptr<sprite_asset> scene_sprite_asset
+                    = app::get().get_asset_database().get_asset<sprite_asset>(
+                        sprite.texture_asset_guid);
+                scene_sprite_asset->write(
+                    dir / (scene_sprite_asset->get_path().filename()));
+
+                std::filesystem::path image_asset_path
+                    = scene_sprite_asset->get_path();
+                image_asset_path.replace_extension(".png");
+
+                // Copy actual image, replace if exists
+                std::filesystem::path image_build_asset_path
+                    = dir / (image_asset_path.filename());
+                if (std::filesystem::exists(image_build_asset_path))
+                {
+                    std::filesystem::remove(image_build_asset_path);
+                }
+                std::filesystem::copy_file(
+                    image_asset_path, image_build_asset_path);
+            });
     }
 
     std::string scene::get_name() const

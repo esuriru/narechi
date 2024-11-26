@@ -34,6 +34,8 @@ namespace narechi::scene
         void add_entity();
 
         void save();
+        void export_to_dir(
+            const std::filesystem::path& dir, bool save = true);
 
         std::string get_name() const;
 
