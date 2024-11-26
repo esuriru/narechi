@@ -86,6 +86,11 @@ namespace narechi::asset
     void scene_asset::deserialize()
     {
         // node = YAML::Load(data);
+        if (!node.IsMap())
+        {
+            return;
+        }
+
         if (is_owning)
         {
             // Don't load the world
@@ -93,11 +98,6 @@ namespace narechi::asset
         }
         else
         {
-            if (!node.IsMap())
-            {
-                return;
-            }
-
             scene_data->name = node["Name"].as<std::string>();
             scene_data->world.from_json(
                 node["World Data"].as<std::string>().c_str());
