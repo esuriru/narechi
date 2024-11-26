@@ -17,6 +17,7 @@ namespace narechi::asset
 
         void load(bool deserialize_only = false);
         void write();
+        void write(const std::filesystem::path& path);
 
         void serialize_guid_yaml();
         void deserialize_guid_yaml();

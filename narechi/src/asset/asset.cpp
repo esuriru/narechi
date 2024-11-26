@@ -38,6 +38,11 @@ namespace narechi::asset
 
     void asset::write()
     {
+        write(path);
+    }
+
+    void asset::write(const std::filesystem::path& path)
+    {
         serialize_guid_yaml();
         serialize();
 
