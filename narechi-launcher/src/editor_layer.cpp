@@ -50,6 +50,13 @@ namespace narechi::editor
                             .callback =
                                 [this]()
                             {
+                                NRC_ASSERT(build_panel, 
+                                    "Cannot build and export if build"
+                                    " panel does not exist");
+                                NRC_ASSERT(current_scene, 
+                                    "Cannot build and export if no"
+                                    " current scene exists");
+                                build_panel->set_export_scene(current_scene);
                                 render_build_panel = true;
                             },
                         }
