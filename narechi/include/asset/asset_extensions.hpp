@@ -1,6 +1,7 @@
 #pragma once
 
 #include "asset/asset_extensions.hpp"
+#include "asset/scene_asset.hpp"
 #include "asset/sprite_asset.hpp"
 #include "core/core.hpp"
 
@@ -17,5 +18,11 @@ namespace narechi::asset
     struct extension<narechi::asset::sprite_asset>
     {
         static constexpr const char* value = ".nrcsprite";
+    };
+
+    template<>
+    struct extension<narechi::asset::scene_asset>
+    {
+        static constexpr const char* value = ".nrcscene";
     };
 }
