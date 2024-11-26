@@ -8,8 +8,11 @@
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
 #include "asset/asset_extensions.hpp"
+#include "asset/embed.hpp"
 
 #include <filesystem>
+
+NRC_DECL_EMBED_BYTE_ARRAY(narechi_player0)
 
 namespace narechi::editor
 {
@@ -19,7 +22,9 @@ namespace narechi::editor
         : layer("EditorLayer")
         , current_scene(nullptr)
         , render_sprite_import_panel(false)
+        , render_build_panel(false)
     {
+        NRC_CORE_LOG(embed::narechi_player0[0]);
         menu_bar = gui::menu_bar::create({
             .menu_items = { 
                 {
@@ -44,6 +49,14 @@ namespace narechi::editor
                                 }
                             },
                         },
+                        {
+                            .title = "Build and Export",
+                            .callback =
+                                [this]()
+                            {
+                                render_build_panel = true;
+                            },
+                        }
                     },
                 },
                 {
@@ -112,6 +125,7 @@ namespace narechi::editor
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
+        build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();
     }
@@ -145,9 +159,15 @@ namespace narechi::editor
         menu_bar->render();
         content_browser_panel->render();
         scene_view_panel->render();
+
         if (render_sprite_import_panel)
         {
             sprite_import_panel->render();
+        }
+
+        if (render_build_panel)
+        {
+            build_panel->render();
         }
     }
 

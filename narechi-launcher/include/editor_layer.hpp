@@ -7,6 +7,7 @@
 #include "panels/content_browser_panel.hpp"
 #include "panels/sprite_import_panel.hpp"
 #include "panels/scene_view_panel.hpp"
+#include "panels/build_panel.hpp"
 
 // TODO - Will there be a need to separate the editor from the editor_layer?
 namespace narechi::editor
@@ -38,11 +39,14 @@ namespace narechi::editor
         sptr<graphics::framebuffer> scene_framebuffer;
 
         sptr<gui::menu_bar> menu_bar;
+
         uptr<content_browser_panel> content_browser_panel;
         uptr<sprite_import_panel> sprite_import_panel;
         uptr<scene_view_panel> scene_view_panel;
+        uptr<build_panel> build_panel;
 
         bool render_sprite_import_panel;
+        bool render_build_panel;
 
         void invalidate_proj_matrix();
     };

@@ -9,12 +9,14 @@ set(NRC_RENDERER_API "opengl")
 
 project(narechi LANGUAGES C CXX)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 set(NRC_ASSET_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(NRC_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
 
 add_subdirectory("narechi")
-add_subdirectory("narechi-launcher")
 add_subdirectory("narechi-player")
+add_subdirectory("narechi-launcher")
 
 include(FetchContent)
 
