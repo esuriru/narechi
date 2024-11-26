@@ -8,7 +8,7 @@ namespace narechi::scope
         const gui::scope::table_scope_properties& props)
         : width(props.element_size)
     {
-        ImGui::BeginTable(props.label.c_str(),
+        is_created = ImGui::BeginTable(props.label.c_str(),
             props.flags & gui::scope::table_scope_flags::fit_columns_to_width ?
                 std::max(static_cast<int>(ImGui::GetContentRegionAvail().x
                              / props.element_size),
@@ -21,7 +21,10 @@ namespace narechi::scope
 
     imgui_table_scope::~imgui_table_scope()
     {
-        ImGui::EndTable();
+        if (is_created)
+        {
+            ImGui::EndTable();
+        }
     }
 
     void imgui_table_scope::next_row()

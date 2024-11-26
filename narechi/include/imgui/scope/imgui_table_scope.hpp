@@ -19,6 +19,7 @@ namespace narechi::scope
 
     private:
         float width;
+        bool is_created = true;
         bool first_column = true;
     };
 }
