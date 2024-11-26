@@ -11,6 +11,7 @@
 #include "asset/asset.hpp"
 #include "asset/scene_asset.hpp"
 #include "asset/sprite_asset.hpp"
+#include "asset/asset_extensions.hpp"
 
 // Scene
 #include "scene/scene.hpp"
