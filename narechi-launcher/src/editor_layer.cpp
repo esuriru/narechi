@@ -8,11 +8,8 @@
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
 #include "asset/asset_extensions.hpp"
-#include "asset/embed.hpp"
 
 #include <filesystem>
-
-NRC_DECL_EMBED_BYTE_ARRAY(narechi_player0)
 
 namespace narechi::editor
 {
@@ -24,7 +21,6 @@ namespace narechi::editor
         , render_sprite_import_panel(false)
         , render_build_panel(false)
     {
-        NRC_CORE_LOG(embed::narechi_player0[0]);
         menu_bar = gui::menu_bar::create({
             .menu_items = { 
                 {

@@ -1,5 +1,11 @@
 #include "panels/build_panel.hpp"
 #include "utils/file_utils.hpp"
+#include "asset/embed.hpp"
+
+#include <fstream>
+
+// Embedded player executable
+NRC_DECL_EMBED_BYTE_ARRAY(narechi_player)
 
 namespace narechi::editor
 {
@@ -38,6 +44,14 @@ namespace narechi::editor
                 [this]()
             {
                 NRC_CORE_LOG("Build initiated");
+                std::ofstream out_player_stream;
+                out_player_stream.open(
+                    std::filesystem::path(build_directory_input->get_text())
+                        / "player.exe",
+                    std::ios::binary | std::ios::app);
+                out_player_stream.write(
+                    reinterpret_cast<const char*>(embed::narechi_player),
+                    embed::narechi_player_length);
             },
         }));
     }
