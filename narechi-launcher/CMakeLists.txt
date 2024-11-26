@@ -21,8 +21,7 @@ add_executable(narechi-launcher ${NARECHI_LAUNCHER_SOURCES})
 
 add_dependencies(narechi-launcher narechi-player)
 
-set(NRC_LAUNCHER_BIN_DIR ${CMAKE_CURRENT_BINARY_DIR})
-
+# TODO - Move these into a script
 set(nrc_player_chunk_id 0)
 
 if(${NRC_PLAYER_CHUNK_COUNT} GREATER 1)
@@ -46,6 +45,31 @@ else()
 
     target_sources(narechi-launcher PRIVATE ${current_player_chunk_file})
 endif()
+
+set(nrc_engine_chunk_id 0)
+
+if(${NRC_ENGINE_CHUNK_COUNT} GREATER 1)
+    while(nrc_engine_chunk_id LESS ${NRC_ENGINE_CHUNK_COUNT})
+        set(current_engine_chunk_file "${CMAKE_CURRENT_BINARY_DIR}/libnarechi_engine${nrc_engine_chunk_id}.cpp")
+
+        if(NOT EXISTS ${current_engine_chunk_file})
+            file(WRITE ${current_engine_chunk_file} "")
+        endif()
+
+        target_sources(narechi-launcher PRIVATE ${current_engine_chunk_file})
+
+        math(EXPR nrc_engine_chunk_id "${nrc_engine_chunk_id} + 1")
+    endwhile()
+else()
+    set(current_engine_chunk_file "${CMAKE_CURRENT_BINARY_DIR}/libnarechi_engine.cpp")
+
+    if(NOT EXISTS ${current_engine_chunk_file})
+        file(WRITE ${current_engine_chunk_file} "")
+    endif()
+
+    target_sources(narechi-launcher PRIVATE ${current_engine_chunk_file})
+endif()
+
 
 target_link_libraries(
     narechi-launcher
