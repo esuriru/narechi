@@ -22,7 +22,7 @@ namespace narechi::scene
 
         struct scene_camera
         {
-            glm::vec4 clear_color {};
+            glm::vec4 clear_color { 0.0f, 0.0f, 0.0f, 1.0f };
         };
 
         struct meta
