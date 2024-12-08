@@ -1,6 +1,10 @@
+# CMake output build directory
 /build
 
+# Generic cache directory
 /.cache
+
+# VSCode cache directory
 /.vscode
 
 # Compiled SPIR-V Shaders
