@@ -5,13 +5,10 @@ set(NARECHI_SOURCES
     "src/core/app.cpp"
     "src/core/window.cpp"
     "src/core/layer_stack.cpp"
-
     "src/asset/asset.cpp"
     "src/asset/scene_asset.cpp"
     "src/asset/sprite_asset.cpp"
-
     "src/file/nfd_context.cpp"
-
     "src/gui/window.cpp"
     "src/gui/element.cpp"
     "src/gui/text_element.cpp"
@@ -23,7 +20,6 @@ set(NARECHI_SOURCES
     "src/gui/menu_bar.cpp"
     "src/gui/image_element.cpp"
     "src/gui/scope/table_scope.cpp"
-
     "src/imgui/imgui_context.cpp"
     "src/imgui/imgui_window.cpp"
     "src/imgui/imgui_text_element.cpp"
@@ -35,7 +31,6 @@ set(NARECHI_SOURCES
     "src/imgui/imgui_menu_bar.cpp"
     "src/imgui/imgui_image_element.cpp"
     "src/imgui/scope/imgui_table_scope.cpp"
-
     "src/graphics/graphics_context.cpp"
     "src/graphics/renderer_api.cpp"
     "src/graphics/image.cpp"
@@ -50,11 +45,8 @@ set(NARECHI_SOURCES
     "src/graphics/buffer_element.cpp"
     "src/graphics/shader.cpp"
     "src/graphics/sprite.cpp"
-
     "src/scene/scene.cpp"
-
     "src/platform/win32/win32window.cpp"
-
     "src/utils/time_utils.cpp"
     "src/utils/file_utils.cpp"
 )
@@ -88,43 +80,49 @@ target_link_options(narechi-engine PUBLIC -static-libstdc++)
 target_include_directories(narechi-engine PUBLIC "include")
 
 # TODO - Build static or shared setting
-target_compile_definitions(narechi-engine PRIVATE
-    "NOMINMAX")
-target_compile_definitions(narechi-engine INTERFACE
-    "IMGUI_DISABLE_OBSOLETE_FUNCTIONS")
+target_compile_definitions(narechi-engine PRIVATE "NOMINMAX")
+target_compile_definitions(
+    narechi-engine INTERFACE "IMGUI_DISABLE_OBSOLETE_FUNCTIONS"
+)
 
 if(WIN32)
-    target_compile_definitions(narechi-engine PRIVATE
-        "NRC_PLATFORM_WINDOWS"
-        "NRC_DEBUG"
-        "NRC_BUILD_DLL"
+    target_compile_definitions(
+        narechi-engine PRIVATE "NRC_PLATFORM_WINDOWS" "NRC_DEBUG"
+                               "NRC_BUILD_DLL"
     )
 else()
+
 endif()
 
 if(${NRC_RENDERER_API} STREQUAL "opengl")
-    target_compile_definitions(narechi-engine PRIVATE
-        "NRC_RENDERER_API_OPENGL")
+    target_compile_definitions(narechi-engine PRIVATE "NRC_RENDERER_API_OPENGL")
 elseif(${NRC_RENDERER_API} STREQUAL "vulkan")
-    target_compile_definitions(narechi-engine PRIVATE
-        "NRC_RENDERER_API_VULKAN")
+    target_compile_definitions(narechi-engine PRIVATE "NRC_RENDERER_API_VULKAN")
 else()
     error("Unsupported Renderer API: " ${NRC_RENDERER_API})
 endif()
 
-embed_text_to_std_string(narechi-engine "${NRC_ASSET_DIR}/shaders/texture_v.glsl")
-embed_text_to_std_string(narechi-engine "${NRC_ASSET_DIR}/shaders/texture_f.glsl")
+embed_text_to_std_string(
+    narechi-engine "${NRC_ASSET_DIR}/shaders/texture_v.glsl"
+)
+embed_text_to_std_string(
+    narechi-engine "${NRC_ASSET_DIR}/shaders/texture_f.glsl"
+)
 
 set(NRC_ENGINE_CHUNK_COUNT 1)
-set(NRC_ENGINE_CHUNK_COUNT ${NRC_ENGINE_CHUNK_COUNT} PARENT_SCOPE)
+set(NRC_ENGINE_CHUNK_COUNT
+    ${NRC_ENGINE_CHUNK_COUNT}
+    PARENT_SCOPE
+)
 message(STATUS "Engine to be packed in ${NRC_ENGINE_CHUNK_COUNT} chunks")
 
 add_custom_command(
-    TARGET narechi-engine POST_BUILD 
-    COMMAND ${CMAKE_COMMAND} 
-        -DNRC_PLAYER_BINARY=$<TARGET_FILE:narechi-engine>
+    TARGET narechi-engine
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -DNRC_PLAYER_BINARY=$<TARGET_FILE:narechi-engine>
         -DNRC_SOURCE_DIR=${CMAKE_SOURCE_DIR}
         -DNRC_LAUNCHER_BIN_DIR=$<TARGET_FILE_DIR:narechi-launcher>
-        -DNRC_PLAYER_CHUNK_COUNT=${NRC_ENGINE_CHUNK_COUNT}
-        -P ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
+        -DNRC_PLAYER_CHUNK_COUNT=${NRC_ENGINE_CHUNK_COUNT} -P
+        ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
 )
