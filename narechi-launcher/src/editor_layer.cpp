@@ -5,6 +5,7 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/framebuffer.hpp"
 #include "panels/content_browser_panel.hpp"
+#include "panels/scene_hierarchy_panel.hpp"
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
 #include "asset/asset_extensions.hpp"
@@ -128,6 +129,7 @@ namespace narechi::editor
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
+        scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>();
         build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();
@@ -162,6 +164,7 @@ namespace narechi::editor
         menu_bar->render();
         content_browser_panel->render();
         scene_view_panel->render();
+        scene_hierarchy_panel->render();
 
         if (render_sprite_import_panel)
         {

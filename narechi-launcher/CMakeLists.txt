@@ -13,10 +13,10 @@ set(NARECHI_LAUNCHER_SOURCES
     "src/panels/sprite_import_panel.cpp"
     "src/panels/scene_view_panel.cpp"
     "src/panels/build_panel.cpp"
+    "src/panels/scene_hierarchy_panel.cpp"
     "src/panels/editor_panel.cpp"
 )
 
- 
 add_executable(narechi-launcher ${NARECHI_LAUNCHER_SOURCES})
 
 add_dependencies(narechi-launcher narechi-player)
@@ -69,7 +69,6 @@ else()
 
     target_sources(narechi-launcher PRIVATE ${current_engine_chunk_file})
 endif()
-
 
 target_link_libraries(
     narechi-launcher
