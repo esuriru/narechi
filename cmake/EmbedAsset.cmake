@@ -77,13 +77,34 @@ function(embed_binary_to_byte_array_output target binary_file output_file)
 
     file(READ "${binary_file}" file_data HEX)
 
+    if (NOT DEFINED skip_file_hash_cache)
+        get_filename_component(output_file_dir ${output_file} DIRECTORY)
+        set(output_cache_file "${output_file_dir}/${binary_file_name}_cache.txt")
+        file(SHA256 ${binary_file} output_file_hash)
+        if(EXISTS ${output_cache_file})
+            file(READ ${output_cache_file} file_cache)
+            if (${file_cache} STREQUAL ${output_file_hash})
+                message(STATUS 
+                "File has not been changed, not rewriting embed source file")
+                return()
+            else ()
+                message(STATUS
+                "File hash is different from current file, rewriting embed source file")
+                file(WRITE ${output_cache_file} ${output_file_hash})
+            endif()
+        else()
+            message(STATUS 
+            "No file cache found, generating new file hash: ${output_cache_file}")
+            file(WRITE ${output_cache_file} ${output_file_hash})
+        endif()
+    endif()
+
     # Prepend with 0x
     string(REGEX REPLACE "([0-9a-f][0-9a-f])" "0x\\1,"
         file_data ${file_data}
     )
 
-    # Generate source file
-    file(WRITE ${output_file}
+    set(output_file_data
         "
 #include <cstdint>
 
@@ -95,6 +116,9 @@ namespace narechi::embed
 }
 "
     )
+
+    # Generate source file
+    file(WRITE ${output_file} ${output_file_data})
 
     # Add to source files in target
     if (NOT DEFINED skip_target_sources)
@@ -116,6 +140,28 @@ function(embed_text_to_std_string target text_file)
     message(STATUS "Packing ${text_file_name} as `std::string`")
 
     file(READ ${text_file} file_data)
+
+    if (NOT DEFINED skip_file_hash_cache)
+        get_filename_component(output_file_dir ${output_file} DIRECTORY)
+        set(output_cache_file "${output_file_dir}/${text_file_name}_cache.txt")
+        file(SHA256 ${text_file} output_file_hash)
+        if(EXISTS ${output_cache_file})
+            file(READ ${output_cache_file} file_cache)
+            if (${file_cache} STREQUAL ${output_file_hash})
+                message(STATUS 
+                "File has not been changed, not rewriting embed source file")
+                return()
+            else ()
+                message(STATUS
+                "File hash is different from current file, rewriting embed source file")
+                file(WRITE ${output_cache_file} ${output_file_hash})
+            endif()
+        else()
+            message(STATUS 
+            "No file cache found, generating new file hash: ${output_cache_file}")
+            file(WRITE ${output_cache_file} ${output_file_hash})
+        endif()
+    endif()
 
     # Replace single backslashes with double backslashes
     string(REPLACE "\n" "\\n" file_data "${file_data}")
