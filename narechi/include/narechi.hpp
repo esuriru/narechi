@@ -18,7 +18,7 @@
 
 // GUI Scopes
 #include "gui/scope/table_scope.hpp"
-#include "gui/scope/tree_scope.hpp"
+#include "gui/scope/tree_node_scope.hpp"
 
 // GUI
 #include "gui/window.hpp"
