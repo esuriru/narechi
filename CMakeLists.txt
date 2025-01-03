@@ -14,6 +14,13 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(NRC_ASSET_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(NRC_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
 
+# Enable on release
+set(NRC_DISABLE_BUILD_EMBED ON)
+
+if(DEFINED NRC_DISABLE_BUILD_EMBED)
+    message(NOTICE "Build embed is disabled. Build in engine will/might not work")
+endif()
+
 add_subdirectory("narechi")
 add_subdirectory("narechi-player")
 add_subdirectory("narechi-launcher")

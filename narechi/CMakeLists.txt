@@ -109,20 +109,23 @@ embed_text_to_std_string(
     narechi-engine "${NRC_ASSET_DIR}/shaders/texture_f.glsl"
 )
 
-set(NRC_ENGINE_CHUNK_COUNT 1)
-set(NRC_ENGINE_CHUNK_COUNT
-    ${NRC_ENGINE_CHUNK_COUNT}
-    PARENT_SCOPE
-)
-message(STATUS "Engine to be packed in ${NRC_ENGINE_CHUNK_COUNT} chunks")
+if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
+    set(NRC_ENGINE_CHUNK_COUNT 1)
+    set(NRC_ENGINE_CHUNK_COUNT
+        ${NRC_ENGINE_CHUNK_COUNT}
+        PARENT_SCOPE
+    )
+    message(STATUS "Engine to be packed in ${NRC_ENGINE_CHUNK_COUNT} chunks")
 
-add_custom_command(
-    TARGET narechi-engine
-    POST_BUILD
-    COMMAND
-        ${CMAKE_COMMAND} -DNRC_PLAYER_BINARY=$<TARGET_FILE:narechi-engine>
-        -DNRC_SOURCE_DIR=${CMAKE_SOURCE_DIR}
-        -DNRC_LAUNCHER_BIN_DIR=$<TARGET_FILE_DIR:narechi-launcher>
-        -DNRC_PLAYER_CHUNK_COUNT=${NRC_ENGINE_CHUNK_COUNT} -P
-        ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
-)
+    add_custom_command(
+        TARGET narechi-engine
+        POST_BUILD
+        COMMAND
+            ${CMAKE_COMMAND} -DNRC_PLAYER_BINARY=$<TARGET_FILE:narechi-engine>
+            -DNRC_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+            -DNRC_LAUNCHER_BIN_DIR=$<TARGET_FILE_DIR:narechi-launcher>
+            -DNRC_PLAYER_CHUNK_COUNT=${NRC_ENGINE_CHUNK_COUNT} -P
+            ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
+    )
+else()
+endif()
