@@ -26,13 +26,13 @@ namespace narechi::editor
                     return;
                 }
 
-                // scene_query.each(
-                //     [this](flecs::entity e, scene::component::meta)
-                //     {
-                //         auto tree_scope =
-                //         gui::scope::tree_node_scope::create(
-                //             { .label = std::string(e.name().c_str()) });
-                //     });
+                scene_query.each(
+                    [this](flecs::entity e, scene::component::meta)
+                    {
+                        auto tree_scope =
+                        gui::scope::tree_node_scope::create(
+                            { .label = std::string(e.name().c_str()) });
+                    });
             });
     }
 
