@@ -101,19 +101,44 @@ namespace narechi::editor
                                     scene_path, scene_name);
                                 current_scene->awake();
 
+                                scene_hierarchy_panel->set_world(
+                                    current_scene->get_world());
+
                                 current_project->set_startup_scene_name(
                                     scene_name);
                                 current_project->save();
                             },
                         },
                         {
-                            .title = "Add Entity",
+                            .title = "New Entity",
                             .callback = 
                                 [this]()
                             {
                                 if (current_scene)
                                 {
-                                    current_scene->add_entity();
+                                    constexpr const char* default_entity_name = 
+                                        "New Entity";
+                                    if (current_scene->get_world()
+                                        .lookup(default_entity_name) == 0)
+                                    {
+                                        current_scene->add_entity(default_entity_name);
+                                        return;
+                                    }
+
+                                    int i = 1;
+                                    while (current_scene->get_world()
+                                        .lookup(
+                                            (std::string(default_entity_name) + 
+                                                " " + std::to_string(i))
+                                            .c_str())
+                                        > 0)
+                                    {
+                                        i++;
+                                    }
+
+                                    current_scene->add_entity(
+                                        (std::string(default_entity_name) + 
+                                        " " + std::to_string(i)));
                                 }
                             },
                         }
@@ -129,6 +154,7 @@ namespace narechi::editor
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
+        scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>();
         build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();
@@ -151,8 +177,7 @@ namespace narechi::editor
         if (current_scene)
         {
             current_scene->awake();
-            scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>(
-                std::make_optional<flecs::world>(current_scene->get_world()));
+            scene_hierarchy_panel->set_world(current_scene->get_world());
         }
     }
 
