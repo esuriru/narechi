@@ -129,7 +129,6 @@ namespace narechi::editor
 
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
-        scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>();
         build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();
@@ -152,6 +151,8 @@ namespace narechi::editor
         if (current_scene)
         {
             current_scene->awake();
+            scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>(
+                std::make_optional<flecs::world>(current_scene->get_world()));
         }
     }
 

@@ -135,4 +135,9 @@ namespace narechi::scene
     {
         return data->name;
     }
+
+    flecs::world scene::get_world() const
+    {
+        return data->world;
+    }
 }
