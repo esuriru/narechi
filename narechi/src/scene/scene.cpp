@@ -81,7 +81,12 @@ namespace narechi::scene
         data->world.progress(delta_time);
     }
 
-    void scene::add_entity()
+    void scene::add_entity(const std::string& name)
+    {
+        data->world.entity(name.c_str()).add<component::meta>();
+    }
+
+    void scene::add_sprite()
     {
         data->world.entity()
             .add<component::position>()
