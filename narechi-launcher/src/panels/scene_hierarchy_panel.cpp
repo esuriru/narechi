@@ -33,10 +33,18 @@ namespace narechi::editor
                 scene_world.value().each(
                     [&](flecs::entity e, scene::component::meta)
                     {
-                        gui::scope::tree_node_scope::create({
+                        auto node = gui::scope::tree_node_scope::create({
                             .id = e.id(),
+                            .selected = selection_ctx && selection_ctx->active
+                                && e == selection_ctx->selected_entity,
                             .label = std::string(e.name()),
                         });
+
+                        if (selection_ctx && node->is_clicked())
+                        {
+                            selection_ctx->active = true;
+                            selection_ctx->selected_entity = e;
+                        }
                     });
             });
     }
@@ -46,5 +54,11 @@ namespace narechi::editor
         scene_world = world;
         scene_query
             = world.query_builder<scene::component::meta>().cached().build();
+    }
+
+    void scene_hierarchy_panel::set_selection_context(
+        entity_selection_context* ctx)
+    {
+        selection_ctx = ctx;
     }
 }

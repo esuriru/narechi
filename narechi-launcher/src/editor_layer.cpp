@@ -1,6 +1,7 @@
 #include "editor_layer.hpp"
 
 #include "asset/sprite_asset.hpp"
+#include "entity_selection_context.hpp"
 #include "file_extensions.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/framebuffer.hpp"
@@ -155,7 +156,11 @@ namespace narechi::editor
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
         scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>();
-        inspector_panel = make_uptr<editor::inspector_panel>();
+        scene_hierarchy_panel->set_selection_context(&entity_selection_ctx);
+
+        inspector_panel
+            = make_uptr<editor::inspector_panel>(&entity_selection_ctx);
+
         build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "entity_selection_context.hpp"
 #include "narechi.hpp"
 
 #include "panels/editor_panel.hpp"
@@ -17,6 +18,7 @@ namespace narechi::editor
 
         void render() override;
         void set_world(flecs::world world);
+        void set_selection_context(entity_selection_context* ctx);
 
     private:
         sptr<narechi::gui::window> window;
@@ -24,5 +26,7 @@ namespace narechi::editor
         sptr<narechi::scene::scene> current_scene;
         std::optional<flecs::world> scene_world = std::nullopt;
         flecs::query<scene::component::meta> scene_query {};
+
+        entity_selection_context* selection_ctx = nullptr;
     };
 }

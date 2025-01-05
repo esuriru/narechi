@@ -2,6 +2,7 @@
 
 #include "graphics/framebuffer.hpp"
 #include "narechi.hpp"
+#include "entity_selection_context.hpp"
 #include "project.hpp"
 
 #include "panels/content_browser_panel.hpp"
@@ -48,6 +49,8 @@ namespace narechi::editor
         uptr<build_panel> build_panel;
         uptr<scene_hierarchy_panel> scene_hierarchy_panel;
         uptr<inspector_panel> inspector_panel;
+
+        entity_selection_context entity_selection_ctx;
 
         bool render_sprite_import_panel;
         bool render_build_panel;
