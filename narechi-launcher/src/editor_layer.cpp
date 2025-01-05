@@ -155,6 +155,7 @@ namespace narechi::editor
         scene_view_panel
             = make_uptr<editor::scene_view_panel>(scene_framebuffer);
         scene_hierarchy_panel = make_uptr<editor::scene_hierarchy_panel>();
+        inspector_panel = make_uptr<editor::inspector_panel>();
         build_panel = make_uptr<editor::build_panel>();
 
         invalidate_proj_matrix();
@@ -191,6 +192,7 @@ namespace narechi::editor
         content_browser_panel->render();
         scene_view_panel->render();
         scene_hierarchy_panel->render();
+        inspector_panel->render();
 
         if (render_sprite_import_panel)
         {

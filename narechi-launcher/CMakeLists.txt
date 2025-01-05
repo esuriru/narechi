@@ -11,6 +11,7 @@ set(NARECHI_LAUNCHER_SOURCES
     "src/panels/scene_view_panel.cpp"
     "src/panels/build_panel.cpp"
     "src/panels/scene_hierarchy_panel.cpp"
+    "src/panels/inspector_panel.cpp"
     "src/panels/editor_panel.cpp"
 )
 
