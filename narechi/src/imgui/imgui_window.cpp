@@ -67,7 +67,12 @@ namespace narechi
         const std::function<void()>& render_pipeline_callback)
     {
         begin();
-        render_pipeline_callback();
+
+        if (active)
+        {
+            render_pipeline_callback();
+        }
+
         end();
     }
 

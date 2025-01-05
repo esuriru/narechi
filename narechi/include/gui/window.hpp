@@ -43,6 +43,7 @@ namespace narechi::gui
         virtual void add_element(sptr<text_input_element> element) = 0;
 
         void set_width_height(uint32_t width, uint32_t height);
+        void set_active(bool active);
 
         uint32_t get_width();
         uint32_t get_height();
@@ -55,5 +56,6 @@ namespace narechi::gui
         window_properties props;
 
         bool has_rendered = false;
+        bool active = true;
     };
 }
