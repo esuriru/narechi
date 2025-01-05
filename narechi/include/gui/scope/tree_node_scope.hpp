@@ -10,6 +10,7 @@ namespace narechi::gui::scope
 {
     struct tree_node_scope_properties
     {
+        unsigned long long id;
         std::string label;
     };
 

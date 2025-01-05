@@ -8,7 +8,8 @@ namespace narechi::scope
     imgui_tree_node_scope::imgui_tree_node_scope(
         const gui::scope::tree_node_scope_properties& props)
     {
-        imgui_node_open = ImGui::TreeNode(props.label.c_str());
+        imgui_node_open
+            = ImGui::TreeNodeEx((void*)props.id, 0, "%s", props.label.c_str());
     }
 
     imgui_tree_node_scope::~imgui_tree_node_scope()
