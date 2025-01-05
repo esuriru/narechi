@@ -23,7 +23,8 @@ namespace narechi::gui::scope
         static uptr<tree_node_scope> create(
             const tree_node_scope_properties& props);
 
-        virtual bool is_open() = 0;
+        virtual bool is_open() const = 0;
+        virtual bool is_clicked() const = 0;
 
     protected:
         tree_node_scope() = default;

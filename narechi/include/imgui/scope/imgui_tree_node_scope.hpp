@@ -15,7 +15,8 @@ namespace narechi::scope
             const gui::scope::tree_node_scope_properties& props);
         ~imgui_tree_node_scope();
 
-        bool is_open() override;
+        bool is_open() const override;
+        bool is_clicked() const override;
 
     private:
         bool imgui_node_open = true;
