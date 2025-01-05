@@ -1,6 +1,7 @@
 #include "panels/scene_hierarchy_panel.hpp"
 
 #include "scene/component.hpp"
+#include <stack>
 
 namespace narechi::editor
 {
@@ -12,7 +13,10 @@ namespace narechi::editor
     {
         if (world.has_value())
         {
-            scene_query = world.value().query<scene::component::meta>();
+            scene_query = world.value()
+                              .query_builder<scene::component::meta>()
+                              .cached()
+                              .build();
         }
     }
 
@@ -26,12 +30,13 @@ namespace narechi::editor
                     return;
                 }
 
-                scene_query.each(
-                    [this](flecs::entity e, scene::component::meta)
+                scene_world.value().each(
+                    [&](flecs::entity e, scene::component::meta)
                     {
-                        auto tree_scope =
-                        gui::scope::tree_node_scope::create(
-                            { .label = std::string(e.name().c_str()) });
+                        gui::scope::tree_node_scope::create({
+                            .id = e.id(),
+                            .label = std::string(e.name()),
+                        });
                     });
             });
     }
@@ -39,5 +44,7 @@ namespace narechi::editor
     void scene_hierarchy_panel::set_world(flecs::world world)
     {
         scene_world = world;
+        scene_query
+            = world.query_builder<scene::component::meta>().cached().build();
     }
 }
