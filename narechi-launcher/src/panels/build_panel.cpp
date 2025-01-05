@@ -76,6 +76,8 @@ namespace narechi::editor
                         embed::libnarechi_engine_length);
                 }
 
+                // TODO - Need to pack and unpack `libflecs.dll`
+
                 NRC_CORE_LOG("Exporting scene as raw files");
                 {
                     std::filesystem::path asset_dir = build_dir / "assets";
