@@ -37,7 +37,7 @@ namespace narechi::scene
 
         component(flecs::world& world)
         {
-            // world.module<component>();
+            world.module<component>();
 
             // From flecs examples
             world.component<std::string>()
@@ -114,6 +114,14 @@ namespace narechi::scene
                                   glm::inverse(glm::translate(glm::mat4(1.0f),
                                       glm::vec3(position.value, 0.0f))));
                           });
+
+            // world.system<component::meta>("UpdateSceneHierarchyUI")
+            //     .each(
+            //         [&](flecs::entity e, component::meta)
+            //         {
+            //             NRC_CORE_LOG("Test");
+            //         });
+            // auto query = world.query<component::meta>();
         }
     };
 }
