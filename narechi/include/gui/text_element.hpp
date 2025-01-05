@@ -10,7 +10,7 @@ namespace narechi::gui
 {
     struct text_element_properties
     {
-        std::string text;
+        std::string text {};
         float scale = 1.0f;
 
         // TODO - Flags

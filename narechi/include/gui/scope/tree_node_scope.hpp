@@ -10,8 +10,9 @@ namespace narechi::gui::scope
 {
     struct tree_node_scope_properties
     {
-        unsigned long long id;
-        std::string label;
+        unsigned long long id = 0;
+        bool selected = false;
+        std::string label {};
     };
 
     class NRC_API tree_node_scope
