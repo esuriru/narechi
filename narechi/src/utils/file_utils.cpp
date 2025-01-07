@@ -7,10 +7,11 @@ extern narechi::file::nfd_context* get_nfd_ctx();
 
 namespace narechi::utils::file
 {
-    std::optional<std::string> open_file_dialog()
+    std::optional<std::string> open_file_dialog(
+        const ::narechi::file::open_file_dialog_args& args)
     {
         NRC_ASSERT(get_nfd_ctx(), "nfde context unavailable");
-        return get_nfd_ctx()->open_file_dialog();
+        return get_nfd_ctx()->open_file_dialog(args);
     }
 
     std::optional<std::string> pick_folder()

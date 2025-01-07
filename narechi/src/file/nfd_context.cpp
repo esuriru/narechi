@@ -16,10 +16,28 @@ namespace narechi::file
         NFD_Quit();
     }
 
-    std::optional<std::string> nfd_context::open_file_dialog()
+    std::optional<std::string> nfd_context::open_file_dialog(
+        const open_file_dialog_args& args)
     {
         NFD::UniquePath nfd_out_path = nullptr;
-        nfdresult_t result = NFD::OpenDialog(nfd_out_path);
+
+        nfdresult_t result;
+        if (args.filters.empty())
+        {
+            result = NFD::OpenDialog(nfd_out_path);
+        }
+        else
+        {
+            std::vector<nfdfilteritem_t> filter_items {};
+            for (auto& filter : args.filters)
+            {
+                filter_items.push_back(
+                    { filter.first.c_str(), filter.second.c_str() });
+            }
+
+            result = NFD::OpenDialog(
+                nfd_out_path, filter_items.data(), filter_items.size());
+        }
 
         if (result == NFD_OKAY)
         {
