@@ -10,6 +10,7 @@
 #include "panels/sprite_import_panel.hpp"
 #include "scene/scene.hpp"
 #include "asset/asset_extensions.hpp"
+#include "utils/file_utils.hpp"
 
 #include <filesystem>
 
@@ -30,10 +31,11 @@ namespace narechi::editor
                     .sub_menu_items = 
                     { 
                         {
-                            .title = "Open File",
+                            .title = "Show Asset Dir in Explorer",
                             .callback =
-                                []()
+                                [this]()
                             {
+                                utils::file::open_explorer_in_dir(asset_dir);
                             },
                         },
                         {
