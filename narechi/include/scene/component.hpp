@@ -98,12 +98,12 @@ namespace narechi::scene
                           [&](component::position& position,
                               const component::scene_camera& scene_camera)
                           {
-                              static glm::vec2 debug_pos {};
-                              static float elapsed_time;
+                              //   static glm::vec2 debug_pos {};
+                              //   static float elapsed_time;
 
-                              elapsed_time += world.delta_time();
-                              debug_pos.x = sinf(elapsed_time);
-                              position.value = debug_pos;
+                              //   elapsed_time += world.delta_time();
+                              //   debug_pos.x = sinf(elapsed_time);
+                              //   position.value = debug_pos;
 
                               // Clear current framebuffer attachments
                               graphics::render_command::clear_color(
