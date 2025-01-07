@@ -49,43 +49,16 @@ namespace narechi::asset
             node.force_insert("Name", scene_data->name);
             node.force_insert(
                 "World Data", scene_data->world.to_json().c_str());
-
-            // TODO - Remove
-            // node.force_insert("Entities",
-            // YAML::Node(YAML::NodeType::Sequence));
-
-            // flecs::query query
-            //     = scene_data->world.query<scene::component::meta>();
-            // query.each(
-            //     [this](flecs::entity e, scene::component::meta)
-            //     {
-            //         node["Entities"].push_back(e.to_json().c_str());
-            //     });
         }
         else
         {
             node["Name"] = scene_data->name;
             node["World Data"] = scene_data->world.to_json().c_str();
-            // node["Entities"] = YAML::Node(YAML::NodeType::Sequence);
-
-            // flecs::query query
-            //     = scene_data->world.query<scene::component::meta>();
-            // query.each(
-            //     [this](flecs::entity e, scene::component::meta)
-            //     {
-            //         node["Entities"].push_back(e.to_json().c_str());
-            //     });
         }
-
-        // YAML::Emitter emitter;
-        // emitter << node;
-
-        // data = emitter.c_str();
     }
 
     void scene_asset::deserialize()
     {
-        // node = YAML::Load(data);
         if (!node.IsMap())
         {
             return;
@@ -101,11 +74,6 @@ namespace narechi::asset
             scene_data->name = node["Name"].as<std::string>();
             scene_data->world.from_json(
                 node["World Data"].as<std::string>().c_str());
-            // for (const auto& child_node : node["Entities"])
-            // {
-            //     scene_data->world.entity().from_json(
-            //         child_node.as<std::string>().c_str());
-            // }
         }
     }
 }
