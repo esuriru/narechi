@@ -6,6 +6,12 @@
         class class_name;                      \
     }
 
+#define NRC_FORWARD_DECL_STRUCT(ns, struct_name) \
+    namespace ns                                 \
+    {                                            \
+        struct struct_name;                      \
+    }
+
 #ifdef NRC_PLATFORM_WINDOWS
     #ifdef NRC_BUILD_DLL
         #define NRC_API __declspec(dllexport)
