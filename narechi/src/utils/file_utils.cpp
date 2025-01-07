@@ -19,4 +19,13 @@ namespace narechi::utils::file
         NRC_ASSERT(get_nfd_ctx(), "nfde context unavailable");
         return get_nfd_ctx()->pick_folder();
     }
+
+    void open_explorer_in_dir(const std::filesystem::path& path)
+    {
+#ifdef NRC_PLATFORM_WINDOWS
+        std::string command = "explorer ";
+        command = command + path.string();
+        system(command.c_str());
+#endif
+    }
 }
