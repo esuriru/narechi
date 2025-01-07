@@ -33,7 +33,7 @@ namespace narechi
         // TODO - Create GUID gen and append to double hash
         ImGui::InputText(props.label_on_left ? ("##" + props.label).c_str() :
                                                props.label.c_str(),
-            &props.text,
+            props.text,
             0);
         ImGui::PopItemWidth();
     }

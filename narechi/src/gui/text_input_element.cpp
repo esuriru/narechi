@@ -1,5 +1,6 @@
 #include "gui/text_input_element.hpp"
 
+#include "core/assert.hpp"
 #include "imgui/imgui_text_input_element.hpp"
 
 namespace narechi::gui
@@ -13,12 +14,14 @@ namespace narechi::gui
 
     std::string text_input_element::get_text() const
     {
-        return props.text;
+        NRC_ASSERT(props.text, "Text is null");
+        return *props.text;
     }
 
     void text_input_element::set_text(const std::string& text)
     {
-        props.text = text;
+        NRC_ASSERT(props.text, "Text is null");
+        (*props.text) = text;
     }
 
     float text_input_element::get_label_length()
@@ -37,5 +40,13 @@ namespace narechi::gui
     {
         // TODO - Verify props
         this->props = props;
+    }
+
+    text_input_element::~text_input_element()
+    {
+        if (props.owning)
+        {
+            delete props.text;
+        }
     }
 }

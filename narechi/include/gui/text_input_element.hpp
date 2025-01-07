@@ -13,7 +13,8 @@ namespace narechi::gui
         bool label_on_left = true;
         float label_gap = 0.0f;
         std::string label;
-        std::string text;
+        std::string* text = new std::string();
+        bool owning = true;
     };
 
     class NRC_API text_input_element : public element
@@ -30,6 +31,7 @@ namespace narechi::gui
 
     protected:
         text_input_element(const text_input_element_properties& props);
+        ~text_input_element();
 
         text_input_element_properties props;
     };
