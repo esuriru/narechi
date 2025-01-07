@@ -16,6 +16,7 @@ namespace narechi::gui
         float width = null_size;
         float height = null_size;
         bool flip_vertically = false;
+        bool same_line = false;
     };
 
     class NRC_API image_element : public element

@@ -12,6 +12,11 @@ namespace narechi
 
     void imgui_image_element::render()
     {
+        if (props.same_line)
+        {
+            ImGui::SameLine();
+        }
+
         if (props.texture)
         {
             ImGui::Image(reinterpret_cast<void*>(
