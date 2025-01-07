@@ -7,14 +7,14 @@ namespace narechi
 {
     void opengl_renderer_api::init()
     {
+        glEnable(GL_BLEND);
         glBlendFuncSeparate(GL_SRC_ALPHA,
             GL_ONE_MINUS_SRC_ALPHA,
             GL_ONE,
             GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
 
         // Enable depth
-        glEnable(GL_DEPTH_TEST);
+        // glEnable(GL_DEPTH_TEST);
     }
 
     void opengl_renderer_api::clear_color(const glm::vec4& color)
