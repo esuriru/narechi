@@ -142,7 +142,41 @@ namespace narechi::editor
                                         " " + std::to_string(i)));
                                 }
                             },
-                        }
+                        },
+                        {
+                            .title = "New Empty Sprite",
+                            .callback = 
+                                [this]()
+                            {
+                                if (current_scene)
+                                {
+                                    constexpr const char* default_entity_name = 
+                                        "New Sprite";
+                                    if (current_scene->get_world()
+                                        .lookup(default_entity_name) == 0)
+                                    {
+                                        current_scene->add_empty_sprite(
+                                            default_entity_name);
+                                        return;
+                                    }
+
+                                    int i = 1;
+                                    while (current_scene->get_world()
+                                        .lookup(
+                                            (std::string(default_entity_name) + 
+                                                " " + std::to_string(i))
+                                            .c_str())
+                                        > 0)
+                                    {
+                                        i++;
+                                    }
+
+                                    current_scene->add_empty_sprite(
+                                        (std::string(default_entity_name) + 
+                                        " " + std::to_string(i)));
+                                }
+                            },
+                        },
                     } 
                 }, 
             },
