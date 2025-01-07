@@ -32,7 +32,7 @@ namespace narechi::scene
         void update(float delta_time);
 
         void add_entity(const std::string& name);
-        void add_sprite();
+        void add_empty_sprite(const std::string& name);
 
         void save();
         void export_to_dir(const std::filesystem::path& dir, bool save = true);

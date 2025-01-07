@@ -86,12 +86,12 @@ namespace narechi::scene
         data->world.entity(name.c_str()).add<component::meta>();
     }
 
-    void scene::add_sprite()
+    void scene::add_empty_sprite(const std::string& name)
     {
-        data->world.entity()
+        data->world.entity(name.c_str())
             .add<component::position>()
             .add<component::meta>()
-            .set<component::sprite>({});
+            .add<component::sprite>();
     }
 
     void scene::save()
