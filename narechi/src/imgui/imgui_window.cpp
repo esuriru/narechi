@@ -68,7 +68,7 @@ namespace narechi
     {
         begin();
 
-        if (active)
+        if (default_render_active)
         {
             render_pipeline_callback();
         }

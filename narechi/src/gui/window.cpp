@@ -35,9 +35,9 @@ namespace narechi::gui
         set_width_height_impl(width, height);
     }
 
-    void window::set_active(bool active)
+    void window::set_default_render_active(bool active)
     {
-        this->active = active;
+        this->default_render_active = active;
     }
 
     uint32_t window::get_width()
