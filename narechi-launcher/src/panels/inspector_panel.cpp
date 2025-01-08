@@ -89,6 +89,64 @@ namespace narechi::editor
                 }
 
                 if (selection_ctx->selected_entity
+                        .has<scene::component::scene_camera>())
+                {
+                    auto& clear_color
+                        = selection_ctx->selected_entity
+                              .get_mut<scene::component::scene_camera>()
+                              ->clear_color;
+
+                    gui::text_element::create({
+                                                  .text = "Scene Camera",
+                                              })
+                        ->render();
+                    gui::text_element::create({
+                                                  .text = "Clear Color",
+                                              })
+                        ->render();
+
+                    // Render vector
+                    constexpr float width = 60.0f;
+                    constexpr float label_gap = -15.0f;
+
+                    gui::float_input_element::create(
+                        {
+                            .width = width,
+                            .label_gap = label_gap,
+                            .label = "R: ",
+                            .value = &clear_color.r,
+                        })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .width = width,
+                            .label_gap = label_gap,
+                            .label = "G: ",
+                            .value = &clear_color.g,
+                            .same_line = true,
+                        })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .width = width,
+                            .label_gap = label_gap,
+                            .label = "B: ",
+                            .value = &clear_color.b,
+                            .same_line = true,
+                        })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .width = width,
+                            .label_gap = label_gap,
+                            .label = "A: ",
+                            .value = &clear_color.a,
+                            .same_line = true,
+                        })
+                        ->render();
+                }
+
+                if (selection_ctx->selected_entity
                         .has<scene::component::sprite>())
                 {
                     auto& texture_asset_guid
