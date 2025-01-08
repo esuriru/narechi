@@ -13,6 +13,8 @@ namespace narechi::editor
         void render() override;
         void set_export_scene(sptr<scene::scene> scene);
 
+        sptr<gui::window> get_window() const;
+
     private:
         sptr<scene::scene> export_scene;
 

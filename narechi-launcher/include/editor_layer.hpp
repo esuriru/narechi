@@ -52,8 +52,6 @@ namespace narechi::editor
 
         entity_selection_context entity_selection_ctx;
 
-        bool render_build_panel;
-
         void invalidate_proj_matrix();
     };
 }

@@ -102,4 +102,9 @@ namespace narechi::editor
     {
         export_scene = scene;
     }
+
+    sptr<gui::window> build_panel::get_window() const
+    {
+        return window;
+    }
 }

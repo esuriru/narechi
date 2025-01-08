@@ -21,7 +21,6 @@ namespace narechi::editor
     editor_layer::editor_layer()
         : layer("EditorLayer")
         , current_scene(nullptr)
-        , render_build_panel(false)
     {
         menu_bar = gui::menu_bar::create({
             .menu_items = { 
@@ -60,7 +59,7 @@ namespace narechi::editor
                                     "Cannot build and export if no"
                                     " current scene exists");
                                 build_panel->set_export_scene(current_scene);
-                                render_build_panel = true;
+                                build_panel->get_window()->set_active(true);
                             },
                         }
                     },
@@ -198,6 +197,8 @@ namespace narechi::editor
             = make_uptr<editor::inspector_panel>(&entity_selection_ctx);
 
         build_panel = make_uptr<editor::build_panel>();
+        build_panel->get_window()->set_enable_toggle(true);
+        build_panel->get_window()->set_active(false);
 
         invalidate_proj_matrix();
     }
@@ -239,11 +240,7 @@ namespace narechi::editor
 
         // Conditional render
         sprite_import_panel->render();
-
-        if (render_build_panel)
-        {
-            build_panel->render();
-        }
+        build_panel->render();
     }
 
     void editor_layer::on_update(float dt)
