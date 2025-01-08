@@ -37,6 +37,7 @@ namespace narechi::editor
                 app::get().get_asset_database().add_asset(
                     asset::sprite_asset::create(
                         image_directory_input->get_text()));
+                window->set_active(false);
             } });
 
         window->add_element(gui::text_element::create(
@@ -55,5 +56,10 @@ namespace narechi::editor
         const std::filesystem::path& dir)
     {
         asset_dir = dir;
+    }
+
+    sptr<narechi::gui::window> sprite_import_panel::get_window() const
+    {
+        return window;
     }
 }

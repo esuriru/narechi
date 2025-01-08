@@ -21,7 +21,6 @@ namespace narechi::editor
     editor_layer::editor_layer()
         : layer("EditorLayer")
         , current_scene(nullptr)
-        , render_sprite_import_panel(false)
         , render_build_panel(false)
     {
         menu_bar = gui::menu_bar::create({
@@ -75,7 +74,8 @@ namespace narechi::editor
                             .callback =
                                 [this]()
                             {
-                                render_sprite_import_panel = true;
+                                sprite_import_panel->get_window()
+                                    ->set_active(true);
                             },
                         },
                     },
@@ -122,7 +122,7 @@ namespace narechi::editor
                                     constexpr const char* default_entity_name = 
                                         "New Entity";
                                     if (current_scene->get_world()
-                                        .lookup(default_entity_name) == 0)
+                                        .lookup(default_entity_name) == 0);
                                     {
                                         current_scene->add_entity(default_entity_name);
                                         return;
@@ -215,6 +215,8 @@ namespace narechi::editor
 
         sprite_import_panel = make_uptr<editor::sprite_import_panel>();
         sprite_import_panel->set_editor_asset_dir(asset_dir);
+        sprite_import_panel->get_window()->set_enable_toggle(true);
+        sprite_import_panel->get_window()->set_active(false);
 
         if (current_scene)
         {
@@ -235,10 +237,8 @@ namespace narechi::editor
         scene_hierarchy_panel->render();
         inspector_panel->render();
 
-        if (render_sprite_import_panel)
-        {
-            sprite_import_panel->render();
-        }
+        // Conditional render
+        sprite_import_panel->render();
 
         if (render_build_panel)
         {

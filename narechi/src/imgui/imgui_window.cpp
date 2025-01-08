@@ -1,5 +1,6 @@
 #include "imgui/imgui_window.hpp"
 
+#include "core/logger.hpp"
 #include "gui/text_input_element.hpp"
 #include "gui/window.hpp"
 #include "imgui.h"
@@ -30,7 +31,11 @@ namespace narechi
             has_rendered = false;
         }
 
-        ImGui::Begin(props.name.c_str(), 0, 0);
+        if (enable_toggle)
+        {
+            NRC_CORE_LOG(active ? "true" : "false");
+        }
+        ImGui::Begin(props.name.c_str(), enable_toggle ? &active : nullptr, 0);
         size = ImGui::GetWindowSize();
         props.width = size.x;
         props.height = size.y;
@@ -66,6 +71,11 @@ namespace narechi
     void imgui_window::render(
         const std::function<void()>& render_pipeline_callback)
     {
+        if (enable_toggle && !active)
+        {
+            return;
+        }
+
         begin();
 
         if (default_render_active)

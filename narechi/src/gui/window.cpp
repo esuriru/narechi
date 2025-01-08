@@ -40,6 +40,16 @@ namespace narechi::gui
         this->default_render_active = active;
     }
 
+    void window::set_active(bool active)
+    {
+        this->active = active;
+    }
+
+    void window::set_enable_toggle(bool enable_toggle)
+    {
+        this->enable_toggle = enable_toggle;
+    }
+
     uint32_t window::get_width()
     {
         return props.width;

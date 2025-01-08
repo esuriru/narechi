@@ -45,6 +45,9 @@ namespace narechi::gui
         void set_width_height(uint32_t width, uint32_t height);
         void set_default_render_active(bool active);
 
+        void set_active(bool active);
+        void set_enable_toggle(bool enable_toggle);
+
         uint32_t get_width();
         uint32_t get_height();
 
@@ -57,5 +60,7 @@ namespace narechi::gui
 
         bool has_rendered = false;
         bool default_render_active = true;
+        bool active = true;
+        bool enable_toggle = false;
     };
 }

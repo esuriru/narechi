@@ -15,6 +15,8 @@ namespace narechi::editor
         void render() override;
         void set_editor_asset_dir(const std::filesystem::path& dir);
 
+        sptr<narechi::gui::window> get_window() const;
+
     private:
         sptr<narechi::gui::window> window;
         sptr<narechi::gui::text_input_element> image_directory_input;
