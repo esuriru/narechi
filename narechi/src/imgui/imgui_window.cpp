@@ -31,10 +31,6 @@ namespace narechi
             has_rendered = false;
         }
 
-        if (enable_toggle)
-        {
-            NRC_CORE_LOG(active ? "true" : "false");
-        }
         ImGui::Begin(props.name.c_str(), enable_toggle ? &active : nullptr, 0);
         size = ImGui::GetWindowSize();
         props.width = size.x;
