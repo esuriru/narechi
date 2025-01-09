@@ -69,20 +69,54 @@ namespace narechi::editor
                               .get_mut<scene::component::position>()
                               ->value;
 
+                    const std::string custom_id[2] = { "pos1", "pos2" };
+
                     gui::text_element::create({
                                                   .text = "Position",
                                               })
                         ->render();
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[0],
                             .label = "X: ",
                             .value = &position_value.x,
                         })
                         ->render();
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[1],
                             .label = "Y: ",
                             .value = &position_value.y,
+                            .same_line = true,
+                        })
+                        ->render();
+                }
+
+                if (selection_ctx->selected_entity
+                        .has<scene::component::scale>())
+                {
+                    auto& value = selection_ctx->selected_entity
+                                      .get_mut<scene::component::scale>()
+                                      ->value;
+
+                    const std::string custom_id[2] = { "scale1", "scale2" };
+
+                    gui::text_element::create({
+                                                  .text = "Scale",
+                                              })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .custom_id = custom_id[0],
+                            .label = "X: ",
+                            .value = &value.x,
+                        })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .custom_id = custom_id[1],
+                            .label = "Y: ",
+                            .value = &value.y,
                             .same_line = true,
                         })
                         ->render();
@@ -109,8 +143,12 @@ namespace narechi::editor
                     constexpr float width = 60.0f;
                     constexpr float label_gap = -15.0f;
 
+                    const std::string custom_id[4]
+                        = { "cc1", "cc2", "cc3", "cc4" };
+
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[0],
                             .width = width,
                             .label_gap = label_gap,
                             .label = "R: ",
@@ -119,6 +157,7 @@ namespace narechi::editor
                         ->render();
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[1],
                             .width = width,
                             .label_gap = label_gap,
                             .label = "G: ",
@@ -128,6 +167,7 @@ namespace narechi::editor
                         ->render();
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[2],
                             .width = width,
                             .label_gap = label_gap,
                             .label = "B: ",
@@ -137,6 +177,7 @@ namespace narechi::editor
                         ->render();
                     gui::float_input_element::create(
                         {
+                            .custom_id = custom_id[3],
                             .width = width,
                             .label_gap = label_gap,
                             .label = "A: ",
