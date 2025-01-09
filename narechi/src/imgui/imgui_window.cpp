@@ -31,8 +31,23 @@ namespace narechi
             has_rendered = false;
         }
 
-        ImGui::Begin(props.name.c_str(), enable_toggle ? &active : nullptr, 0);
-        size = ImGui::GetWindowSize();
+        ImGuiWindowFlags flags = 0;
+
+        if (props.flags & gui::window_flags::no_vertical_scrollbar)
+        {
+            flags |= ImGuiWindowFlags_NoScrollbar;
+        }
+
+        if (props.flags & gui::window_flags::no_padding)
+        {
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, { 0.0f, 0.0f });
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
+        }
+
+        ImGui::Begin(
+            props.name.c_str(), enable_toggle ? &active : nullptr, flags);
+        // size = ImGui::GetWindowSize();
+        size = ImGui::GetWindowContentRegionMax();
         props.width = size.x;
         props.height = size.y;
     }
@@ -49,6 +64,11 @@ namespace narechi
         }
 
         ImGui::End();
+
+        if (props.flags & gui::window_flags::no_padding)
+        {
+            ImGui::PopStyleVar(2);
+        }
     }
 
     void imgui_window::render()

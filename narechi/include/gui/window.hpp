@@ -13,6 +13,8 @@ namespace narechi::gui
     enum class window_flags
     {
         align_text_elements = 1 << 0,
+        no_padding = 1 << 2,
+        no_vertical_scrollbar = 1 << 3,
     };
 
     NRC_ENUM_FLAG_OPERATORS(window_flags);
