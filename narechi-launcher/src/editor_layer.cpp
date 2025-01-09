@@ -11,6 +11,7 @@
 #include "scene/scene.hpp"
 #include "asset/asset_extensions.hpp"
 #include "utils/file_utils.hpp"
+#include "scene/component.hpp"
 
 #include <filesystem>
 
@@ -175,6 +176,25 @@ namespace narechi::editor
                                     current_scene->add_empty_sprite(
                                         (std::string(default_entity_name) + 
                                         " " + std::to_string(i)));
+                                }
+                            },
+                        },
+                    } 
+                }, 
+                { 
+                    .title = "Component",
+                    .sub_menu_items = 
+                    { 
+                        {
+                            .title = "Add Scale",
+                            .callback =
+                                [this]()
+                            {
+                                if (entity_selection_ctx.active)
+                                {
+                                    using namespace narechi::scene;
+                                    entity_selection_ctx.selected_entity
+                                        .add<component::scale>();
                                 }
                             },
                         },
