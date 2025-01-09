@@ -121,7 +121,7 @@ namespace narechi::editor
                                     constexpr const char* default_entity_name = 
                                         "New Entity";
                                     if (current_scene->get_world()
-                                        .lookup(default_entity_name) == 0);
+                                        .lookup(default_entity_name) == 0)
                                     {
                                         current_scene->add_entity(default_entity_name);
                                         return;
