@@ -10,7 +10,7 @@ namespace narechi::gui
     class NRC_API element
     {
     public:
-        element();
+        element(bool generate_uid = true);
 
         virtual void render() = 0;
         void generate_uid();

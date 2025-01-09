@@ -36,8 +36,8 @@ namespace narechi
 
         ImGui::PushItemWidth(props.width);
         // TODO - Create GUID gen and append to double hash
-        ImGui::InputFloat(props.label_on_left ? ("##" + props.label).c_str() :
-                                                props.label.c_str(),
+        ImGui::InputFloat(
+            props.label_on_left ? ("##" + uid).c_str() : props.label.c_str(),
             props.value);
         ImGui::PopItemWidth();
     }

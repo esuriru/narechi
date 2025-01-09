@@ -9,6 +9,7 @@ namespace narechi::gui
 {
     struct float_input_element_properties
     {
+        std::string custom_id {};
         float width = 100.0f;
         bool label_on_left = true;
         float label_gap = 0.0f;

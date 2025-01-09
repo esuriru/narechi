@@ -24,8 +24,10 @@ namespace narechi::gui
 
     float_input_element::float_input_element(
         const float_input_element_properties& props)
-        : props(props)
+        : element(static_cast<bool>(props.custom_id.empty()))
+        , props(props)
     {
+        set_custom_uid(props.custom_id);
         // TODO - Verify props
     }
 }

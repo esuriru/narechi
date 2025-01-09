@@ -4,9 +4,12 @@
 
 namespace narechi::gui
 {
-    element::element()
+    element::element(bool generate_uid)
     {
-        generate_uid();
+        if (generate_uid)
+        {
+            this->generate_uid();
+        }
     }
 
     void element::generate_uid()
