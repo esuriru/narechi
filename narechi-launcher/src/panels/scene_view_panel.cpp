@@ -8,8 +8,13 @@ namespace narechi::editor
     scene_view_panel::scene_view_panel(sptr<graphics::framebuffer> framebuffer)
         : editor_panel("Scene View")
         , scene_framebuffer(framebuffer)
-        , window(gui::window::create(
-              { .name = "Scene", .width = 600, .height = 800 }))
+        , window(gui::window::create({
+              .name = "Scene",
+              .width = 600,
+              .height = 800,
+              .flags = gui::window_flags::no_padding
+                  | gui::window_flags::no_vertical_scrollbar,
+          }))
     {
         scene_image = gui::image_element::create({
             .texture_gfx_ctx_id = framebuffer->get_color_attachment()->get_id(),
