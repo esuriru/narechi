@@ -20,6 +20,11 @@ namespace narechi::scene
             glm::vec2 value = glm::vec2(0.0f, 0.0f);
         };
 
+        struct scale
+        {
+            glm::vec2 value = glm::vec2(1.0f, 1.0f);
+        };
+
         struct scene_camera
         {
             glm::vec4 clear_color { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -63,6 +68,7 @@ namespace narechi::scene
                 .member("a", &glm::vec4::w);
 
             world.component<position>().member<glm::vec2>("value");
+            world.component<scale>().member<glm::vec2>("value");
             world.component<sprite>().member<std::string>("texture_asset_guid");
 
             world.component<scene_camera>().member<glm::vec4>("clear_color");
@@ -71,10 +77,12 @@ namespace narechi::scene
             flecs::system sprite_render_system
                 = world
                       .system<const component::position,
+                          const component::scale*,
                           const component::sprite>("SpriteRender")
                       .kind(flecs::OnUpdate)
                       .each(
                           [](const component::position& pos,
+                              const component::scale* scale,
                               const component::sprite& sprite)
                           {
                               auto& database = app::get().get_asset_database();
@@ -83,8 +91,13 @@ namespace narechi::scene
                                       sprite.texture_asset_guid);
                               if (sprite_asset)
                               {
+                                  glm::vec2 quad_scale { 1.0f, 1.0f };
+                                  if (scale)
+                                  {
+                                      quad_scale = scale->value;
+                                  }
                                   graphics::render2d::submit_quad(pos.value,
-                                      { 20, 20 },
+                                      quad_scale,
                                       sprite_asset->get_texture());
                               }
                           });
@@ -98,13 +111,6 @@ namespace narechi::scene
                           [&](component::position& position,
                               const component::scene_camera& scene_camera)
                           {
-                              //   static glm::vec2 debug_pos {};
-                              //   static float elapsed_time;
-
-                              //   elapsed_time += world.delta_time();
-                              //   debug_pos.x = sinf(elapsed_time);
-                              //   position.value = debug_pos;
-
                               // Clear current framebuffer attachments
                               graphics::render_command::clear_color(
                                   scene_camera.clear_color);
@@ -114,14 +120,6 @@ namespace narechi::scene
                                   glm::inverse(glm::translate(glm::mat4(1.0f),
                                       glm::vec3(position.value, 0.0f))));
                           });
-
-            // world.system<component::meta>("UpdateSceneHierarchyUI")
-            //     .each(
-            //         [&](flecs::entity e, component::meta)
-            //         {
-            //             NRC_CORE_LOG("Test");
-            //         });
-            // auto query = world.query<component::meta>();
         }
     };
 }
