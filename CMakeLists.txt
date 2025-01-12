@@ -80,6 +80,13 @@ FetchContent_Declare(
         SHA256=0F867768CE55F2D8FA361BE82F87F0EA5E51438BC47CA30CD92C9FD8B014E84E
 )
 
+FetchContent_Declare(
+    sol2
+    URL https://github.com/ThePhD/sol2/archive/refs/tags/v3.3.0.zip 
+    URL_HASH
+        SHA256=A7489629C596C8A67108AD3603CB6A90073BA6647E50441C8C55492254190D67
+)
+
 add_subdirectory("deps/glm")
 target_link_libraries(narechi-engine PUBLIC glm::glm)
 
@@ -105,6 +112,9 @@ target_link_libraries(narechi-engine PUBLIC stb)
 
 add_subdirectory("deps/stduuid")
 target_link_libraries(narechi-engine PUBLIC stduuid)
+
+add_subdirectory("deps/sol2")
+target_link_libraries(narechi-engine PUBLIC sol2::sol2)
 
 if(${NRC_RENDERER_API} STREQUAL "vulkan")
     message(STATUS "narechi using Vulkan")
