@@ -3,11 +3,7 @@
 #include "asset/asset_extensions.hpp"
 #include "asset/scene_asset.hpp"
 #include "asset/sprite_asset.hpp"
-#include "core/core.hpp"
-
-#include <string>
-#include <unordered_map>
-#include <functional>
+#include "asset/component_def_asset.hpp"
 
 namespace narechi::asset
 {
@@ -24,5 +20,11 @@ namespace narechi::asset
     struct extension<narechi::asset::scene_asset>
     {
         static constexpr const char* value = ".nrcscene";
+    };
+
+    template<>
+    struct extension<narechi::asset::component_def_asset>
+    {
+        static constexpr const char* value = ".nrccdef";
     };
 }
