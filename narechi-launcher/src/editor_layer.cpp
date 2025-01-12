@@ -1,5 +1,6 @@
 #include "editor_layer.hpp"
 
+#include "asset/component_def_asset.hpp"
 #include "asset/sprite_asset.hpp"
 #include "entity_selection_context.hpp"
 #include "file_extensions.hpp"
@@ -78,6 +79,54 @@ namespace narechi::editor
                                     ->set_active(true);
                             },
                         },
+                        {
+                            .title = "Scan for Component definitions",
+                            .callback =
+                                [this]()
+                            {
+                                using namespace std::filesystem;
+
+                                if (component_def_asset)
+                                {
+                                    NRC_CORE_LOG(
+                                        "Component definition already exists");
+                                    return;
+                                }
+
+                                for (const auto& it :
+                                    recursive_directory_iterator(
+                                        asset_dir))
+                                {
+                                    if (it.is_regular_file())
+                                    {
+                                        namespace a = narechi::asset;
+                                        if (it.path().extension()
+                                            == a::extension<a::component_def_asset>
+                                                ::value)
+                                        {
+                                            component_def_asset
+                                                = a::component_def_asset::load(
+                                                    it.path());
+                                            if (component_def_asset)
+                                            {
+                                                // Import user-defined 
+                                                // components
+                                                ecs_script_run(
+                                                    current_scene->get_world(),
+                                                    "User-defined Components",
+                                                    component_def_asset
+                                                        ->get_code()
+                                                        .c_str());
+                                            }
+                                            app::get()
+                                                .get_asset_database()
+                                                .add_asset(
+                                                    component_def_asset);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                 },
                 { 
@@ -124,7 +173,8 @@ namespace narechi::editor
                                     if (current_scene->get_world()
                                         .lookup(default_entity_name) == 0)
                                     {
-                                        current_scene->add_entity(default_entity_name);
+                                        current_scene->add_entity(
+                                            default_entity_name);
                                         return;
                                     }
 
@@ -242,6 +292,15 @@ namespace narechi::editor
         if (current_scene)
         {
             current_scene->awake();
+
+            if (component_def_asset)
+            {
+                // Import user-defined components
+                ecs_script_run(current_scene->get_world(),
+                    "User-defined Components",
+                    component_def_asset->get_code().c_str());
+            }
+
             scene_hierarchy_panel->set_world(current_scene->get_world());
         }
     }
@@ -341,17 +400,32 @@ namespace narechi::editor
             return;
         }
 
+        constexpr uint32_t allowed_definition_count = 1;
+        uint32_t component_definitions = 0;
+
         // TODO - Dirty code to change
         for (const auto& it :
             std::filesystem::recursive_directory_iterator(asset_dir))
         {
-            if (it.is_regular_file()
-                && it.path().extension()
-                    == asset::extension<asset::sprite_asset>::value)
+            if (it.is_regular_file())
             {
-                app::get().get_asset_database().add_asset(
-                    asset::sprite_asset::load_data(it.path().parent_path()
-                        / (it.path().stem().string() + ".png")));
+                if (it.path().extension()
+                    == asset::extension<asset::sprite_asset>::value)
+                {
+                    app::get().get_asset_database().add_asset(
+                        asset::sprite_asset::load_data(it.path().parent_path()
+                            / (it.path().stem().string() + ".png")));
+                }
+                else if (component_definitions < allowed_definition_count
+                    && it.path().extension()
+                        == asset::extension<asset::component_def_asset>::value)
+                {
+                    component_def_asset
+                        = asset::component_def_asset::load(it.path());
+                    app::get().get_asset_database().add_asset(
+                        component_def_asset);
+                    component_definitions++;
+                }
             }
         }
     }

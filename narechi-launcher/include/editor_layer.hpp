@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asset/component_def_asset.hpp"
 #include "graphics/framebuffer.hpp"
 #include "narechi.hpp"
 #include "entity_selection_context.hpp"
@@ -40,6 +41,7 @@ namespace narechi::editor
 
         sptr<scene::scene> current_scene;
         sptr<graphics::framebuffer> scene_framebuffer;
+        sptr<asset::component_def_asset> component_def_asset;
 
         sptr<gui::menu_bar> menu_bar;
 
