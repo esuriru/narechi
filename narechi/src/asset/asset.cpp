@@ -8,12 +8,15 @@
 
 namespace narechi::asset
 {
-    asset::asset(const std::filesystem::path& path)
+    asset::asset(const std::filesystem::path& path,
+        const std::string& custom_guid, bool is_yaml_asset)
         : path(path)
         , is_owning(false)
+        , is_yaml_asset(is_yaml_asset)
     {
-        // TODO - Utils function
-        guid = uuids::to_string(uuids::uuid_system_generator {}());
+        guid = custom_guid.empty() ?
+            uuids::to_string(uuids::uuid_system_generator {}()) :
+            custom_guid;
     }
 
     const std::filesystem::path& asset::get_path() const
@@ -29,10 +32,20 @@ namespace narechi::asset
             std::ostringstream buffer;
             buffer << file_in.rdbuf();
 
-            node = YAML::Load(buffer.str());
+            if (is_yaml_asset)
+            {
+                node = YAML::Load(buffer.str());
+            }
+            else
+            {
+                data = buffer.str();
+            }
         }
 
-        deserialize_guid_yaml();
+        if (is_yaml_asset)
+        {
+            deserialize_guid_yaml();
+        }
         deserialize();
     }
 
@@ -43,15 +56,26 @@ namespace narechi::asset
 
     void asset::write(const std::filesystem::path& path)
     {
-        serialize_guid_yaml();
-        serialize();
+        if (is_yaml_asset)
+        {
+            serialize_guid_yaml();
+        }
 
-        YAML::Emitter emitter;
-        emitter << node;
+        serialize();
 
         std::ofstream file_out(path);
         NRC_ASSERT(file_out.is_open(), "Asset directory is not valid");
-        file_out << emitter.c_str();
+
+        if (is_yaml_asset)
+        {
+            YAML::Emitter emitter;
+            emitter << node;
+            file_out << emitter.c_str();
+        }
+        else
+        {
+            file_out << data;
+        }
     }
 
     void asset::serialize_guid_yaml()

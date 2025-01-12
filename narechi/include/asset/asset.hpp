@@ -11,7 +11,8 @@ namespace narechi::asset
     class NRC_API asset
     {
     public:
-        asset(const std::filesystem::path& path);
+        asset(const std::filesystem::path& path,
+            const std::string& custom_guid = {}, bool is_yaml_asset = true);
 
         const std::filesystem::path& get_path() const;
 
@@ -28,9 +29,11 @@ namespace narechi::asset
         YAML::Node node;
         std::string data;
         std::filesystem::path path;
-        bool is_owning;
 
         std::string guid;
+
+        bool is_owning;
+        bool is_yaml_asset;
 
     private:
         virtual void serialize() = 0;
