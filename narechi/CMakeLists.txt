@@ -8,6 +8,7 @@ set(NARECHI_SOURCES
     "src/asset/asset.cpp"
     "src/asset/scene_asset.cpp"
     "src/asset/sprite_asset.cpp"
+    "src/asset/component_def_asset.cpp"
     "src/file/nfd_context.cpp"
     "src/gui/window.cpp"
     "src/gui/element.cpp"
