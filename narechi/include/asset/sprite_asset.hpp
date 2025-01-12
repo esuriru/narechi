@@ -2,7 +2,6 @@
 
 #include "graphics/texture2d.hpp"
 #include "asset/asset.hpp"
-#include "yaml-cpp/yaml.h"
 
 NRC_FORWARD_DECL_CLASS(narechi::graphics, sprite)
 
