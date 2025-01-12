@@ -66,6 +66,26 @@ namespace narechi::scene
 
     void scene::awake()
     {
+        // data->world.script("User-defined components")
+        //     .code(R"(
+        //     using flecs.meta;
+
+        //     struct scale {
+        //         x = f32
+        //         y = f32
+        //     }
+        //     )")
+        //     .run();
+
+        // ecs_script_run(data->world, "User-defined components", R"(
+        //     using flecs.meta;
+
+        //     struct scale {
+        //         x = f32
+        //         y = f32
+        //     }
+        //     )");
+
         if (!data->world.lookup("SceneCamera"))
         {
             NRC_CORE_INFO("Created SceneCamera because there is none");
