@@ -8,6 +8,7 @@
 #include "imgui/imgui_context.hpp"
 #include "file/nfd_context.hpp"
 #include "asset/database.hpp"
+#include "script/sol2_context.hpp"
 
 #include <utility>
 #include <queue>
@@ -67,6 +68,8 @@ namespace narechi
         uptr<graphics::graphics_context> gfx_ctx;
         uptr<imgui_context> imgui_ctx;
         uptr<file::nfd_context> nfd_ctx;
+        uptr<script::sol2_context> sol2_ctx;
+
         asset::database asset_database;
 
         layer_stack layer_stack;
