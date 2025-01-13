@@ -10,6 +10,7 @@ namespace narechi::script
     {
     public:
         sol2_context();
+        sol::state& get_lua_state();
 
     private:
         sol::state lua_state;
