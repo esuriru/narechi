@@ -10,6 +10,7 @@ set(NARECHI_SOURCES
     "src/asset/sprite_asset.cpp"
     "src/asset/component_def_asset.cpp"
     "src/script/sol2_context.cpp"
+    "src/script/lua_script.cpp"
     "src/file/nfd_context.cpp"
     "src/gui/window.cpp"
     "src/gui/element.cpp"
