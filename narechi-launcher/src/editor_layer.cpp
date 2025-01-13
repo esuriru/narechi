@@ -299,6 +299,33 @@ namespace narechi::editor
                 ecs_script_run(current_scene->get_world(),
                     "User-defined Components",
                     component_def_asset->get_code().c_str());
+
+                flecs::world world = current_scene->get_world();
+                flecs::entity rotation_component = world.lookup("rotation");
+                if (rotation_component > 0)
+                {
+                    world.entity().add(rotation_component);
+
+                    auto query = world.query_builder().with("rotation").build();
+
+                    int test_index = query.find_var("test");
+
+                    if (query.count() > 0)
+                    {
+                        query.each(
+                            [&](flecs::iter& it, size_t row)
+                            {
+                                flecs::entity e = it.entity(row);
+                                void* ptr = e.ensure(rotation_component);
+
+                                flecs::cursor cursor
+                                    = world.cursor(rotation_component, ptr);
+                                cursor.push();
+                                cursor.set_float(20.0f);
+                                cursor.pop();
+                            });
+                    }
+                }
             }
 
             scene_hierarchy_panel->set_world(current_scene->get_world());
