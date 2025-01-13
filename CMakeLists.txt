@@ -18,7 +18,9 @@ set(NRC_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
 set(NRC_DISABLE_BUILD_EMBED ON)
 
 if(DEFINED NRC_DISABLE_BUILD_EMBED)
-    message(NOTICE "Build embed is disabled. Build in engine will/might not work")
+    message(NOTICE
+            "Build embed is disabled. Build in engine will/might not work"
+    )
 endif()
 
 add_subdirectory("narechi")
@@ -82,9 +84,16 @@ FetchContent_Declare(
 
 FetchContent_Declare(
     sol2
-    URL https://github.com/ThePhD/sol2/archive/refs/tags/v3.3.0.zip 
+    URL https://github.com/ThePhD/sol2/archive/refs/tags/v3.3.0.zip
     URL_HASH
         SHA256=A7489629C596C8A67108AD3603CB6A90073BA6647E50441C8C55492254190D67
+)
+
+FetchContent_Declare(
+    lua
+    URL https://github.com/lua/lua/archive/refs/tags/v5.4.7.zip
+    URL_HASH
+        SHA256=22AB10F9F67BF12FD1EFEADF72BA1BEF721D2B54CED797A41EC556AE3BFBEE64
 )
 
 add_subdirectory("deps/glm")
@@ -112,6 +121,9 @@ target_link_libraries(narechi-engine PUBLIC stb)
 
 add_subdirectory("deps/stduuid")
 target_link_libraries(narechi-engine PUBLIC stduuid)
+
+add_subdirectory("deps/lua")
+target_link_libraries(narechi-engine PUBLIC lua::lua)
 
 add_subdirectory("deps/sol2")
 target_link_libraries(narechi-engine PUBLIC sol2::sol2)
