@@ -31,6 +31,7 @@ namespace narechi
         graphics::graphics_context& get_graphics_context();
         imgui_context& get_imgui_context();
         file::nfd_context& get_nfd_context();
+        script::sol2_context& get_sol2_context();
         asset::database& get_asset_database();
 
     protected:

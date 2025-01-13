@@ -153,6 +153,12 @@ namespace narechi
         return *nfd_ctx;
     }
 
+    script::sol2_context& app::get_sol2_context()
+    {
+        NRC_ASSERT(sol2_ctx, "sol2 context is not created yet");
+        return *sol2_ctx;
+    }
+
     asset::database& app::get_asset_database()
     {
         return asset_database;
