@@ -48,6 +48,8 @@ namespace narechi
 
         nfd_ctx = make_uptr<file::nfd_context>();
         nfd_ctx->init();
+
+        sol2_ctx = make_uptr<script::sol2_context>();
     }
 
     void app::run()
