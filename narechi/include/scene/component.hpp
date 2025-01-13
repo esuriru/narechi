@@ -120,6 +120,24 @@ namespace narechi::scene
                                   glm::inverse(glm::translate(glm::mat4(1.0f),
                                       glm::vec3(position.value, 0.0f))));
                           });
+            // auto query
+            //     =
+            //     world.query_builder().with("rotation").src("$test").build();
+            // int test_index = query.find_var("test");
+
+            // query.each(
+            //     [&](flecs::iter& it, size_t index)
+            //     {
+            //         void* ptr =
+            //         it.entity(index).ensure(it.get_var(test_index));
+
+            //         flecs::world world = it.entity(index).world();
+            //         flecs::cursor cursor
+            //             = world.cursor(world.lookup("rotation"), ptr);
+            //         cursor.push();
+            //         cursor.set_float(20.0f);
+            //         cursor.pop();
+            //     });
         }
     };
 }
