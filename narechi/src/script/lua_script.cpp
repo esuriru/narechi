@@ -2,6 +2,7 @@
 
 #include "core/app.hpp"
 #include "core/logger.hpp"
+#include "script/raw_component_view.hpp"
 
 #include <unordered_map>
 #include <regex>
@@ -16,8 +17,10 @@ namespace narechi::script
     lua_script::lua_script(
         sol2_context& ctx, const std::string& code, flecs::world world)
     {
-        // auto& sol2_ctx = app::get().get_sol2_context();
-        // auto& lua_state = sol2_ctx.get_lua_state();
+        auto& lua_state = ctx.get_lua_state();
+        sol::protected_function_result result = lua_state.script(code);
+        NRC_ASSERT(result.valid(), "Could not compile lua script");
+
         auto map = get_function_argument_map(code);
 
         for (auto& kv_pair : map)
@@ -30,13 +33,13 @@ namespace narechi::script
             NRC_CORE_LOG(
                 "Creating query from script function: ", kv_pair.first);
 
-            auto builder = world.query_builder(kv_pair.first);
+            auto builder = world.query_builder();
 
             NRC_CORE_LOG("Validating arguments in world");
 
             unordered_map<string, std::vector<flecs::entity>> component_map;
 
-            int i;
+            int i = 0;
             for (auto& arg : kv_pair.second)
             {
                 NRC_CORE_LOG("Querying ", arg, "in world");
@@ -55,30 +58,23 @@ namespace narechi::script
 
             auto query = builder.cached().build();
 
-            auto& lua_state = ctx.get_lua_state();
-
-            query.run(
+            query.each(
                 [&](flecs::iter& it, size_t row)
                 {
                     flecs::entity e = it.entity(row);
 
                     for (auto& kv_pair : component_map)
                     {
-                        std::vector<void*> raw_components;
+                        std::vector<raw_component_view> raw_components;
                         for (auto& component : kv_pair.second)
                         {
                             void* ptr = e.ensure(component);
-                            raw_components.push_back(ptr);
+                            raw_components.push_back(
+                                raw_component_view(world, component, ptr));
                         }
 
-                        // sol::function func = lua_state[kv_pair.first];
-                        // sol::variadic_args args;
-                        // func.call(args);
-
-                        // flecs::cursor cursor = world.cursor(component, ptr);
-                        // cursor.push();
-                        // cursor.set_float(20.0f);
-                        // cursor.pop();
+                        sol::function func = lua_state[kv_pair.first];
+                        func(sol::as_args(raw_components));
                     }
                 });
         }
