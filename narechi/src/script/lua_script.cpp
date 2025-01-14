@@ -13,21 +13,74 @@ namespace narechi::script
     using std::unordered_map;
     using std::vector;
 
-    lua_script::lua_script(const std::string& code)
+    lua_script::lua_script(
+        sol2_context& ctx, const std::string& code, flecs::world world)
     {
         // auto& sol2_ctx = app::get().get_sol2_context();
         // auto& lua_state = sol2_ctx.get_lua_state();
-
         auto map = get_function_argument_map(code);
 
         for (auto& kv_pair : map)
         {
-            NRC_CORE_LOG("Function: ", kv_pair.first);
-            NRC_CORE_LOG("Arguments: ");
+            if (kv_pair.second.empty())
+            {
+                NRC_CORE_LOG("No function arguments detected, skipping");
+            }
+
+            NRC_CORE_LOG(
+                "Creating query from script function: ", kv_pair.first);
+
+            auto builder = world.query_builder(kv_pair.first);
+
+            NRC_CORE_LOG("Validating arguments in world");
+
+            unordered_map<string, std::vector<flecs::entity>> component_map;
+
+            int i;
             for (auto& arg : kv_pair.second)
             {
-                NRC_CORE_LOG(arg);
+                NRC_CORE_LOG("Querying ", arg, "in world");
+                flecs::entity component_entity = world.lookup(arg.c_str());
+                if (component_entity <= 0)
+                {
+                    NRC_CORE_LOG(arg,
+                        " does not exist in world, unable to create query");
+                }
+                component_map[kv_pair.first].push_back(component_entity);
+
+                NRC_CORE_LOG(
+                    "Valid query argument ", std::to_string(i++), ": ", arg);
+                builder.with(arg.c_str());
             }
+
+            auto query = builder.cached().build();
+
+            auto& lua_state = ctx.get_lua_state();
+
+            query.run(
+                [&](flecs::iter& it, size_t row)
+                {
+                    flecs::entity e = it.entity(row);
+
+                    for (auto& kv_pair : component_map)
+                    {
+                        std::vector<void*> raw_components;
+                        for (auto& component : kv_pair.second)
+                        {
+                            void* ptr = e.ensure(component);
+                            raw_components.push_back(ptr);
+                        }
+
+                        // sol::function func = lua_state[kv_pair.first];
+                        // sol::variadic_args args;
+                        // func.call(args);
+
+                        // flecs::cursor cursor = world.cursor(component, ptr);
+                        // cursor.push();
+                        // cursor.set_float(20.0f);
+                        // cursor.pop();
+                    }
+                });
         }
     }
 
