@@ -13,6 +13,7 @@
 #include "asset/asset_extensions.hpp"
 #include "utils/file_utils.hpp"
 #include "scene/component.hpp"
+#include "script/lua_script.hpp"
 
 #include <filesystem>
 
@@ -308,27 +309,24 @@ namespace narechi::editor
                 flecs::entity rotation_component = world.lookup("rotation");
                 if (rotation_component > 0)
                 {
-                    world.entity().add(rotation_component);
+                    flecs::entity test_entity
+                        = world.entity().add(rotation_component);
+                    void* raw_rotation_component
+                        = test_entity.ensure(rotation_component);
 
-                    auto query = world.query_builder().with("rotation").build();
+                    flecs::cursor cursor = world.cursor(
+                        rotation_component, raw_rotation_component);
+                    cursor.push();
+                    cursor.set_float(20.0f);
+                    cursor.pop();
 
-                    int test_index = query.find_var("test");
-
-                    if (query.count() > 0)
-                    {
-                        query.each(
-                            [&](flecs::iter& it, size_t row)
-                            {
-                                flecs::entity e = it.entity(row);
-                                void* ptr = e.ensure(rotation_component);
-
-                                flecs::cursor cursor
-                                    = world.cursor(rotation_component, ptr);
-                                cursor.push();
-                                cursor.set_float(20.0f);
-                                cursor.pop();
-                            });
-                    }
+                    script::lua_script script(app::get().get_sol2_context(),
+                        R"(
+                        function rotate_object(rotation)
+                            rotation:set_float(rotation:get_float() + 10)
+                        end
+                    )",
+                        current_scene->get_world());
                 }
             }
 
