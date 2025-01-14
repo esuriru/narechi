@@ -9,7 +9,7 @@
 
 namespace narechi::script
 {
-    class lua_script
+    class NRC_API lua_script
     {
     public:
         lua_script(
