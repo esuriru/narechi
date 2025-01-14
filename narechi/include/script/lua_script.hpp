@@ -17,5 +17,15 @@ namespace narechi::script
 
         std::unordered_map<std::string, std::vector<std::string>>
         get_function_argument_map(const std::string& code);
+
+        void call();
+
+    private:
+        sol2_context& ctx;
+        flecs::world world;
+
+        std::unordered_map<std::string, std::vector<flecs::entity>>
+            component_map;
+        flecs::query<> query;
     };
 }

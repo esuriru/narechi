@@ -16,12 +16,17 @@ namespace narechi::script
 
     lua_script::lua_script(
         sol2_context& ctx, const std::string& code, flecs::world world)
+        : ctx(ctx)
+        , world(world)
     {
         auto& lua_state = ctx.get_lua_state();
         sol::protected_function_result result = lua_state.script(code);
         NRC_ASSERT(result.valid(), "Could not compile lua script");
 
         auto map = get_function_argument_map(code);
+
+        constexpr std::string_view double_underscore = "__";
+        constexpr std::string_view dot = ".";
 
         for (auto& kv_pair : map)
         {
@@ -37,46 +42,29 @@ namespace narechi::script
 
             NRC_CORE_LOG("Validating arguments in world");
 
-            unordered_map<string, std::vector<flecs::entity>> component_map;
-
             int i = 0;
             for (auto& arg : kv_pair.second)
             {
-                NRC_CORE_LOG("Querying ", arg, "in world");
+                std::regex pattern("__");
+                arg = std::regex_replace(arg, pattern, "::");
+
+                NRC_CORE_LOG("Querying ", arg, " in world");
                 flecs::entity component_entity = world.lookup(arg.c_str());
                 if (component_entity <= 0)
                 {
                     NRC_CORE_LOG(arg,
                         " does not exist in world, unable to create query");
+                    return;
                 }
                 component_map[kv_pair.first].push_back(component_entity);
 
                 NRC_CORE_LOG(
                     "Valid query argument ", std::to_string(i++), ": ", arg);
-                builder.with(arg.c_str());
+                builder.with(component_entity);
             }
 
-            auto query = builder.cached().build();
-
-            query.each(
-                [&](flecs::iter& it, size_t row)
-                {
-                    flecs::entity e = it.entity(row);
-
-                    for (auto& kv_pair : component_map)
-                    {
-                        std::vector<raw_component_view> raw_components;
-                        for (auto& component : kv_pair.second)
-                        {
-                            void* ptr = e.ensure(component);
-                            raw_components.push_back(
-                                raw_component_view(world, component, ptr));
-                        }
-
-                        sol::function func = lua_state[kv_pair.first];
-                        func(sol::as_args(raw_components));
-                    }
-                });
+            NRC_CORE_LOG("Generating query");
+            query = builder.cached().build();
         }
     }
 
@@ -125,5 +113,30 @@ namespace narechi::script
         }
 
         return map;
+    }
+
+    void lua_script::call()
+    {
+        auto& lua_state = ctx.get_lua_state();
+
+        query.each(
+            [&](flecs::iter& it, size_t row)
+            {
+                flecs::entity e = it.entity(row);
+
+                for (auto& kv_pair : component_map)
+                {
+                    std::vector<raw_component_view> raw_components;
+                    for (auto& component : kv_pair.second)
+                    {
+                        void* ptr = e.ensure(component);
+                        raw_components.push_back(
+                            raw_component_view(world, component, ptr));
+                    }
+
+                    sol::function func = lua_state[kv_pair.first];
+                    func(sol::as_args(raw_components));
+                }
+            });
     }
 }
