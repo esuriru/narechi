@@ -15,6 +15,7 @@ namespace narechi::script
         void set_float(float value);
 
         float get_float_depth(uint32_t depth);
+        void set_float_depth(uint32_t depth, float value);
 
     private:
         flecs::world world;

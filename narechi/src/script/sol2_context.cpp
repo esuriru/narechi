@@ -22,7 +22,11 @@ namespace narechi::script
             "get_float",
             &raw_component_view::get_float,
             "set_float",
-            &raw_component_view::set_float);
+            &raw_component_view::set_float,
+            "get_float_depth",
+            &raw_component_view::get_float_depth,
+            "set_float_depth",
+            &raw_component_view::set_float_depth);
 
         sol::protected_function_result script_result = lua_state.script(R"(
             function f()

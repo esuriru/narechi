@@ -38,4 +38,14 @@ namespace narechi::script
         return cursor.get_float();
     }
 
+    void raw_component_view::set_float_depth(uint32_t depth, float value)
+    {
+        flecs::cursor cursor = world.cursor(component_entity, raw_component);
+        for (uint32_t i = 0; i < depth; ++i)
+        {
+            cursor.push();
+        }
+        cursor.set_float(value);
+    }
+
 }
