@@ -12,6 +12,7 @@
 #include "panels/build_panel.hpp"
 #include "panels/scene_hierarchy_panel.hpp"
 #include "panels/inspector_panel.hpp"
+#include "script/lua_script.hpp"
 
 // TODO - Will there be a need to separate the editor from the editor_layer?
 namespace narechi::editor
@@ -51,6 +52,8 @@ namespace narechi::editor
         uptr<build_panel> build_panel;
         uptr<scene_hierarchy_panel> scene_hierarchy_panel;
         uptr<inspector_panel> inspector_panel;
+
+        uptr<script::lua_script> test_script;
 
         entity_selection_context entity_selection_ctx;
 

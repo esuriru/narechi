@@ -320,13 +320,27 @@ namespace narechi::editor
                     cursor.set_float(20.0f);
                     cursor.pop();
 
-                    script::lua_script script(app::get().get_sol2_context(),
+                    test_script = make_uptr<script::lua_script>(
+                        app::get().get_sol2_context(),
                         R"(
+                        function position_test(narechi__scene__component__position, narechi__scene__component__scale)
+                            local position = narechi__scene__component__position
+                            position:set_float_depth(2, position:get_float_depth(2) - .01)
+                        end
+
                         function rotate_object(rotation)
-                            rotation:set_float(rotation:get_float() + 10)
+                            rotation:set_float(rotation:get_float() + .01)
                         end
                     )",
                         current_scene->get_world());
+
+                    world.system("ScriptSystem")
+                        .kind(flecs::OnUpdate)
+                        .run(
+                            [this](flecs::iter& it)
+                            {
+                                test_script->call();
+                            });
                 }
             }
 
