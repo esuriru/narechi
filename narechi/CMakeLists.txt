@@ -11,6 +11,7 @@ set(NARECHI_SOURCES
     "src/asset/component_def_asset.cpp"
     "src/script/sol2_context.cpp"
     "src/script/lua_script.cpp"
+    "src/script/raw_component_view.cpp"
     "src/file/nfd_context.cpp"
     "src/gui/window.cpp"
     "src/gui/element.cpp"
