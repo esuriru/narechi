@@ -3,6 +3,7 @@
 #include "sol/sol.hpp"
 #include "core/logger.hpp"
 #include "script/lua_script.hpp"
+#include "script/raw_component_view.hpp"
 
 namespace narechi::script
 {
@@ -16,18 +17,19 @@ namespace narechi::script
             NRC_CORE_LOG("sol2 could not initialize");
         }
 
+        lua_state.new_usertype<raw_component_view>("raw_component_view",
+            sol::no_constructor,
+            "get_float",
+            &raw_component_view::get_float,
+            "set_float",
+            &raw_component_view::set_float);
+
         sol::protected_function_result script_result = lua_state.script(R"(
             function f()
                 print("test")
             end
         )");
         lua_state["f"].call();
-
-        lua_script script(R"(
-            function f(testarg1, testarg2)
-                print("test")
-            end
-        )");
     }
 
     sol::state& sol2_context::get_lua_state()
