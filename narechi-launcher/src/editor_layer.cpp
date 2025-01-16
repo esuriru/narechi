@@ -294,18 +294,23 @@ namespace narechi::editor
         {
             current_scene->awake();
 
-            if (component_def_asset)
+            flecs::world world = current_scene->get_world();
+            constexpr const char* script_name = "User-defined components";
+            if (component_def_asset && world.lookup(script_name) == 0)
             {
                 // Import user-defined components
+                // world.script("User-defined components")
+                //     .code(component_def_asset->get_code().c_str())
+                //     .run();
+                world.entity(script_name);
                 ecs_script_run(current_scene->get_world(),
-                    "User-defined Components",
+                    script_name,
                     component_def_asset->get_code().c_str());
             }
 
             // Run scripts
             if (true)
             {
-                flecs::world world = current_scene->get_world();
                 flecs::entity rotation_component = world.lookup("rotation");
                 if (rotation_component > 0)
                 {
