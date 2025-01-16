@@ -9,6 +9,7 @@ set(NARECHI_SOURCES
     "src/asset/scene_asset.cpp"
     "src/asset/sprite_asset.cpp"
     "src/asset/component_def_asset.cpp"
+    "src/asset/lua_script_asset.cpp"
     "src/script/sol2_context.cpp"
     "src/script/lua_script.cpp"
     "src/script/raw_component_view.cpp"
@@ -136,4 +137,5 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
             ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
     )
 else()
+
 endif()
