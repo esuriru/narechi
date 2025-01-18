@@ -238,12 +238,11 @@ namespace narechi::editor
                                             "nrcsprite" } } } });
                                 if (sprite_asset_path.has_value())
                                 {
-                                    std::ifstream file_in(
-                                        sprite_asset_path.value());
-                                    std::ostringstream buffer;
-                                    buffer << file_in.rdbuf();
+                                    std::string data
+                                        = utils::file::open_file_as_string(
+                                            sprite_asset_path.value());
 
-                                    YAML::Node node = YAML::Load(buffer.str());
+                                    YAML::Node node = YAML::Load(data);
                                     texture_asset_guid
                                         = node["ID"].as<std::string>();
                                 }
