@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asset/lua_script_meta_asset.hpp"
 #include "asset/sprite_asset.hpp"
 #include "core/core.hpp"
 #include "core/assert.hpp"
@@ -32,6 +33,15 @@ namespace narechi::asset
             return asset->get_guid();
         }
 
+        std::string add_asset(sptr<lua_script_meta_asset> asset)
+        {
+            NRC_ASSERT(
+                !asset->get_guid().empty(), "Asset GUID cannot be empty");
+            asset_map[asset->get_guid()] = asset;
+            scripts[asset->get_path()] = asset;
+            return asset->get_guid();
+        }
+
         template<typename T>
         sptr<T> get_asset(const std::string& guid)
         {
@@ -43,5 +53,7 @@ namespace narechi::asset
 
     private:
         std::unordered_map<std::string, sptr<void>> asset_map;
+        std::unordered_map<std::filesystem::path, sptr<lua_script_meta_asset>>
+            scripts;
     };
 }
