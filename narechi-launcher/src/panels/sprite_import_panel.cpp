@@ -23,7 +23,8 @@ namespace narechi::editor
             .on_click =
                 [this]()
             {
-                auto file_path = utils::file::open_file_dialog();
+                auto file_path = utils::file::open_file_dialog(
+                    { .filters = { { { ".png", "png" } } } });
                 if (file_path.has_value())
                 {
                     image_directory_input->set_text(file_path.value());
