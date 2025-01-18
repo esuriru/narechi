@@ -28,10 +28,12 @@ namespace narechi::script
         //     const std::filesystem::path& code_path);
 
         void call();
+
+        void reset();
         void compile();
 
         std::string get_code() const;
-        void set_code(const std::string& code, bool recompile);
+        void set_code(const std::string& code);
 
         static const char* extension();
 

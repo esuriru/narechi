@@ -19,56 +19,7 @@ namespace narechi::script
         : deps(deps)
         , code(code)
     {
-        auto& world = deps.world;
-        auto& ctx = deps.ctx;
-
-        auto& lua_state = ctx.get_lua_state();
-        sol::protected_function_result result = lua_state.script(code);
-        NRC_ASSERT(result.valid(), "Could not compile lua script");
-
-        auto map = get_function_argument_map(code);
-
-        constexpr std::string_view double_underscore = "__";
-        constexpr std::string_view dot = ".";
-
-        for (auto& kv_pair : map)
-        {
-            if (kv_pair.second.empty())
-            {
-                NRC_CORE_LOG("No function arguments detected, skipping");
-            }
-
-            NRC_CORE_LOG(
-                "Creating query from script function: ", kv_pair.first);
-
-            auto builder = world.query_builder();
-
-            NRC_CORE_LOG("Validating arguments in world");
-
-            int i = 0;
-            for (auto& arg : kv_pair.second)
-            {
-                std::regex pattern("__");
-                arg = std::regex_replace(arg, pattern, "::");
-
-                NRC_CORE_LOG("Querying ", arg, " in world");
-                flecs::entity component_entity = world.lookup(arg.c_str());
-                if (component_entity <= 0)
-                {
-                    NRC_CORE_LOG(arg,
-                        " does not exist in world, unable to create query");
-                    return;
-                }
-                component_map[kv_pair.first].push_back(component_entity);
-
-                NRC_CORE_LOG(
-                    "Valid query argument ", std::to_string(i++), ": ", arg);
-                builder.with(component_entity);
-            }
-
-            NRC_CORE_LOG("Generating query");
-            query = builder.cached().build();
-        }
+        compile();
     }
 
     lua_script::~lua_script()
@@ -139,6 +90,9 @@ namespace narechi::script
 
     void lua_script::call()
     {
+        NRC_ASSERT(deps.world.is_alive(query),
+            "Query is not valid in lua script call");
+
         auto& lua_state = deps.ctx.get_lua_state();
 
         query.each(
@@ -149,6 +103,7 @@ namespace narechi::script
                 for (auto& kv_pair : component_map)
                 {
                     std::vector<raw_component_view> raw_components;
+                    raw_components.reserve(kv_pair.second.size());
                     for (auto& component : kv_pair.second)
                     {
                         void* ptr = e.ensure(component);
@@ -162,13 +117,65 @@ namespace narechi::script
             });
     }
 
+    void lua_script::reset()
+    {
+        component_map.clear();
+        query.destruct();
+    }
+
     void lua_script::compile()
     {
+        auto& world = deps.world;
         auto& ctx = deps.ctx;
 
         auto& lua_state = ctx.get_lua_state();
+
         sol::protected_function_result result = lua_state.script(code);
         NRC_ASSERT(result.valid(), "Could not compile lua script");
+
+        auto map = get_function_argument_map(code);
+
+        constexpr std::string_view double_underscore = "__";
+        constexpr std::string_view dot = ".";
+
+        for (auto& kv_pair : map)
+        {
+            if (kv_pair.second.empty())
+            {
+                NRC_CORE_LOG("No function arguments detected, skipping");
+            }
+
+            NRC_CORE_LOG(
+                "Creating query from script function: ", kv_pair.first);
+
+            auto builder = world.query_builder();
+
+            NRC_CORE_LOG("Validating arguments in world");
+
+            int i = 0;
+            for (auto& arg : kv_pair.second)
+            {
+                std::regex pattern("__");
+                arg = std::regex_replace(arg, pattern, "::");
+
+                NRC_CORE_LOG("Querying ", arg, " in world");
+                flecs::entity component_entity = world.lookup(arg.c_str());
+                if (component_entity <= 0)
+                {
+                    NRC_CORE_LOG(arg,
+                        " does not exist in world, unable to create query");
+                    return;
+                }
+                component_map[kv_pair.first].push_back(component_entity);
+
+                NRC_CORE_LOG(
+                    "Valid query argument ", std::to_string(i++), ": ", arg);
+                builder.with(component_entity);
+            }
+
+            NRC_CORE_LOG("Generating query");
+            query = builder.cached().build();
+        }
     }
 
     std::string lua_script::get_code() const
@@ -176,14 +183,9 @@ namespace narechi::script
         return code;
     }
 
-    void lua_script::set_code(const std::string& code, bool recompile)
+    void lua_script::set_code(const std::string& code)
     {
         this->code = code;
-        if (recompile)
-        {
-            // TODO - Reset state?
-            compile();
-        }
     }
 
     const char* lua_script::extension()
