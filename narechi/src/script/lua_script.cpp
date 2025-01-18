@@ -3,6 +3,7 @@
 #include "core/app.hpp"
 #include "core/logger.hpp"
 #include "script/raw_component_view.hpp"
+#include "utils/file_utils.hpp"
 
 #include <unordered_map>
 #include <regex>
@@ -14,11 +15,13 @@ namespace narechi::script
     using std::unordered_map;
     using std::vector;
 
-    lua_script::lua_script(
-        sol2_context& ctx, const std::string& code, flecs::world world)
-        : ctx(ctx)
-        , world(world)
+    lua_script::lua_script(const lua_script_deps& deps, const std::string& code)
+        : deps(deps)
+        , code(code)
     {
+        auto& world = deps.world;
+        auto& ctx = deps.ctx;
+
         auto& lua_state = ctx.get_lua_state();
         sol::protected_function_result result = lua_state.script(code);
         NRC_ASSERT(result.valid(), "Could not compile lua script");
@@ -67,6 +70,25 @@ namespace narechi::script
             query = builder.cached().build();
         }
     }
+
+    lua_script::~lua_script()
+    {
+    }
+
+    // sptr<lua_script> lua_script::load_new_meta_s(
+    //     const lua_script_deps& deps, const std::filesystem::path& code_path)
+    // {
+    //     NRC_ASSERT(
+    //         std::filesystem::exists(code_path), "Code path does not exist");
+    //     std::string code = utils::file::open_file_as_string(code_path);
+
+    //     std::filesystem::path meta_path = code_path;
+    //     meta_path.replace_extension(
+    //         asset::extension<asset::lua_script_meta_asset>::value);
+    //     auto script = make_sptr<lua_script>(deps, code);
+    //     script->asset = asset::lua_script_meta_asset::create(meta_path);
+    //     return script;
+    // }
 
     vector<string> split(const string& str, const string& delim)
     {
@@ -117,7 +139,7 @@ namespace narechi::script
 
     void lua_script::call()
     {
-        auto& lua_state = ctx.get_lua_state();
+        auto& lua_state = deps.ctx.get_lua_state();
 
         query.each(
             [&](flecs::iter& it, size_t row)
@@ -131,12 +153,41 @@ namespace narechi::script
                     {
                         void* ptr = e.ensure(component);
                         raw_components.push_back(
-                            raw_component_view(world, component, ptr));
+                            raw_component_view(deps.world, component, ptr));
                     }
 
                     sol::function func = lua_state[kv_pair.first];
                     func(sol::as_args(raw_components));
                 }
             });
+    }
+
+    void lua_script::compile()
+    {
+        auto& ctx = deps.ctx;
+
+        auto& lua_state = ctx.get_lua_state();
+        sol::protected_function_result result = lua_state.script(code);
+        NRC_ASSERT(result.valid(), "Could not compile lua script");
+    }
+
+    std::string lua_script::get_code() const
+    {
+        return code;
+    }
+
+    void lua_script::set_code(const std::string& code, bool recompile)
+    {
+        this->code = code;
+        if (recompile)
+        {
+            // TODO - Reset state?
+            compile();
+        }
+    }
+
+    const char* lua_script::extension()
+    {
+        return ".lua";
     }
 }
