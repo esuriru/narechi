@@ -73,6 +73,36 @@ namespace narechi::editor
                     .sub_menu_items = 
                     { 
                         {
+                            .title = "Recompile Scripts",
+                            .callback =
+                                [this]()
+                            {
+                                if (!current_scene)
+                                {
+                                    return;
+                                }
+
+                                namespace s = narechi::scene;
+                                current_scene->get_world().query<
+                                    s::component::lua_script>()
+                                    .each([](
+                                        s::component::lua_script& script)
+                                    {
+                                        auto& app = app::get();
+                                        auto& database = 
+                                            app.get_asset_database();
+                                        auto lua_script_meta_asset = 
+                                            database.get_asset<
+                                            asset::lua_script_meta_asset>(
+                                            script.script_asset_guid);
+                                        if (lua_script_meta_asset)
+                                        {
+                                            lua_script_meta_asset->compile();
+                                        }
+                                    });
+                            },
+                        },
+                        {
                             .title = "Import Sprite",
                             .callback =
                                 [this]()
