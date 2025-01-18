@@ -463,13 +463,27 @@ namespace narechi::editor
         auto world = current_scene->get_world();
         std::unordered_set<std::string> loaded_scripts;
 
+        auto create_new_script_entity = [](flecs::world world,
+                                            const std::string& name,
+                                            const std::string& guid)
+        {
+            if (world.lookup(name.c_str()) == 0)
+            {
+                // Create script entity in world as it does not exist
+                world.entity(name.c_str())
+                    .set<narechi::scene::component::lua_script>({
+                        .script_asset_guid = guid,
+                    });
+            }
+        };
+
         for (const auto& it :
             std::filesystem::recursive_directory_iterator(asset_dir))
         {
             // Scan for lua scripts and create meta files if they don't exist
             if (it.is_regular_file())
             {
-                if (loaded_scripts.contains(it.path().filename().string()))
+                if (loaded_scripts.contains(it.path().stem().string()))
                 {
                     // Script is loaded, skip either meta or script
                     return;
@@ -485,17 +499,30 @@ namespace narechi::editor
                                 script::lua_script::extension())),
                         "Script meta file exists but script does not");
 
-                    asset_database.add_asset(
+                    auto guid = asset_database.add_asset(
                         asset::lua_script_meta_asset::load_existing_script(
                             {
                                 .world = world,
                                 .ctx = app::get().get_sol2_context(),
                             },
                             it.path()));
+
+                    std::string filename = it.path().stem().string();
+                    create_new_script_entity(world, filename, guid);
                     loaded_scripts.insert(it.path().filename().string());
                 }
                 else if (extension == script::lua_script::extension())
                 {
+                    if (std::filesystem::exists(
+                            std::filesystem::path(it.path()).replace_extension(
+                                asset::extension<
+                                    asset::lua_script_meta_asset>::value)))
+                    {
+                        // Meta file exists already, so we wait to load using
+                        // that
+                        continue;
+                    }
+
                     auto guid = asset_database.add_asset(
                         asset::lua_script_meta_asset::create(
                             {
@@ -506,16 +533,8 @@ namespace narechi::editor
                                 asset::extension<
                                     asset::lua_script_meta_asset>::value)));
 
-                    std::string filename = it.path().filename().string();
-                    if (world.lookup(filename.c_str()) == 0)
-                    {
-                        // Create script entity in world as it does not exist
-                        world.entity(filename.c_str())
-                            .set<narechi::scene::component::lua_script>({
-                                .script_asset_guid = guid,
-                            });
-                    }
-
+                    std::string filename = it.path().stem().string();
+                    create_new_script_entity(world, filename, guid);
                     loaded_scripts.insert(filename);
                 }
             }
