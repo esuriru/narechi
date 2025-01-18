@@ -2,6 +2,7 @@
 
 #include "core/assert.hpp"
 #include "file/nfd_context.hpp"
+#include <fstream>
 
 extern narechi::file::nfd_context* get_nfd_ctx();
 
@@ -27,5 +28,13 @@ namespace narechi::utils::file
         command = command + path.string();
         system(command.c_str());
 #endif
+    }
+
+    std::string open_file_as_string(const std::filesystem::path& path)
+    {
+        std::ifstream file_in(path);
+        std::ostringstream buffer;
+        buffer << file_in.rdbuf();
+        return buffer.str();
     }
 }
