@@ -12,6 +12,9 @@ namespace narechi::script
         sol2_context();
         sol::state& get_lua_state();
 
+        void init(bool open_libs = false);
+        void reload();
+
     private:
         sol::state lua_state;
     };

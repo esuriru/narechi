@@ -9,12 +9,20 @@ namespace narechi::script
 {
     sol2_context::sol2_context()
     {
-        lua_state.open_libraries(sol::lib::base, sol::lib::package);
-        sol::protected_function_result result
-            = lua_state.script(R"(print("sol2 initialized"))");
-        if (!result.valid())
+        init(true);
+        NRC_CORE_LOG("sol2 initialized");
+    }
+
+    sol::state& sol2_context::get_lua_state()
+    {
+        return lua_state;
+    }
+
+    void sol2_context::init(bool open_libs)
+    {
+        if (open_libs)
         {
-            NRC_CORE_LOG("sol2 could not initialize");
+            lua_state.open_libraries(sol::lib::base, sol::lib::package);
         }
 
         lua_state.new_usertype<raw_component_view>("raw_component_view",
@@ -27,17 +35,11 @@ namespace narechi::script
             &raw_component_view::get_float_depth,
             "set_float_depth",
             &raw_component_view::set_float_depth);
-
-        sol::protected_function_result script_result = lua_state.script(R"(
-            function f()
-                print("test")
-            end
-        )");
-        lua_state["f"].call();
     }
 
-    sol::state& sol2_context::get_lua_state()
+    void sol2_context::reload()
     {
-        return lua_state;
+        lua_state.globals().clear();
+        init(true);
     }
 }
