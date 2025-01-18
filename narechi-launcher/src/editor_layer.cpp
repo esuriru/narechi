@@ -16,6 +16,7 @@
 #include "script/lua_script.hpp"
 
 #include <filesystem>
+#include <unordered_set>
 
 namespace narechi::editor
 {
@@ -153,9 +154,7 @@ namespace narechi::editor
                                 current_scene = scene::create(
                                     scene_path, scene_name);
                                 current_scene->awake();
-
-                                scene_hierarchy_panel->set_world(
-                                    current_scene->get_world());
+                                on_scene_select();
 
                                 current_project->set_startup_scene_name(
                                     scene_name);
@@ -293,63 +292,7 @@ namespace narechi::editor
         if (current_scene)
         {
             current_scene->awake();
-
-            flecs::world world = current_scene->get_world();
-            constexpr const char* script_name = "User-defined components";
-            if (component_def_asset && world.lookup(script_name) == 0)
-            {
-                // Import user-defined components
-                // world.script("User-defined components")
-                //     .code(component_def_asset->get_code().c_str())
-                //     .run();
-                world.entity(script_name);
-                ecs_script_run(current_scene->get_world(),
-                    script_name,
-                    component_def_asset->get_code().c_str());
-            }
-
-            // Run scripts
-            if (true)
-            {
-                flecs::entity rotation_component = world.lookup("rotation");
-                if (rotation_component > 0)
-                {
-                    flecs::entity test_entity
-                        = world.entity().add(rotation_component);
-                    void* raw_rotation_component
-                        = test_entity.ensure(rotation_component);
-
-                    flecs::cursor cursor = world.cursor(
-                        rotation_component, raw_rotation_component);
-                    cursor.push();
-                    cursor.set_float(20.0f);
-                    cursor.pop();
-
-                    test_script = make_uptr<script::lua_script>(
-                        app::get().get_sol2_context(),
-                        R"(
-                        function position_test(narechi__scene__component__position, narechi__scene__component__scale)
-                            local position = narechi__scene__component__position
-                            position:set_float_depth(2, position:get_float_depth(2) - .01)
-                        end
-
-                        function rotate_object(rotation)
-                            rotation:set_float(rotation:get_float() + .01)
-                        end
-                    )",
-                        current_scene->get_world());
-
-                    world.system("ScriptSystem")
-                        .kind(flecs::OnUpdate)
-                        .run(
-                            [this](flecs::iter& it)
-                            {
-                                test_script->call();
-                            });
-                }
-            }
-
-            scene_hierarchy_panel->set_world(current_scene->get_world());
+            on_scene_select();
         }
     }
 
@@ -450,6 +393,7 @@ namespace narechi::editor
 
         constexpr uint32_t allowed_definition_count = 1;
         uint32_t component_definitions = 0;
+        auto& asset_database = app::get().get_asset_database();
 
         // TODO - Dirty code to change
         for (const auto& it :
@@ -457,25 +401,164 @@ namespace narechi::editor
         {
             if (it.is_regular_file())
             {
-                if (it.path().extension()
-                    == asset::extension<asset::sprite_asset>::value)
+                auto extension = it.path().extension();
+                if (extension == asset::extension<asset::sprite_asset>::value)
                 {
-                    app::get().get_asset_database().add_asset(
-                        asset::sprite_asset::load_data(it.path().parent_path()
-                            / (it.path().stem().string() + ".png")));
+                    std::filesystem::path sprite_asset_path = it.path();
+                    sprite_asset_path.replace_extension(".png");
+                    asset_database.add_asset(
+                        asset::sprite_asset::load_data(sprite_asset_path));
                 }
                 else if (component_definitions < allowed_definition_count
-                    && it.path().extension()
+                    && extension
                         == asset::extension<asset::component_def_asset>::value)
                 {
                     component_def_asset
                         = asset::component_def_asset::load(it.path());
-                    app::get().get_asset_database().add_asset(
-                        component_def_asset);
+                    asset_database.add_asset(component_def_asset);
                     component_definitions++;
                 }
             }
         }
+    }
+
+    void editor_layer::import_scripts()
+    {
+        if (!current_scene)
+        {
+            return;
+        }
+
+        auto& asset_database = app::get().get_asset_database();
+        auto world = current_scene->get_world();
+        std::unordered_set<std::string> loaded_scripts;
+
+        for (const auto& it :
+            std::filesystem::recursive_directory_iterator(asset_dir))
+        {
+            // Scan for lua scripts and create meta files if they don't exist
+            if (it.is_regular_file())
+            {
+                if (loaded_scripts.contains(it.path().filename().string()))
+                {
+                    // Script is loaded, skip either meta or script
+                    return;
+                }
+
+                auto extension = it.path().extension();
+                if (extension
+                    == asset::extension<asset::lua_script_meta_asset>::value)
+                {
+                    NRC_ASSERT(
+                        std::filesystem::exists(
+                            std::filesystem::path(it.path()).replace_extension(
+                                script::lua_script::extension())),
+                        "Script meta file exists but script does not");
+
+                    asset_database.add_asset(
+                        asset::lua_script_meta_asset::load_existing_script(
+                            {
+                                .world = world,
+                                .ctx = app::get().get_sol2_context(),
+                            },
+                            it.path()));
+                    loaded_scripts.insert(it.path().filename().string());
+                }
+                else if (extension == script::lua_script::extension())
+                {
+                    auto guid = asset_database.add_asset(
+                        asset::lua_script_meta_asset::create(
+                            {
+                                .world = world,
+                                .ctx = app::get().get_sol2_context(),
+                            },
+                            std::filesystem::path(it.path()).replace_extension(
+                                asset::extension<
+                                    asset::lua_script_meta_asset>::value)));
+
+                    std::string filename = it.path().filename().string();
+                    if (world.lookup(filename.c_str()) == 0)
+                    {
+                        // Create script entity in world as it does not exist
+                        world.entity(filename.c_str())
+                            .set<narechi::scene::component::lua_script>({
+                                .script_asset_guid = guid,
+                            });
+                    }
+
+                    loaded_scripts.insert(filename);
+                }
+            }
+        }
+    }
+
+    // To be called when `current_scene` is populated
+    void editor_layer::on_scene_select()
+    {
+        // Import component definition file
+        flecs::world world = current_scene->get_world();
+        constexpr const char* script_name = "User-defined components";
+        if (component_def_asset && world.lookup(script_name) == 0)
+        {
+            // Import user-defined components
+            // world.script("User-defined components")
+            //     .code(component_def_asset->get_code().c_str())
+            //     .run();
+            world.entity(script_name);
+            ecs_script_run(current_scene->get_world(),
+                script_name,
+                component_def_asset->get_code().c_str());
+        }
+
+        import_scripts();
+
+        // // Run scripts
+        // if (true)
+        // {
+        //     flecs::entity rotation_component = world.lookup("rotation");
+        //     if (rotation_component > 0)
+        //     {
+        //         flecs::entity test_entity
+        //             = world.entity().add(rotation_component);
+        //         void* raw_rotation_component
+        //             = test_entity.ensure(rotation_component);
+
+        //         flecs::cursor cursor = world.cursor(
+        //             rotation_component, raw_rotation_component);
+        //         cursor.push();
+        //         cursor.set_float(20.0f);
+        //         cursor.pop();
+
+        //         test_script = make_uptr<script::lua_script>(
+        //             script::lua_script_deps {
+        //                 .world = world,
+        //                 .ctx = app::get().get_sol2_context(),
+        //             },
+        //             R"(
+        //             function
+        //             position_test(narechi__scene__component__position,
+        //             narechi__scene__component__scale)
+        //                 local position = narechi__scene__component__position
+        //                 position:set_float_depth(2,
+        //                 position:get_float_depth(2) - .01)
+        //             end
+
+        //             function rotate_object(rotation)
+        //                 rotation:set_float(rotation:get_float() + .01)
+        //             end
+        //         )");
+
+        //         world.system("ScriptSystem")
+        //             .kind(flecs::OnUpdate)
+        //             .run(
+        //                 [this](flecs::iter& it)
+        //                 {
+        //                     test_script->call();
+        //                 });
+        //     }
+        // }
+
+        scene_hierarchy_panel->set_world(current_scene->get_world());
     }
 
     void editor_layer::invalidate_proj_matrix()

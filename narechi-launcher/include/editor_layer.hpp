@@ -35,6 +35,9 @@ namespace narechi::editor
 
         void load_scene_from_project();
         void import_assets();
+        void import_scripts();
+
+        void on_scene_select();
 
     private:
         std::filesystem::path asset_dir;
