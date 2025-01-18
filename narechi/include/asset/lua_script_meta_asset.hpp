@@ -24,6 +24,7 @@ namespace narechi::asset
 
     private:
         sptr<script::lua_script> script;
+        std::filesystem::path code_path;
 
         void serialize() override;
         void deserialize() override;
