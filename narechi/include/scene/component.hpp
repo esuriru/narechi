@@ -10,6 +10,7 @@
 #include "graphics/render_command.hpp"
 
 #include "flecs.h"
+#include "script/lua_script.hpp"
 
 namespace narechi::scene
 {
@@ -38,6 +39,11 @@ namespace narechi::scene
         {
             // sptr<graphics::texture2d> texture;
             std::string texture_asset_guid;
+        };
+
+        struct lua_script
+        {
+            std::string script_asset_guid;
         };
 
         component(flecs::world& world)
@@ -70,6 +76,8 @@ namespace narechi::scene
             world.component<position>().member<glm::vec2>("value");
             world.component<scale>().member<glm::vec2>("value");
             world.component<sprite>().member<std::string>("texture_asset_guid");
+            world.component<lua_script>().member<std::string>(
+                "script_asset_guid");
 
             world.component<scene_camera>().member<glm::vec4>("clear_color");
             world.component<meta>();
@@ -99,6 +107,22 @@ namespace narechi::scene
                                   graphics::render2d::submit_quad(pos.value,
                                       quad_scale,
                                       sprite_asset->get_texture());
+                              }
+                          });
+
+            flecs::system script_system
+                = world.system<component::lua_script>()
+                      .kind(flecs::PreUpdate)
+                      .each(
+                          [&](component::lua_script& script)
+                          {
+                              auto& database = app::get().get_asset_database();
+                              auto lua_script_meta_asset = database.get_asset<
+                                  asset::lua_script_meta_asset>(
+                                  script.script_asset_guid);
+                              if (lua_script_meta_asset)
+                              {
+                                  lua_script_meta_asset->get_script()->call();
                               }
                           });
 
