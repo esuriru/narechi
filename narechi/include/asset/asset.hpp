@@ -7,7 +7,6 @@
 
 namespace narechi::asset
 {
-    // NOTE - Will there be a need to have a non-yaml asset?
     class NRC_API asset
     {
     public:
