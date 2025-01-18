@@ -17,5 +17,7 @@ namespace narechi::script
 
     private:
         sol::state lua_state;
+
+        void init_glm();
     };
 }

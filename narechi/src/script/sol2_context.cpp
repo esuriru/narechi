@@ -4,13 +4,14 @@
 #include "core/logger.hpp"
 #include "script/lua_script.hpp"
 #include "script/raw_component_view.hpp"
+#include "glm/glm.hpp"
 
 namespace narechi::script
 {
     sol2_context::sol2_context()
     {
         init(true);
-        NRC_CORE_LOG("sol2 initialized");
+        NRC_CORE_DEBUG("sol2 initialized");
     }
 
     sol::state& sol2_context::get_lua_state()
@@ -22,24 +23,108 @@ namespace narechi::script
     {
         if (open_libs)
         {
-            lua_state.open_libraries(sol::lib::base, sol::lib::package);
+            lua_state.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math);
         }
+
+        init_glm();
 
         lua_state.new_usertype<raw_component_view>("raw_component_view",
             sol::no_constructor,
+            "set_depth",
+            &raw_component_view::set_depth,
             "get_float",
             &raw_component_view::get_float,
             "set_float",
             &raw_component_view::set_float,
-            "get_float_depth",
-            &raw_component_view::get_float_depth,
-            "set_float_depth",
-            &raw_component_view::set_float_depth);
+            "get_vec2",
+            &raw_component_view::get_vec2,
+            "set_vec2",
+            &raw_component_view::set_vec2);
     }
 
     void sol2_context::reload()
     {
         lua_state.globals().clear();
         init(true);
+    }
+
+    void sol2_context::init_glm()
+    {
+        auto vec2_multiply_overloads = sol::overload(
+            [](const glm::vec2& v1, const glm::vec2& v2)
+            {
+                return v1 * v2;
+            },
+            [](const glm::vec2& v1, float value)
+            {
+                return v1 * value;
+            },
+            [](float value, const glm::vec2& v1)
+            {
+                return v1 * value;
+            });
+
+        auto vec2_divide_overloads = sol::overload(
+            [](const glm::vec2& v1, const glm::vec2& v2)
+            {
+                return v1 / v2;
+            },
+            [](const glm::vec2& v1, float value)
+            {
+                return v1 / value;
+            },
+            [](float value, const glm::vec2& v1)
+            {
+                return v1 / value;
+            });
+
+        auto vec2_addition_overloads = sol::overload(
+            [](const glm::vec2& v1, const glm::vec2& v2)
+            {
+                return v1 + v2;
+            },
+            [](const glm::vec2& v1, float value)
+            {
+                return v1 + value;
+            },
+            [](float value, const glm::vec2& v1)
+            {
+                return v1 + value;
+            });
+
+        auto vec2_subtraction_overloads = sol::overload(
+            [](const glm::vec2& v1, const glm::vec2& v2)
+            {
+                return v1 - v2;
+            },
+            [](const glm::vec2& v1, float value)
+            {
+                return v1 - value;
+            },
+            [](float value, const glm::vec2& v1)
+            {
+                return v1 - value;
+            });
+
+        lua_state.new_usertype<glm::vec2>("vec2",
+            sol::call_constructor,
+            sol::constructors<glm::vec2(float), glm::vec2(float, float)>(),
+            "x",
+            &glm::vec2::x,
+            "y",
+            &glm::vec2::y,
+            sol::meta_function::multiplication,
+            vec2_multiply_overloads,
+            sol::meta_function::division,
+            vec2_divide_overloads,
+            sol::meta_function::addition,
+            vec2_addition_overloads,
+            sol::meta_function::subtraction,
+            vec2_subtraction_overloads,
+            "length",
+            [](const glm::vec2& v)
+            {
+                return glm::length(v);
+            });
     }
 }
