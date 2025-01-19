@@ -1,0 +1,3 @@
+ID: 89597b52-2197-450d-a18f-34ae80a445a1
+Name: New Scene
+World Data: "{\"results\":[{\"name\":\"SceneCamera\", \"id\":556, \"tags\":[\"narechi.scene.component.meta\"], \"components\":{\"narechi.scene.component.position\":{\"value\":{\"x\":0, \"y\":0}}, \"narechi.scene.component.scene_camera\":{\"clear_color\":{\"r\":0.5, \"g\":0.5, \"b\":1, \"a\":1}}}}, {\"name\":\"#557\", \"id\":557, \"tags\":[\"flecs.core.Query\"], \"components\":{\"(flecs.core.Poly,flecs.core.Query)\":null}}]}"
