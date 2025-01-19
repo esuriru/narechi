@@ -5,7 +5,7 @@ first time.
 
 ## Create new project
 
-Start the editor executable in the folder downloaded from the releases. Move to
+Start the editor executable `narechi-launcher.exe` in the folder downloaded from the releases. Move to
 the project creation panel by clicking the "Create Project" button.
 
 ![Main menu](../images/create_project_button.JPG)
