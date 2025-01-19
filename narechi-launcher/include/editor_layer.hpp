@@ -14,6 +14,8 @@
 #include "panels/inspector_panel.hpp"
 #include "script/lua_script.hpp"
 
+#include <unordered_set>
+
 // TODO - Will there be a need to separate the editor from the editor_layer?
 namespace narechi::editor
 {
@@ -57,6 +59,7 @@ namespace narechi::editor
         uptr<inspector_panel> inspector_panel;
 
         uptr<script::lua_script> test_script;
+        std::unordered_set<std::string> loaded_scripts;
 
         entity_selection_context entity_selection_ctx;
 

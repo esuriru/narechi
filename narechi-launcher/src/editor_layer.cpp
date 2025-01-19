@@ -83,6 +83,7 @@ namespace narechi::editor
                                 }
 
                                 namespace s = narechi::scene;
+                                import_scripts();
                                 current_scene->get_world().query<
                                     s::component::lua_script>()
                                     .each([](
@@ -461,7 +462,6 @@ namespace narechi::editor
 
         auto& asset_database = app::get().get_asset_database();
         auto world = current_scene->get_world();
-        std::unordered_set<std::string> loaded_scripts;
 
         auto create_new_script_entity = [](flecs::world world,
                                             const std::string& name,
