@@ -25,4 +25,12 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
             -DNRC_PLAYER_CHUNK_COUNT=${NRC_PLAYER_CHUNK_COUNT} -P
             ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
     )
+else()
+    add_custom_command(
+        TARGET narechi-player
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                $<TARGET_FILE:narechi-player> $<TARGET_FILE_DIR:narechi-launcher>
+        COMMAND_EXPAND_LISTS
+    )
 endif()
