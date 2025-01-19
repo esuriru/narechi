@@ -1,7 +1,7 @@
 # Quickstart
 
-This is a tutorial that will cover how to set up a moving and scaling object
-using Lua scripting and how to build a packaged executable of the simulation.
+This is a guide on how to create a project using the narechi editor for the
+first time.
 
 ## Create new project
 
