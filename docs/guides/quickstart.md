@@ -57,3 +57,21 @@ We may save the scene by going to the menu and clicking on
 this directory: `File > Save Scene`
 
 ![Save scene](../images/file_save_scene.JPG)
+
+## Building and Exporting
+
+We may export the executable by going in the same menu and
+pressing `File > Build and Export`. This will enable the
+build panel.
+
+![Build export panel](../images/build_export_menu.JPG)
+
+You may press on the "Dir" button to have the ease of
+selecting the build folder.
+
+![Build export panel select dir](../images/build_select_dir.JPG)
+
+Once the build directory is populated, press the "Build"
+button and the folder will be populated with the build.
+
+![Build directory](../images/build_dir.JPG)
