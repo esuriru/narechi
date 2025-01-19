@@ -509,7 +509,7 @@ namespace narechi::editor
 
                     std::string filename = it.path().stem().string();
                     create_new_script_entity(world, filename, guid);
-                    loaded_scripts.insert(it.path().filename().string());
+                    loaded_scripts.insert(filename);
                 }
                 else if (extension == script::lua_script::extension())
                 {
