@@ -31,7 +31,7 @@ Now, let us create a scene by using the menu at the top and clicking this direct
 Three things will happen:
 
 * There will now be an empty black background in the scene panel
-* New Scene asset will be created in the Content Browser panel which
+* New Scene asset will be created which you can see in the Content Browser panel
 * Default scene camera will be added to the scene, as can be
 seen in the hierarchy
 
