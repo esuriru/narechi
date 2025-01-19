@@ -11,4 +11,6 @@ narechi is an ECS game engine that primarily focuses on producing 2D simulations
 > All the documentation (including guides and tutorial) is in Windows 64bit. If you are using a different platform, your mileage may vary.
 
 Download the latest release provided in this repository. You may find a
-quickstart guide [here](docs/guides/quickstart.md).
+quickstart guide [here](docs/guides/quickstart.md). You may also
+ use a pre-existing tutorial project with an attached guide
+ [here](docs/guides/moving_object_tutorial.md).
