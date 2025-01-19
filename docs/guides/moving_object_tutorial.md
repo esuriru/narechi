@@ -187,8 +187,8 @@ Let's store the original scale that we were using in the inspector:
     local original_scale = vec2(10, 12)
 ```
 
-Then, let's adjust the scale by a mathematical function as well
-linked to the accumulating value.
+Then, let's adjust the scale by a mathematical function as well as
+linking it to the accumulating value.
 
 ```lua
     local new_scale = original_scale * math.cos(accumulator)
