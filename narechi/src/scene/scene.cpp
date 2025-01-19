@@ -1,5 +1,6 @@
 #include "scene/scene.hpp"
 
+#include "asset/lua_script_meta_asset.hpp"
 #include "core/logger.hpp"
 #include "flecs.h"
 
@@ -129,6 +130,24 @@ namespace narechi::scene
         using namespace asset;
         asset->write(dir / (get_name() + extension<scene_asset>::value));
 
+        auto copy_file = [dir](const std::filesystem::path& path)
+        {
+            NRC_ASSERT(std::filesystem::exists(path),
+                "Path does not exist when copying: ",
+                path);
+
+            // Have to manually delete because exception throws
+            std::filesystem::path target_path = dir / path.filename();
+            if (std::filesystem::exists(target_path))
+            {
+                std::filesystem::remove(target_path);
+            }
+
+            std::filesystem::copy(path,
+                target_path,
+                std::filesystem::copy_options::overwrite_existing);
+        };
+
         // Export sprites
         data->world.query<const component::sprite>().each(
             [&](const component::sprite& sprite)
@@ -145,14 +164,25 @@ namespace narechi::scene
                 image_asset_path.replace_extension(".png");
 
                 // Copy actual image, replace if exists
-                std::filesystem::path image_build_asset_path
-                    = dir / (image_asset_path.filename());
-                if (std::filesystem::exists(image_build_asset_path))
-                {
-                    std::filesystem::remove(image_build_asset_path);
-                }
-                std::filesystem::copy_file(
-                    image_asset_path, image_build_asset_path);
+                copy_file(image_asset_path);
+            });
+
+        data->world.query<const component::lua_script>().each(
+            [&](const component::lua_script& script)
+            {
+                sptr<lua_script_meta_asset> script_meta_asset
+                    = app::get()
+                          .get_asset_database()
+                          .get_asset<lua_script_meta_asset>(
+                              script.script_asset_guid);
+                script_meta_asset->write(
+                    dir / (script_meta_asset->get_path().filename()));
+
+                std::filesystem::path script_path
+                    = script_meta_asset->get_path();
+                script_path.replace_extension(script::lua_script::extension());
+
+                copy_file(script_path);
             });
     }
 
