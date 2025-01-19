@@ -7,6 +7,9 @@
 #include "core/logger.hpp"
 #include "core/events/app_event.hpp"
 
+// Scene (Components)
+#include "scene/component.hpp"
+
 // Assets
 #include "asset/asset.hpp"
 #include "asset/scene_asset.hpp"
