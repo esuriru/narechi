@@ -137,5 +137,7 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
             ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
     )
 else()
-
+    target_compile_definitions(
+        narechi-engine PUBLIC "NRC_NO_EMBED"
+    )
 endif()
