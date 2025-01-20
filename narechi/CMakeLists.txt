@@ -84,7 +84,7 @@ endif()
 add_library(narechi-engine SHARED ${NARECHI_SOURCES} ${RENDERER_API_SOURCES})
 
 target_link_libraries(narechi-engine PRIVATE glfw)
-target_link_options(narechi-engine PUBLIC -static-libstdc++)
+target_link_options(narechi-engine PUBLIC -static)
 
 target_include_directories(narechi-engine PUBLIC "include")
 
@@ -137,7 +137,5 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
             ${NRC_CMAKE_DIR}/scripts/EmbedPlayer.cmake
     )
 else()
-    target_compile_definitions(
-        narechi-engine PUBLIC "NRC_NO_EMBED"
-    )
+    target_compile_definitions(narechi-engine PUBLIC "NRC_NO_EMBED")
 endif()
