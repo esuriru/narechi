@@ -1,4 +1,5 @@
 include(${NRC_CMAKE_DIR}/EmbedAsset.cmake)
+include(InstallRequiredSystemLibraries)
 
 set(NARECHI_LAUNCHER_SOURCES
     "src/main.cpp"
@@ -33,7 +34,9 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
                 file(WRITE ${current_player_chunk_file} "")
             endif()
 
-            target_sources(narechi-launcher PRIVATE ${current_player_chunk_file})
+            target_sources(
+                narechi-launcher PRIVATE ${current_player_chunk_file}
+            )
 
             math(EXPR nrc_player_chunk_id "${nrc_player_chunk_id} + 1")
         endwhile()
@@ -61,7 +64,9 @@ if(NOT DEFINED NRC_DISABLE_BUILD_EMBED)
                 file(WRITE ${current_engine_chunk_file} "")
             endif()
 
-            target_sources(narechi-launcher PRIVATE ${current_engine_chunk_file})
+            target_sources(
+                narechi-launcher PRIVATE ${current_engine_chunk_file}
+            )
 
             math(EXPR nrc_engine_chunk_id "${nrc_engine_chunk_id} + 1")
         endwhile()
