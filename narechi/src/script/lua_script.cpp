@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <regex>
 #include <algorithm>
+#include <unordered_set>
 
 namespace narechi::script
 {
@@ -61,8 +62,28 @@ namespace narechi::script
     unordered_map<string, vector<string>> lua_script::get_function_argument_map(
         const string& code)
     {
+        // NOTE - Depends on lua script actually being run
+        auto& lua_state = deps.ctx.get_lua_state();
+        sol::table global_table = lua_state.globals();
+
+        std::unordered_set<std::string> function_names {};
+
+        for (auto& pair : global_table)
+        {
+            if (pair.second.get_type() == sol::type::function)
+            {
+                function_names.insert(pair.first.as<std::string>());
+            }
+        }
+
+        if (function_names.empty())
+        {
+            return {};
+        }
+
         unordered_map<string, vector<string>> map;
         std::regex function_regex("function\\s+(\\w+)\\s*\\((.*?)\\)");
+
         std::smatch match;
 
         string::const_iterator begin = code.begin();
@@ -72,6 +93,12 @@ namespace narechi::script
         {
             string function_name = match[1].str();
             string arguments = match[2].str();
+
+            if (!function_names.contains(function_name))
+            {
+                begin = match.suffix().first;
+                continue;
+            }
 
             // Split arguments by commas
             vector<string> args = split(arguments, ",");
@@ -90,37 +117,56 @@ namespace narechi::script
 
     void lua_script::call()
     {
-        NRC_ASSERT(deps.world.is_alive(query),
-            "Query is not valid in lua script call");
-
         auto& lua_state = deps.ctx.get_lua_state();
 
-        query.each(
-            [&](flecs::iter& it, size_t row)
-            {
-                flecs::entity e = it.entity(row);
+        for (int i = 0; i < queries.size(); ++i)
+        {
+            auto& query = queries[i];
 
-                for (auto& kv_pair : component_map)
+            NRC_ASSERT(deps.world.is_alive(query),
+                "Query is not valid in lua script call");
+
+            query.each(
+                [&](flecs::iter& it, size_t row)
                 {
-                    std::vector<raw_component_view> raw_components;
-                    raw_components.reserve(kv_pair.second.size());
-                    for (auto& component : kv_pair.second)
+                    flecs::entity e = it.entity(row);
+
+                    auto& components = component_map[i];
+                    vector<raw_component_view> raw_components;
+                    raw_components.reserve(components.size());
+                    for (auto& component : components)
                     {
                         void* ptr = e.ensure(component);
                         raw_components.push_back(
                             raw_component_view(deps.world, component, ptr));
                     }
 
-                    sol::function func = lua_state[kv_pair.first];
+                    sol::function func = lua_state[function_names[i]];
                     func(sol::as_args(raw_components));
-                }
-            });
+                });
+        }
     }
 
     void lua_script::reset()
     {
         component_map.clear();
-        query.destruct();
+
+        for (auto& query : queries)
+        {
+            query.destruct();
+        }
+
+        auto& lua_state = deps.ctx.get_lua_state();
+        sol::table global_table = lua_state.globals();
+
+        // Clear all functions
+        for (auto& name : function_names)
+        {
+            global_table[name] = sol::nil;
+        }
+        function_names.clear();
+
+        queries.clear();
     }
 
     void lua_script::compile()
@@ -152,6 +198,9 @@ namespace narechi::script
 
             NRC_CORE_LOG("Validating arguments in world");
 
+            // Create empty list
+            component_map.push_back({});
+
             int i = 0;
             for (auto& arg : kv_pair.second)
             {
@@ -166,15 +215,16 @@ namespace narechi::script
                         " does not exist in world, unable to create query");
                     return;
                 }
-                component_map[kv_pair.first].push_back(component_entity);
+                component_map.back().push_back(component_entity);
 
                 NRC_CORE_LOG(
                     "Valid query argument ", std::to_string(i++), ": ", arg);
                 builder.with(component_entity);
             }
 
-            NRC_CORE_LOG("Generating query");
-            query = builder.cached().build();
+            NRC_CORE_LOG("Generating query: ", kv_pair.first);
+            queries.push_back(builder.cached().build());
+            function_names.push_back(kv_pair.first);
         }
     }
 

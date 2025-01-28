@@ -44,9 +44,9 @@ namespace narechi::script
         lua_script_deps deps;
         std::string code;
 
-        std::unordered_map<std::string, std::vector<flecs::entity>>
-            component_map;
-        flecs::query<> query;
+        std::vector<std::vector<flecs::entity>> component_map;
+        std::vector<std::string> function_names;
+        std::vector<flecs::query<>> queries;
 
         std::unordered_map<std::string, std::vector<std::string>>
         get_function_argument_map(const std::string& code);
