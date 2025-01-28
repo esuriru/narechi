@@ -16,6 +16,7 @@ namespace narechi::scene
 {
     struct component
     {
+        // TODO - Label these primitives as "2D" use-case
         struct position
         {
             glm::vec2 value = glm::vec2(0.0f, 0.0f);
@@ -24,6 +25,11 @@ namespace narechi::scene
         struct scale
         {
             glm::vec2 value = glm::vec2(1.0f, 1.0f);
+        };
+
+        struct rotation
+        {
+            float z = 0.0f;
         };
 
         struct scene_camera
@@ -38,12 +44,12 @@ namespace narechi::scene
         struct sprite
         {
             // sptr<graphics::texture2d> texture;
-            std::string texture_asset_guid;
+            std::string texture_asset_guid {};
         };
 
         struct lua_script
         {
-            std::string script_asset_guid;
+            std::string script_asset_guid {};
         };
 
         component(flecs::world& world)
@@ -75,6 +81,7 @@ namespace narechi::scene
 
             world.component<position>().member<glm::vec2>("value");
             world.component<scale>().member<glm::vec2>("value");
+            world.component<rotation>().member<float>("z");
             world.component<sprite>().member<std::string>("texture_asset_guid");
             world.component<lua_script>().member<std::string>(
                 "script_asset_guid");
@@ -85,11 +92,13 @@ namespace narechi::scene
             flecs::system sprite_render_system
                 = world
                       .system<const component::position,
+                          const component::rotation*,
                           const component::scale*,
                           const component::sprite>("SpriteRender")
                       .kind(flecs::OnUpdate)
                       .each(
                           [](const component::position& pos,
+                              const component::rotation* rot,
                               const component::scale* scale,
                               const component::sprite& sprite)
                           {
@@ -105,6 +114,7 @@ namespace narechi::scene
                                       quad_scale = scale->value;
                                   }
                                   graphics::render2d::submit_quad(pos.value,
+                                      rot ? rot->z : 0.0f,
                                       quad_scale,
                                       sprite_asset->get_texture());
                               }
