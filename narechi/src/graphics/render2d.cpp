@@ -1,5 +1,6 @@
 #include "graphics/render2d.hpp"
 
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -84,13 +85,16 @@ namespace narechi::graphics::render2d
         proj_matrix = mat;
     }
 
-    void submit_quad(const glm::vec2& world_pos, const glm::vec2& size,
-        sptr<graphics::texture2d> texture)
+    void submit_quad(const glm::vec2& world_pos, const float rotation,
+        const glm::vec2& size, sptr<graphics::texture2d> texture)
     {
         texture_shader->bind();
 
         glm::mat4 model_matrix = glm::translate(glm::identity<glm::mat4>(),
                                      glm::vec3(world_pos, 0.0f))
+            * glm::rotate(glm::identity<glm::mat4>(),
+                glm::radians(rotation),
+                { 0.0f, 0.0f, 1.0f })
             * glm::scale(glm::identity<glm::mat4>(), glm::vec3(size, 0.0f));
 
         glm::mat4 MVP = proj_matrix * view_matrix * model_matrix;
