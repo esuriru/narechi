@@ -29,9 +29,16 @@ namespace narechi
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + props.label_gap);
         }
 
+        if (props.bottom_of_window)
+        {
+            ImGui::SetCursorPosY(
+                ImGui::GetWindowSize().y - props.bottom_margin);
+        }
+
         ImGui::PushItemWidth(props.width);
         // TODO - Create GUID gen and append to double hash
-        ImGui::InputText(props.label_on_left ? ("##" + props.label).c_str() :
+        ImGui::InputText(props.label.empty() ? ("##" + uid).c_str() :
+                props.label_on_left          ? ("##" + props.label).c_str() :
                                                props.label.c_str(),
             props.text,
             0);
