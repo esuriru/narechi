@@ -1,5 +1,6 @@
 #include "panels/inspector_panel.hpp"
 
+#include "gui/button_element.hpp"
 #include "gui/float_input_element.hpp"
 #include "gui/space_element.hpp"
 #include "gui/text_element.hpp"
@@ -19,6 +20,22 @@ namespace narechi::editor
         , selection_ctx(selection_ctx)
     {
         entity_name_element = gui::text_element::create({});
+        component_input_element = gui::text_input_element::create({
+            .width = 200.0f,
+            .label_on_left = false,
+            .bottom_of_window = true,
+            .bottom_margin = 90.0f,
+        });
+        add_component_button = gui::button_element::create({
+            .same_line = true,
+            .label = "Add Component",
+            .on_click =
+                [&]()
+            {
+                current_result
+                    = add_component(component_input_element->get_text());
+            },
+        });
     }
 
     void inspector_panel::render()
@@ -41,25 +58,6 @@ namespace narechi::editor
 
                 gui::space_element::create({ .lines = 1 })->render();
                 gui::text_element::create({ .text = "Components" })->render();
-                // selection_ctx->selected_entity.each(
-                //     [this](flecs::id component_id)
-                //     {
-                //         if (component_id.is_entity())
-                //         {
-                //             flecs::entity e = component_id.entity();
-                //             gui::text_element::create(
-                //                 {
-                //                     .text = std::string(e.name()),
-                //                 })
-                //                 ->render();
-
-                //             if (e.name() == "position")
-                //             {
-                //                 gui::text_element::create({})
-                //                     ->render();
-                //             }
-                //         }
-                //     });
 
                 if (selection_ctx->selected_entity
                         .has<scene::component::position>())
@@ -250,6 +248,68 @@ namespace narechi::editor
                         })
                         ->render();
                 }
+
+                component_input_element->render();
+                add_component_button->render();
+                auto add_component_message = get_add_component_message();
+                if (add_component_message)
+                {
+                    gui::text_element::create({
+                                                  .text = add_component_message,
+                                              })
+                        ->render();
+                }
             });
+    }
+
+    inspector_panel::add_component_result inspector_panel::add_component(
+        const std::string& component_name)
+    {
+        if (!selection_ctx || !selection_ctx->active)
+        {
+            return add_component_result::selection_ctx_null;
+        }
+
+        flecs::world world = selection_ctx->selected_entity.world();
+
+        // Attempt to find component
+        flecs::entity component_entity = world.lookup(component_name.c_str());
+        if (component_entity == 0)
+        {
+            return add_component_result::component_does_not_exist;
+        }
+
+        if (selection_ctx->selected_entity.has(component_entity))
+        {
+            return add_component_result::component_already_added;
+        }
+        else
+        {
+            selection_ctx->selected_entity.add(component_entity);
+            return add_component_result::successful;
+        }
+
+        NRC_CORE_FATAL("Add component result is none");
+        return add_component_result::none;
+    }
+
+    const char* inspector_panel::get_add_component_message() const
+    {
+        switch (current_result)
+        {
+        case add_component_result::selection_ctx_null:
+            NRC_CORE_FATAL("Selection context is null");
+            break;
+        case add_component_result::component_does_not_exist:
+            return "Component does not exist";
+            break;
+        case add_component_result::component_already_added:
+            return "Component already added on entity";
+        case add_component_result::successful:
+            return "Successful";
+        case add_component_result::none:
+            return nullptr;
+            break;
+        }
     }
 }
