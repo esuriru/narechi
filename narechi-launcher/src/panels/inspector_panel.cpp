@@ -91,6 +91,26 @@ namespace narechi::editor
                 }
 
                 if (selection_ctx->selected_entity
+                        .has<scene::component::rotation>())
+                {
+                    auto& value = selection_ctx->selected_entity
+                                      .get_mut<scene::component::rotation>()
+                                      ->z;
+
+                    gui::text_element::create({
+                                                  .text = "Rotation",
+                                              })
+                        ->render();
+                    gui::float_input_element::create(
+                        {
+                            .custom_id = "rotation_inspector_value",
+                            .label = "Z: ",
+                            .value = &value,
+                        })
+                        ->render();
+                }
+
+                if (selection_ctx->selected_entity
                         .has<scene::component::scale>())
                 {
                     auto& value = selection_ctx->selected_entity
