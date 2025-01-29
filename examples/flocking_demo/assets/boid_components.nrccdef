@@ -1,0 +1,11 @@
+using flecs.meta;
+
+struct vec2 {
+    x = f32
+    y = f32
+}
+
+struct boid {
+    vel = vec2
+    acc = vec2
+}
