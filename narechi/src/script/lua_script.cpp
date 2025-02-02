@@ -63,7 +63,12 @@ namespace narechi::script
         {
             if (pair.second.get_type() == sol::type::function)
             {
-                function_names.insert(pair.first.as<std::string>());
+                std::string function_name = pair.first.as<std::string>();
+                if (function_name.starts_with("init")
+                    || function_name.starts_with("update"))
+                {
+                    function_names.insert(function_name);
+                }
             }
         }
 
@@ -135,7 +140,15 @@ namespace narechi::script
                     }
 
                     sol::function func = lua_state[function_names[type][i]];
-                    func(sol::as_args(raw_components));
+                    sol::protected_function_result result
+                        = func(sol::as_args(raw_components));
+                    if (!result.valid())
+                    {
+                        NRC_CORE_ERROR("Lua function result invalid from ",
+                            function_names[type][i],
+                            ": ",
+                            sol::error(result).what());
+                    }
                 });
         }
     }
