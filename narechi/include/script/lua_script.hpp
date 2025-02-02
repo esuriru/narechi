@@ -50,8 +50,9 @@ namespace narechi::script
         lua_script_deps deps;
         std::string code;
 
-        std::vector<std::vector<flecs::entity>> component_map;
-        std::vector<std::string> function_names;
+        std::unordered_map<func_type, std::vector<std::vector<flecs::entity>>>
+            component_map;
+        std::unordered_map<func_type, std::vector<std::string>> function_names;
         std::unordered_map<func_type, std::vector<flecs::query<>>> queries;
 
         void add_to_queries(

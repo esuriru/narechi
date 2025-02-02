@@ -110,11 +110,11 @@ namespace narechi::script
     {
         auto& lua_state = deps.ctx.get_lua_state();
 
-        auto update_queries = queries[type];
+        auto& query_list = queries[type];
 
-        for (int i = 0; i < update_queries.size(); ++i)
+        for (int i = 0; i < query_list.size(); ++i)
         {
-            auto& query = update_queries[i];
+            auto& query = query_list[i];
 
             NRC_ASSERT(deps.world.is_alive(query),
                 "Query is not valid in lua script call");
@@ -124,7 +124,7 @@ namespace narechi::script
                 {
                     flecs::entity e = it.entity(row);
 
-                    auto& components = component_map[i];
+                    auto& components = component_map[type][i];
                     vector<raw_component_view> raw_components;
                     raw_components.reserve(components.size());
                     for (auto& component : components)
@@ -134,7 +134,7 @@ namespace narechi::script
                             raw_component_view(deps.world, component, ptr));
                     }
 
-                    sol::function func = lua_state[function_names[i]];
+                    sol::function func = lua_state[function_names[type][i]];
                     func(sol::as_args(raw_components));
                 });
         }
@@ -148,21 +148,27 @@ namespace narechi::script
         {
             for (auto& query : query_list.second)
             {
-                query.destruct();
+                if (query != 0)
+                {
+                    query.destruct();
+                }
             }
         }
+
+        queries.clear();
 
         auto& lua_state = deps.ctx.get_lua_state();
         sol::table global_table = lua_state.globals();
 
         // Clear all functions
-        for (auto& name : function_names)
+        for (auto& name_list : function_names)
         {
-            global_table[name] = sol::nil;
+            for (auto& name : name_list.second)
+            {
+                global_table[name] = sol::nil;
+            }
         }
         function_names.clear();
-
-        queries.clear();
     }
 
     void lua_script::compile()
@@ -197,7 +203,10 @@ namespace narechi::script
             NRC_CORE_LOG("Validating arguments in world");
 
             // Create empty list
-            component_map.push_back({});
+            func_type type = kv_pair.first.starts_with("init") ?
+                func_type::init :
+                func_type::update;
+            component_map[type].push_back({});
 
             int i = 0;
             for (auto& arg : kv_pair.second)
@@ -213,7 +222,7 @@ namespace narechi::script
                         " does not exist in world, unable to create query");
                     return;
                 }
-                component_map.back().push_back(component_entity);
+                component_map[type].back().push_back(component_entity);
 
                 NRC_CORE_LOG(
                     "Valid query argument ", std::to_string(i++), ": ", arg);
@@ -243,10 +252,15 @@ namespace narechi::script
     void lua_script::add_to_queries(
         const std::string& query_name, flecs::query<> query)
     {
-        insert_to_query_map(query_name.starts_with("init") ? func_type::init :
-                                                             func_type::update,
-            query);
-        function_names.push_back(query_name);
+        func_type type = query_name.starts_with("init") ? func_type::init :
+                                                          func_type::update;
+        insert_to_query_map(type, query);
+        if (function_names.find(type) == function_names.end())
+        {
+            function_names[type] = {};
+        }
+
+        function_names[type].push_back(query_name);
     }
 
     void lua_script::insert_to_query_map(func_type type, flecs::query<> query)
