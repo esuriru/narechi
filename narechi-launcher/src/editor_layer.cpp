@@ -99,6 +99,8 @@ namespace narechi::editor
                                         if (lua_script_meta_asset)
                                         {
                                             lua_script_meta_asset->compile();
+                                            lua_script_meta_asset->get_script()
+                                                ->call(script::func_type::init);
                                         }
                                     });
                             },
@@ -463,6 +465,8 @@ namespace narechi::editor
         auto& asset_database = app::get().get_asset_database();
         auto world = current_scene->get_world();
 
+        std::vector<sptr<script::lua_script>> loaded_script_assets {};
+
         auto create_new_script_entity = [](flecs::world world,
                                             const std::string& name,
                                             const std::string& guid)
@@ -499,13 +503,15 @@ namespace narechi::editor
                                 script::lua_script::extension())),
                         "Script meta file exists but script does not");
 
-                    auto guid = asset_database.add_asset(
-                        asset::lua_script_meta_asset::load_existing_script(
+                    auto meta_asset
+                        = asset::lua_script_meta_asset::load_existing_script(
                             {
                                 .world = world,
                                 .ctx = app::get().get_sol2_context(),
                             },
-                            it.path()));
+                            it.path());
+                    auto guid = asset_database.add_asset(meta_asset);
+                    loaded_script_assets.push_back(meta_asset->get_script());
 
                     std::string filename = it.path().stem().string();
                     create_new_script_entity(world, filename, guid);
@@ -523,21 +529,28 @@ namespace narechi::editor
                         continue;
                     }
 
-                    auto guid = asset_database.add_asset(
-                        asset::lua_script_meta_asset::create(
-                            {
-                                .world = world,
-                                .ctx = app::get().get_sol2_context(),
-                            },
-                            std::filesystem::path(it.path()).replace_extension(
-                                asset::extension<
-                                    asset::lua_script_meta_asset>::value)));
+                    auto meta_asset = asset::lua_script_meta_asset::create(
+                        {
+                            .world = world,
+                            .ctx = app::get().get_sol2_context(),
+                        },
+                        std::filesystem::path(it.path()).replace_extension(
+                            asset::extension<
+                                asset::lua_script_meta_asset>::value));
+                    auto guid = asset_database.add_asset(meta_asset);
+                    loaded_script_assets.push_back(meta_asset->get_script());
 
                     std::string filename = it.path().stem().string();
                     create_new_script_entity(world, filename, guid);
                     loaded_scripts.insert(filename);
                 }
             }
+        }
+
+        // Re-run init functions
+        for (auto& script : loaded_script_assets)
+        {
+            script->call(script::func_type::init);
         }
     }
 

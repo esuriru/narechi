@@ -10,37 +10,10 @@
 #include <algorithm>
 #include <unordered_set>
 
-namespace narechi::script
+namespace
 {
     using std::string;
-    using std::unordered_map;
     using std::vector;
-
-    lua_script::lua_script(const lua_script_deps& deps, const std::string& code)
-        : deps(deps)
-        , code(code)
-    {
-        compile();
-    }
-
-    lua_script::~lua_script()
-    {
-    }
-
-    // sptr<lua_script> lua_script::load_new_meta_s(
-    //     const lua_script_deps& deps, const std::filesystem::path& code_path)
-    // {
-    //     NRC_ASSERT(
-    //         std::filesystem::exists(code_path), "Code path does not exist");
-    //     std::string code = utils::file::open_file_as_string(code_path);
-
-    //     std::filesystem::path meta_path = code_path;
-    //     meta_path.replace_extension(
-    //         asset::extension<asset::lua_script_meta_asset>::value);
-    //     auto script = make_sptr<lua_script>(deps, code);
-    //     script->asset = asset::lua_script_meta_asset::create(meta_path);
-    //     return script;
-    // }
 
     vector<string> split(const string& str, const string& delim)
     {
@@ -57,6 +30,24 @@ namespace narechi::script
             prev = pos + delim.length();
         } while (pos < str.length() && prev < str.length());
         return tokens;
+    }
+}
+
+namespace narechi::script
+{
+    using std::string;
+    using std::unordered_map;
+    using std::vector;
+
+    lua_script::lua_script(const lua_script_deps& deps, const std::string& code)
+        : deps(deps)
+        , code(code)
+    {
+        compile();
+    }
+
+    lua_script::~lua_script()
+    {
     }
 
     unordered_map<string, vector<string>> lua_script::get_function_argument_map(
@@ -115,13 +106,15 @@ namespace narechi::script
         return map;
     }
 
-    void lua_script::call()
+    void lua_script::call(func_type type)
     {
         auto& lua_state = deps.ctx.get_lua_state();
 
-        for (int i = 0; i < queries.size(); ++i)
+        auto update_queries = queries[type];
+
+        for (int i = 0; i < update_queries.size(); ++i)
         {
-            auto& query = queries[i];
+            auto& query = update_queries[i];
 
             NRC_ASSERT(deps.world.is_alive(query),
                 "Query is not valid in lua script call");
@@ -151,9 +144,12 @@ namespace narechi::script
     {
         component_map.clear();
 
-        for (auto& query : queries)
+        for (auto& query_list : queries)
         {
-            query.destruct();
+            for (auto& query : query_list.second)
+            {
+                query.destruct();
+            }
         }
 
         auto& lua_state = deps.ctx.get_lua_state();
@@ -171,6 +167,8 @@ namespace narechi::script
 
     void lua_script::compile()
     {
+        // TODO - Cache the same query if it has the same component map
+
         auto& world = deps.world;
         auto& ctx = deps.ctx;
 
@@ -223,8 +221,7 @@ namespace narechi::script
             }
 
             NRC_CORE_LOG("Generating query: ", kv_pair.first);
-            queries.push_back(builder.cached().build());
-            function_names.push_back(kv_pair.first);
+            add_to_queries(kv_pair.first, builder.cached().build());
         }
     }
 
@@ -241,5 +238,25 @@ namespace narechi::script
     const char* lua_script::extension()
     {
         return ".lua";
+    }
+
+    void lua_script::add_to_queries(
+        const std::string& query_name, flecs::query<> query)
+    {
+        insert_to_query_map(query_name.starts_with("init") ? func_type::init :
+                                                             func_type::update,
+            query);
+        function_names.push_back(query_name);
+    }
+
+    void lua_script::insert_to_query_map(func_type type, flecs::query<> query)
+    {
+        // Create a new empty vector if doesn't exist
+        if (queries.find(type) == queries.end())
+        {
+            queries[type] = {};
+        }
+
+        queries[type].push_back(query);
     }
 }
