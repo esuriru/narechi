@@ -35,7 +35,7 @@ namespace narechi::player
             // Load scene
             if (it.path().extension() == extension<scene_asset>::value)
             {
-                current_scene = scene::scene::load(it.path());
+                current_scene = scene::scene::load(it.path(), nullptr);
                 NRC_VERIFY(current_scene,
                     "Could not load scene at path: ",
                     it.path().string());
