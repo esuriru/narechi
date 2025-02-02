@@ -21,10 +21,26 @@ namespace narechi::script
         return cursor.get_float();
     }
 
+    float raw_component_view::get_float_l(uint32_t length)
+    {
+        flecs::cursor cursor = get_cursor();
+        reach_depth(cursor);
+        reach_length(cursor, length, 1);
+        return cursor.get_float();
+    }
+
     void raw_component_view::set_float(float value)
     {
         flecs::cursor cursor = get_cursor();
         reach_depth(cursor);
+        cursor.set_float(static_cast<double>(value));
+    }
+
+    void raw_component_view::set_float_l(uint32_t length, float value)
+    {
+        flecs::cursor cursor = get_cursor();
+        reach_depth(cursor);
+        reach_length(cursor, length, 1);
         cursor.set_float(static_cast<double>(value));
     }
 
@@ -40,10 +56,49 @@ namespace narechi::script
         return return_value;
     }
 
+    glm::vec2 raw_component_view::get_vec2_l(uint32_t length)
+    {
+        glm::vec2 return_value;
+
+        flecs::cursor cursor = get_cursor();
+        reach_depth(cursor);
+        cursor.pop();
+        for (int i = 0; i < length; ++i)
+        {
+            cursor.next();
+        }
+        cursor.push();
+        // reach_depth(cursor);
+        // reach_length(cursor, length, 2);
+
+        return_value.x = cursor.get_float();
+        cursor.next();
+        return_value.y = cursor.get_float();
+        return return_value;
+    }
+
     void raw_component_view::set_vec2(glm::vec2 vec)
     {
         flecs::cursor cursor = get_cursor();
         reach_depth(cursor);
+        cursor.set_float(static_cast<float>(vec.x));
+        cursor.next();
+        cursor.set_float(static_cast<float>(vec.y));
+    }
+
+    void raw_component_view::set_vec2_l(uint32_t length, glm::vec2 vec)
+    {
+        flecs::cursor cursor = get_cursor();
+
+        reach_depth(cursor);
+        cursor.pop();
+        for (int i = 0; i < length; ++i)
+        {
+            cursor.next();
+        }
+        cursor.push();
+
+        // reach_length(cursor, length, 2);
         cursor.set_float(static_cast<float>(vec.x));
         cursor.next();
         cursor.set_float(static_cast<float>(vec.y));
@@ -62,9 +117,20 @@ namespace narechi::script
         }
     }
 
+    void raw_component_view::reach_length(
+        flecs::cursor& cursor, uint32_t length, uint32_t component_count)
+    {
+        for (int i = 0; i < length; ++i)
+        {
+            for (int j = 0; j < component_count; ++j)
+            {
+                cursor.next();
+            }
+        }
+    }
+
     void raw_component_view::set_depth(uint32_t depth)
     {
         this->depth = depth;
     }
-
 }
