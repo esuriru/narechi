@@ -208,14 +208,24 @@ namespace narechi::editor
                 if (selection_ctx->selected_entity
                         .has<scene::component::sprite>())
                 {
-                    auto& texture_asset_guid
-                        = selection_ctx->selected_entity
-                              .get_mut<scene::component::sprite>()
-                              ->texture_asset_guid;
+                    auto sprite = selection_ctx->selected_entity
+                                      .get_mut<scene::component::sprite>();
+                    auto& texture_asset_guid = sprite->texture_asset_guid;
+                    auto& rotation_offset = sprite->rotation_offset;
 
                     gui::text_element::create({
                                                   .text = "Sprite",
                                               })
+                        ->render();
+
+                    constexpr float width = 60.0f;
+                    gui::float_input_element::create(
+                        {
+                            .custom_id = "sprite_rotation_offset",
+                            .width = width,
+                            .label = "Rotation Offset: ",
+                            .value = &rotation_offset,
+                        })
                         ->render();
 
                     // gui::text_input_element::create(
