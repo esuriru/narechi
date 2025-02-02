@@ -15,6 +15,12 @@ namespace narechi::script
         void init(bool open_libs = false);
         void reload();
 
+        template<typename T>
+        void set_global(const char* key, T value)
+        {
+            lua_state[key] = value;
+        }
+
     private:
         sol::state lua_state;
 
