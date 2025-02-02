@@ -195,6 +195,52 @@ namespace narechi::editor
                             },
                         },
                         {
+                            .title = "Clone Selected Entity",
+                            .callback = 
+                                [this]()
+                            {
+                                if (!current_scene ||
+                                    !entity_selection_ctx.active)
+                                {
+                                    return;
+                                }
+
+                                auto new_entity = 
+                                    entity_selection_ctx.selected_entity.clone();
+
+                                constexpr const char* cloned_entity_suffix = 
+                                    " (Clone)";
+                                std::string cloned_entity_name = 
+                                    std::string(
+                                        entity_selection_ctx.selected_entity
+                                            .name().c_str())
+                                    + cloned_entity_suffix;
+
+                                if (current_scene->get_world()
+                                    .lookup(cloned_entity_name.c_str()) == 0)
+                                {
+                                    new_entity.set_name(
+                                        cloned_entity_name.c_str());
+                                    return;
+                                }
+
+                                int i = 1;
+                                while (current_scene->get_world()
+                                    .lookup(
+                                        (cloned_entity_name + 
+                                            " " + std::to_string(i))
+                                        .c_str())
+                                    > 0)
+                                {
+                                    i++;
+                                }
+
+                                new_entity.set_name(
+                                    (cloned_entity_name + 
+                                    " " + std::to_string(i)).c_str());
+                            },
+                        },
+                        {
                             .title = "New Entity",
                             .callback = 
                                 [this]()
