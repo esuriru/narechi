@@ -23,7 +23,8 @@ namespace narechi::script
     {
         if (open_libs)
         {
-            lua_state.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math);
+            lua_state.open_libraries(
+                sol::lib::base, sol::lib::package, sol::lib::math);
         }
 
         init_glm();
@@ -33,13 +34,17 @@ namespace narechi::script
             "set_depth",
             &raw_component_view::set_depth,
             "get_float",
-            &raw_component_view::get_float,
+            sol::overload(&raw_component_view::get_float,
+                &raw_component_view::get_float_l),
             "set_float",
-            &raw_component_view::set_float,
+            sol::overload(&raw_component_view::set_float,
+                &raw_component_view::set_float_l),
             "get_vec2",
-            &raw_component_view::get_vec2,
+            sol::overload(
+                &raw_component_view::get_vec2, &raw_component_view::get_vec2_l),
             "set_vec2",
-            &raw_component_view::set_vec2);
+            sol::overload(&raw_component_view::set_vec2,
+                &raw_component_view::set_vec2_l));
     }
 
     void sol2_context::reload()
