@@ -42,17 +42,34 @@ namespace narechi::scene
         return new_scene;
     }
 
-    sptr<scene> scene::load(const std::filesystem::path& path)
+    sptr<scene> scene::load(const std::filesystem::path& path,
+        sptr<asset::component_def_asset> cdef)
     {
         sptr<scene> existing_scene = make_sptr<scene>(path);
         existing_scene->data->world.import <component>();
+
+        // Run component definition scripts
+        constexpr const char* script_name = "User-defined components";
+        if (cdef && existing_scene->data->world.lookup(script_name) == 0)
+        {
+            // Import user-defined components
+            // world.script("User-defined components")
+            //     .code(component_def_asset->get_code().c_str())
+            //     .run();
+            existing_scene->data->world.entity(script_name);
+            ecs_script_run(existing_scene->data->world,
+                script_name,
+                cdef->get_code().c_str());
+        }
+
         existing_scene->data->world.set<flecs::Rest>({});
         existing_scene->asset->load();
 
         return existing_scene;
     }
 
-    sptr<scene> scene::load(uptr<asset::scene_asset> scene_asset)
+    sptr<scene> scene::load(uptr<asset::scene_asset> scene_asset,
+        sptr<asset::component_def_asset> cdef)
     {
         sptr<scene> existing_scene = make_sptr<scene>();
         existing_scene->asset = std::move(scene_asset);
@@ -60,6 +77,21 @@ namespace narechi::scene
 
         // To load the world
         existing_scene->data->world.import <component>();
+
+        // Run component definition scripts
+        constexpr const char* script_name = "User-defined components";
+        if (cdef && existing_scene->data->world.lookup(script_name) == 0)
+        {
+            // Import user-defined components
+            // world.script("User-defined components")
+            //     .code(component_def_asset->get_code().c_str())
+            //     .run();
+            existing_scene->data->world.entity(script_name);
+            ecs_script_run(existing_scene->data->world,
+                script_name,
+                cdef->get_code().c_str());
+        }
+
         existing_scene->data->world.set<flecs::Rest>({});
         existing_scene->asset->load(true);
         return existing_scene;

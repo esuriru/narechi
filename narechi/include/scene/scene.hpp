@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asset/component_def_asset.hpp"
 #include "core/core.hpp"
 
 #include "flecs.h"
@@ -25,8 +26,10 @@ namespace narechi::scene
 
         static sptr<scene> create(
             const std::filesystem::path& path, const std::string& name);
-        static sptr<scene> load(const std::filesystem::path& path);
-        static sptr<scene> load(uptr<asset::scene_asset> scene_asset);
+        static sptr<scene> load(const std::filesystem::path& path,
+            sptr<asset::component_def_asset> cdef);
+        static sptr<scene> load(uptr<asset::scene_asset> scene_asset,
+            sptr<asset::component_def_asset> cdef);
 
         void awake();
         void update(float delta_time);

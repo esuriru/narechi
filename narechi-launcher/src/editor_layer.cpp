@@ -409,7 +409,8 @@ namespace narechi::editor
                 if (asset->get_scene_data().name
                     == current_project->get_data().startup_scene_name)
                 {
-                    current_scene = scene::load(std::move(asset));
+                    current_scene
+                        = scene::load(std::move(asset), component_def_asset);
                     NRC_CORE_LOG(
                         "Startup scene loaded: ", current_scene->get_name());
                 }
@@ -559,18 +560,6 @@ namespace narechi::editor
     {
         // Import component definition file
         flecs::world world = current_scene->get_world();
-        constexpr const char* script_name = "User-defined components";
-        if (component_def_asset && world.lookup(script_name) == 0)
-        {
-            // Import user-defined components
-            // world.script("User-defined components")
-            //     .code(component_def_asset->get_code().c_str())
-            //     .run();
-            world.entity(script_name);
-            ecs_script_run(current_scene->get_world(),
-                script_name,
-                component_def_asset->get_code().c_str());
-        }
 
         import_scripts();
 
