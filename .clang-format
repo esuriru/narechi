@@ -4,6 +4,7 @@ AlignEscapedNewlines: Left
 AllowAllArgumentsOnNextLine: true
 AllowShortLambdasOnASingleLine: None
 AllowShortFunctionsOnASingleLine: None 
+AlignOperands: DontAlign
 BasedOnStyle: WebKit
 BreakBeforeBraces: Allman
 BreakBeforeInheritanceComma: false
