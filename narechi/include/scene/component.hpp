@@ -44,6 +44,7 @@ namespace narechi::scene
         struct sprite
         {
             // sptr<graphics::texture2d> texture;
+            float rotation_offset = 0.0f;
             std::string texture_asset_guid {};
         };
 
@@ -82,7 +83,9 @@ namespace narechi::scene
             world.component<position>().member<glm::vec2>("value");
             world.component<scale>().member<glm::vec2>("value");
             world.component<rotation>().member<float>("z");
-            world.component<sprite>().member<std::string>("texture_asset_guid");
+            world.component<sprite>()
+                .member<float>("rotation_offset")
+                .member<std::string>("texture_asset_guid");
             world.component<lua_script>().member<std::string>(
                 "script_asset_guid");
 
@@ -114,7 +117,8 @@ namespace narechi::scene
                                       quad_scale = scale->value;
                                   }
                                   graphics::render2d::submit_quad(pos.value,
-                                      rot ? rot->z : 0.0f,
+                                      (rot ? rot->z : 0.0f)
+                                          + sprite.rotation_offset,
                                       quad_scale,
                                       sprite_asset->get_texture());
                               }
