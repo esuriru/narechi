@@ -111,7 +111,8 @@ namespace narechi::script
                 return v1 - value;
             });
 
-        lua_state.new_usertype<glm::vec2>("vec2",
+        lua_state.new_usertype<glm::vec2>(
+            "vec2",
             sol::call_constructor,
             sol::constructors<glm::vec2(float), glm::vec2(float, float)>(),
             "x",
@@ -130,6 +131,11 @@ namespace narechi::script
             [](const glm::vec2& v)
             {
                 return glm::length(v);
+            },
+            "normalize",
+            [](const glm::vec2& v)
+            {
+                return glm::normalize(v);
             });
     }
 }
