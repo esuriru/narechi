@@ -130,6 +130,10 @@ namespace narechi::scene
                       .each(
                           [&](component::lua_script& script)
                           {
+                              auto& script_ctx = app::get().get_sol2_context();
+                              script_ctx.set_global(
+                                  "delta_time", world.delta_time());
+
                               auto& database = app::get().get_asset_database();
                               auto lua_script_meta_asset = database.get_asset<
                                   asset::lua_script_meta_asset>(
