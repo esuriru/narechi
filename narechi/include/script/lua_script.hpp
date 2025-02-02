@@ -12,6 +12,12 @@ NRC_FORWARD_DECL_CLASS(narechi::asset, lua_script_meta_asset);
 
 namespace narechi::script
 {
+    enum class func_type
+    {
+        update,
+        init
+    };
+
     struct NRC_API lua_script_deps
     {
         flecs::world world;
@@ -27,7 +33,7 @@ namespace narechi::script
         // static sptr<lua_script> load_new_meta_s(const lua_script_deps& deps,
         //     const std::filesystem::path& code_path);
 
-        void call();
+        void call(func_type type = func_type::update);
 
         void reset();
         void compile();
@@ -46,7 +52,11 @@ namespace narechi::script
 
         std::vector<std::vector<flecs::entity>> component_map;
         std::vector<std::string> function_names;
-        std::vector<flecs::query<>> queries;
+        std::unordered_map<func_type, std::vector<flecs::query<>>> queries;
+
+        void add_to_queries(
+            const std::string& query_name, flecs::query<> query);
+        void insert_to_query_map(func_type type, flecs::query<> query);
 
         std::unordered_map<std::string, std::vector<std::string>>
         get_function_argument_map(const std::string& code);
