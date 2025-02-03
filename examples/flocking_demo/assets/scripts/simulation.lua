@@ -1,8 +1,8 @@
 -- BOID_COUNT = 200;
 
-WALL_DISTANCE = 8
+WALL_DISTANCE = 16
 WALL_WEIGHT = 100
-WALL_SCALE = 16
+WALL_SCALE = 32
 HALF_WALL_SCALE = WALL_SCALE / 2
 
 MIN_SPEED = 2
@@ -11,6 +11,8 @@ MAX_SPEED = 5
 S_COEF = 0.2
 A_COEF = 0.5
 C_COEF = 0.5
+
+neighbour_entity_buffer = { {} }
 
 function init_boids(narechi__scene__component__position, boid)
     local pos = narechi__scene__component__position
@@ -21,8 +23,8 @@ function init_boids(narechi__scene__component__position, boid)
     -- boid:set_float(math.random())
     -- boid:set_float(1, math.random())
     boid:set_depth(2)
-    -- boid:set_vec2(math.random(MIN_SPEED, MAX_SPEED) *
-    --     vec2(math.random(), math.random()).normalize())
+    boid:set_vec2(math.random(MIN_SPEED, MAX_SPEED) *
+        vec2(math.random(), math.random()).normalize())
 
     -- boid:set_vec2(1, vec2(math.random(), math.random()))
 
@@ -100,3 +102,8 @@ function update_boid_wall(narechi__scene__component__position, boid)
 
     boid:set_vec2(1, acc)
 end
+
+-- function update_neighbour_buffer(boid, spatial_query_result)
+--     neighbour_entity_buffer
+--     e.remove(spatial_query_result)
+-- end
