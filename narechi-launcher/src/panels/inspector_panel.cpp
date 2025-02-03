@@ -218,7 +218,7 @@ namespace narechi::editor
                                               })
                         ->render();
 
-                    constexpr float width = 60.0f;
+                    constexpr float width = 90.0f;
                     gui::float_input_element::create(
                         {
                             .custom_id = "sprite_rotation_offset",
