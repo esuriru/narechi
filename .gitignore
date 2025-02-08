@@ -1,6 +1,9 @@
 # CMake output build directory
 /build
 
+# Generic build directories
+build/
+
 # Generic cache directory
 /.cache
 
