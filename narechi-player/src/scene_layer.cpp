@@ -21,9 +21,11 @@ namespace narechi::player
             = std::filesystem::current_path() / "assets";
 
         // TODO - Is this required?
-        // constexpr uint32_t allowed_definition_count = 1;
-        // uint32_t component_definitions = 0;
-        // sptr<component_def_asset> scene_component_def_asset {};
+        constexpr uint32_t allowed_definition_count = 1;
+        uint32_t component_definitions = 0;
+        sptr<component_def_asset> component_def_asset = nullptr;
+
+        std::optional<std::filesystem::path> scene_path {};
 
         for (const auto& it : std::filesystem::directory_iterator(asset_dir))
         {
@@ -32,14 +34,20 @@ namespace narechi::player
                 continue;
             }
 
+            if (component_definitions < allowed_definition_count
+                && it.path().extension()
+                    == extension<narechi::asset::component_def_asset>::value)
+            {
+                component_def_asset = component_def_asset::load(it.path());
+                app::get().get_asset_database().add_asset(component_def_asset);
+                component_definitions++;
+                NRC_CORE_LOG("Component definition asset found");
+            }
+
             // Load scene
             if (it.path().extension() == extension<scene_asset>::value)
             {
-                current_scene = scene::scene::load(it.path(), nullptr);
-                NRC_VERIFY(current_scene,
-                    "Could not load scene at path: ",
-                    it.path().string());
-                NRC_CORE_LOG("Scene loaded: ", current_scene->get_name());
+                scene_path = it.path();
             }
 
             // Load sprites
@@ -52,19 +60,16 @@ namespace narechi::player
                     sprite_asset::load_data(image_path));
                 NRC_CORE_LOG("Image loaded: ", image_path.string());
             }
+        }
 
-            // TODO - Is this needed?
-            // Load component definition file
-            // if (it.path().extension() ==
-            // extension<component_def_asset>::value
-            //     && component_definitions < allowed_definition_count)
-            // {
-            //     scene_component_def_asset
-            //         = component_def_asset::load(it.path());
-            //     app::get().get_asset_database().add_asset(
-            //         scene_component_def_asset);
-            //     component_definitions++;
-            // }
+        if (scene_path.has_value())
+        {
+            current_scene
+                = scene::scene::load(scene_path.value(), component_def_asset);
+            NRC_VERIFY(current_scene,
+                "Could not load scene at path: ",
+                scene_path.value().string());
+            NRC_CORE_LOG("Scene loaded: ", current_scene->get_name());
         }
 
         if (!current_scene)
@@ -74,9 +79,6 @@ namespace narechi::player
         else
         {
             // Now, attempt to import scene-dependent assets like scripts
-
-            // TODO - Is this needed?
-            // Load component definition
 
             // Load scripts
             import_scripts(asset_dir);
