@@ -91,7 +91,7 @@ but for this tutorial, we will name it `main.lua`.
 Let's write some lua code into the file, and save it.
 
 ```lua
-function move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
+function update_move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
     local position = narechi__scene__component__position
     position:set_depth(2)
 
@@ -109,6 +109,8 @@ To basically explain the Lua API:
 * In-built components of the engine will have to be prepended with `narechi__scene__component__`
 * Components are typeless, hence, there is a need for an accessor, hence, the `set_depth` function which enables the
 `set_vec2` function
+* Queries that will be called every frame should be prepended with `update`,
+and those that are called when the program begins should preprended with `init`
 
 To explain the depth system, each component is broken down into a
 serializable struct like `{ x: 32 }`. Hence, if we want to access
@@ -158,7 +160,7 @@ The end script should look something like this:
 ```lua
 accumulator = 0.0
 
-function move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
+function update_move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
     local position = narechi__scene__component__position
     position:set_depth(2)
 
@@ -205,7 +207,7 @@ The final script should look like this:
 ```lua
 accumulator = 0.0;
 
-function move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
+function update_move_to_pos(narechi__scene__component__position, narechi__scene__component__scale)
     local position = narechi__scene__component__position
     position:set_depth(2)
 
