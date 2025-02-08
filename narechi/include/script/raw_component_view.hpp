@@ -3,6 +3,8 @@
 #include "flecs.h"
 #include "glm/glm.hpp"
 
+#include <string>
+
 namespace narechi::script
 {
     // To be created to pass into a script after an .ensure()
@@ -13,6 +15,9 @@ namespace narechi::script
             flecs::entity_view component_entity, void* component);
 
         void set_depth(uint32_t depth);
+
+        std::string get_str(const std::string& key);
+        void set_str(const std::string& key, const std::string& string);
 
         float get_float();
         float get_float_l(uint32_t length);

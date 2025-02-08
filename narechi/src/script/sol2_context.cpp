@@ -43,8 +43,12 @@ namespace narechi::script
             sol::overload(
                 &raw_component_view::get_vec2, &raw_component_view::get_vec2_l),
             "set_vec2",
-            sol::overload(&raw_component_view::set_vec2,
-                &raw_component_view::set_vec2_l));
+            sol::overload(
+                &raw_component_view::set_vec2, &raw_component_view::set_vec2_l),
+            "get_str",
+            &raw_component_view::get_str,
+            "set_str",
+            &raw_component_view::set_str);
     }
 
     void sol2_context::reload()

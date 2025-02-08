@@ -133,4 +133,21 @@ namespace narechi::script
     {
         this->depth = depth;
     }
+
+    std::string raw_component_view::get_str(const std::string& key)
+    {
+        flecs::cursor cursor = get_cursor();
+        reach_depth(cursor);
+        cursor.member(key.c_str());
+        return cursor.get_string();
+    }
+
+    void raw_component_view::set_str(
+        const std::string& key, const std::string& string)
+    {
+        flecs::cursor cursor = get_cursor();
+        reach_depth(cursor);
+        cursor.member(key.c_str());
+        cursor.set_string(string.c_str());
+    }
 }
