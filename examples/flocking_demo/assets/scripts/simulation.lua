@@ -12,6 +12,8 @@ S_COEF = 0.2
 A_COEF = 0.5
 C_COEF = 0.5
 
+WAIT_TIME = -1.0
+
 neighbour_entity_buffer = { {} }
 asset_guids = { 
     "02783a6c-6300-4547-bb18-e119b45fee9d",
@@ -38,6 +40,11 @@ function init_boids(narechi__scene__component__position, narechi__scene__compone
 end
 
 function update_boid_movement(narechi__scene__component__position, narechi__scene__component__rotation, boid)
+    if WAIT_TIME > 0.0 then
+       WAIT_TIME = WAIT_TIME - delta_time
+       return
+    end
+
     function clamp(x, min, max)
         if x < min then return min end
         if x > max then return max end
@@ -79,6 +86,11 @@ function update_boid_movement(narechi__scene__component__position, narechi__scen
 end
 
 function update_boid_wall(narechi__scene__component__position, boid)
+    if WAIT_TIME > 0.0 then
+       WAIT_TIME = WAIT_TIME - delta_time
+       return
+    end
+
     function accel_against_wall(dist, dir, thresh, weight)
         if dist < thresh then
             return dir * (weight / math.abs(dist / thresh))
