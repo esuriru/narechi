@@ -1,30 +1,36 @@
 -- BOID_COUNT = 200;
 
-WALL_DISTANCE = 16
+WALL_DISTANCE = 24
 WALL_WEIGHT = 100
 WALL_SCALE = 32
 HALF_WALL_SCALE = WALL_SCALE / 2
 
-MIN_SPEED = 2
-MAX_SPEED = 5
+MIN_SPEED = 0.1
+MAX_SPEED = 10
 
 S_COEF = 0.2
 A_COEF = 0.5
 C_COEF = 0.5
 
 neighbour_entity_buffer = { {} }
+asset_guids = { 
+    "02783a6c-6300-4547-bb18-e119b45fee9d",
+    "b0518fbc-9ab8-462f-a6a1-43308f1b114d", 
+    "ae2f651b-03f6-49ed-8a17-bb75fa7b1769" } 
 
-function init_boids(narechi__scene__component__position, boid)
+function init_boids(narechi__scene__component__position, narechi__scene__component__sprite, boid)
     local pos = narechi__scene__component__position
     pos:set_depth(2)
     pos:set_vec2(vec2(math.random(), math.random()))
+
+    local sprite = narechi__scene__component__sprite
+    sprite:set_str("texture_asset_guid", asset_guids[math.random(1, 3)])
 
     -- local vel = boid:get_vec2()
     -- boid:set_float(math.random())
     -- boid:set_float(1, math.random())
     boid:set_depth(2)
-    boid:set_vec2(math.random(MIN_SPEED, MAX_SPEED) *
-        vec2(math.random(), math.random()).normalize())
+    boid:set_vec2(1, vec2((math.random() * 2) - 1, (math.random() * 2) - 1))
 
     -- boid:set_vec2(1, vec2(math.random(), math.random()))
 
@@ -50,13 +56,15 @@ function update_boid_movement(narechi__scene__component__position, narechi__scen
     local vel = boid:get_vec2()
     local acc = boid:get_vec2(1)
 
-    vel = vel + acc * delta_time
+    local fixed_delta_time = math.min(delta_time, 0.2)
+
+    vel = vel + acc * fixed_delta_time
 
     local dir = vel:normalize()
     local speed = vel:length()
 
     vel = dir * clamp(speed, MIN_SPEED, MAX_SPEED)
-    pos = pos + vel * delta_time
+    pos = pos + vel * fixed_delta_time
 
     rotation_component:set_float(math.atan(dir.y, dir.x) * (180 / math.pi))
 
