@@ -38,7 +38,8 @@ namespace narechi::scene
         void add_empty_sprite(const std::string& name);
 
         void save();
-        void export_to_dir(const std::filesystem::path& dir, bool save = true);
+        void export_to_dir(const std::filesystem::path& dir,
+            sptr<asset::component_def_asset> cdef_asset, bool save = true);
 
         std::string get_name() const;
         flecs::world get_world() const;

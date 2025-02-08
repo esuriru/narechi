@@ -153,6 +153,11 @@ namespace narechi::editor
                                                         ->get_code()
                                                         .c_str());
                                             }
+                                            if (build_panel)
+                                            {
+                                                build_panel->set_cdef_asset(
+                                                    component_def_asset);
+                                            }
                                             app::get()
                                                 .get_asset_database()
                                                 .add_asset(
@@ -348,6 +353,7 @@ namespace narechi::editor
         build_panel = make_uptr<editor::build_panel>();
         build_panel->get_window()->set_enable_toggle(true);
         build_panel->get_window()->set_active(false);
+        build_panel->set_cdef_asset(component_def_asset);
 
         invalidate_proj_matrix();
     }
@@ -495,6 +501,10 @@ namespace narechi::editor
                 {
                     component_def_asset
                         = asset::component_def_asset::load(it.path());
+                    if (build_panel)
+                    {
+                        build_panel->set_cdef_asset(component_def_asset);
+                    }
                     asset_database.add_asset(component_def_asset);
                     component_definitions++;
                 }

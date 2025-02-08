@@ -125,7 +125,7 @@ namespace narechi::editor
                     }
 
                     // Export asset to new asset directory
-                    export_scene->export_to_dir(asset_dir);
+                    export_scene->export_to_dir(asset_dir, cdef_asset);
                 }
             },
         }));
@@ -139,6 +139,11 @@ namespace narechi::editor
     void build_panel::set_export_scene(sptr<scene::scene> scene)
     {
         export_scene = scene;
+    }
+
+    void build_panel::set_cdef_asset(sptr<asset::component_def_asset> asset)
+    {
+        cdef_asset = asset;
     }
 
     sptr<gui::window> build_panel::get_window() const

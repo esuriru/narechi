@@ -1,5 +1,6 @@
 #include "scene/scene.hpp"
 
+#include "asset/component_def_asset.hpp"
 #include "asset/lua_script_meta_asset.hpp"
 #include "core/logger.hpp"
 #include "flecs.h"
@@ -152,7 +153,8 @@ namespace narechi::scene
         asset->write();
     }
 
-    void scene::export_to_dir(const std::filesystem::path& dir, bool save)
+    void scene::export_to_dir(const std::filesystem::path& dir,
+        sptr<asset::component_def_asset> cdef_asset, bool save)
     {
         if (save)
         {
@@ -161,6 +163,9 @@ namespace narechi::scene
 
         using namespace asset;
         asset->write(dir / (get_name() + extension<scene_asset>::value));
+        cdef_asset->write(dir
+            / (cdef_asset->get_path().stem().string()
+                + extension<component_def_asset>::value));
 
         auto copy_file = [dir](const std::filesystem::path& path)
         {
