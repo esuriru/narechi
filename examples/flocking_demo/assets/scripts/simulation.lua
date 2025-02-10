@@ -14,6 +14,8 @@ C_COEF = 0.5
 
 WAIT_TIME = -1.0
 
+WALL_OFFSET = vec2(0.0);
+
 neighbour_entity_buffer = { {} }
 asset_guids = { 
     "02783a6c-6300-4547-bb18-e119b45fee9d",
@@ -99,6 +101,16 @@ function update_boid_wall(narechi__scene__component__position, boid)
         end
     end
 
+    if get_key("Up") then
+        WALL_OFFSET.y = WALL_OFFSET.y + 0.001 
+    elseif get_key("Down") then
+        WALL_OFFSET.y = WALL_OFFSET.y - 0.001 
+    elseif get_key("Left") then
+        WALL_OFFSET.x = WALL_OFFSET.x - 0.001 
+    elseif get_key("Right") then
+        WALL_OFFSET.x = WALL_OFFSET.x + 0.001 
+    end
+
     local u = vec2(0, 1)
     local d = vec2(0, -1)
     local l = vec2(-1, 0)
@@ -115,10 +127,10 @@ function update_boid_wall(narechi__scene__component__position, boid)
     local acc = boid:get_vec2(1)
 
     acc = acc +
-        accel_against_wall(-HALF_WALL_SCALE - pos.x, r, thresh, weight) +
-        accel_against_wall(-HALF_WALL_SCALE - pos.y, u, thresh, weight) +
-        accel_against_wall(HALF_WALL_SCALE - pos.x, l, thresh, weight) +
-        accel_against_wall(HALF_WALL_SCALE - pos.y, d, thresh, weight)
+        accel_against_wall(-HALF_WALL_SCALE - pos.x + WALL_OFFSET.x, r, thresh, weight) +
+        accel_against_wall(-HALF_WALL_SCALE - pos.y + WALL_OFFSET.y, u, thresh, weight) +
+        accel_against_wall(HALF_WALL_SCALE - pos.x + WALL_OFFSET.x, l, thresh, weight) +
+        accel_against_wall(HALF_WALL_SCALE - pos.y + WALL_OFFSET.y, d, thresh, weight)
 
     boid:set_vec2(1, acc)
 end

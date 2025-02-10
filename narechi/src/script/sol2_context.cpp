@@ -1,5 +1,6 @@
 #include "script/sol2_context.hpp"
 
+#include "imgui.h"
 #include "sol/sol.hpp"
 #include "core/logger.hpp"
 #include "script/lua_script.hpp"
@@ -49,6 +50,28 @@ namespace narechi::script
             &raw_component_view::get_str,
             "set_str",
             &raw_component_view::set_str);
+        
+        lua_state["get_key"] = [](const std::string& key)
+        {
+            if (key == "Up")
+            {
+                return ImGui::IsKeyDown(ImGuiKey_UpArrow);
+            }
+            else if (key == "Down")
+            {
+                return ImGui::IsKeyDown(ImGuiKey_DownArrow);
+            }
+            else if (key == "Left")
+            {
+                return ImGui::IsKeyDown(ImGuiKey_LeftArrow);
+            }
+            else if (key == "Right")
+            {
+                return ImGui::IsKeyDown(ImGuiKey_RightArrow);
+            }
+
+            return false;
+        };
     }
 
     void sol2_context::reload()
