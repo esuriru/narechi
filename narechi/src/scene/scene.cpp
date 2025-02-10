@@ -163,9 +163,12 @@ namespace narechi::scene
 
         using namespace asset;
         asset->write(dir / (get_name() + extension<scene_asset>::value));
-        cdef_asset->write(dir
-            / (cdef_asset->get_path().stem().string()
-                + extension<component_def_asset>::value));
+        if (cdef_asset)
+        {
+            cdef_asset->write(dir
+                / (cdef_asset->get_path().stem().string()
+                    + extension<component_def_asset>::value));
+        }
 
         auto copy_file = [dir](const std::filesystem::path& path)
         {
